@@ -17,7 +17,7 @@ const ITunesPage: FC = () => {
   const navigate = useNavigate();
 
   const handleSearch = () => {
-    setLoading(true);
+    /*setLoading(true);
   
   // Фильтрация данных из SONGS_MOCK на основе введенного значения
     const filteredMockData = SONGS_MOCK.results.filter((item) =>
@@ -27,9 +27,9 @@ const ITunesPage: FC = () => {
     );
 
     setMusic(filteredMockData);
-    setLoading(false); // Останавливаем состояние загрузки
-    
-    /*setLoading(true); // Устанавливаем состояние загрузки
+    setLoading(false); // Останавливаем состояние загрузки*/
+
+    setLoading(true); // Устанавливаем состояние загрузки
     getMusicByName(searchValue)
       .then((response) => {
         // Фильтруем треки, оставляя только те, где `wrapperType` равен "track"

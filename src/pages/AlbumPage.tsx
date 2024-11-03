@@ -1,4 +1,4 @@
-import "./AlbumPage.css";
+/*import "./AlbumPage.css";
 import { FC, useEffect, useState } from "react";
 import { BreadCrumbs } from "../components/BreadCrumbs/BreadCrumbs";
 import { ROUTES, ROUTE_LABELS } from "../../Routes";
@@ -58,11 +58,11 @@ export const AlbumPage: FC = () => {
       )}
     </div>
   );
-};
+};*/
 
 
 
-/*import "./AlbumPage.css";
+import "./AlbumPage.css";
 import { FC, useEffect, useState } from "react";
 import { BreadCrumbs } from "../components/BreadCrumbs/BreadCrumbs";
 import { ROUTES, ROUTE_LABELS } from "../../Routes";
@@ -121,10 +121,10 @@ export const AlbumPage: FC = () => {
           </Row>
         </div>
       ) : (
-        <div className="album_page_loader_block">{/* загрузка *//*} 
+        <div className="album_page_loader_block">{/* загрузка */} 
           <Spinner animation="border" />
         </div>
       )}
     </div>
   );
-};*/
+};
