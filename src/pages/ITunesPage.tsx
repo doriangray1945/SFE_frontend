@@ -7,6 +7,7 @@ import { BreadCrumbs } from "../components/BreadCrumbs/BreadCrumbs";
 import { ROUTES, ROUTE_LABELS } from '../../Routes';
 import { MusicCard } from '../components/MusicCard/MusicCard';
 import { useNavigate } from "react-router-dom";
+import { SONGS_MOCK } from "../modules/mock";
 
 const ITunesPage: FC = () => {
   const [searchValue, setSearchValue] = useState("");
@@ -17,19 +18,40 @@ const ITunesPage: FC = () => {
 
   const handleSearch = () => {
     setLoading(true);
+  
+  // Фильтрация данных из SONGS_MOCK на основе введенного значения
+    const filteredMockData = SONGS_MOCK.results.filter((item) =>
+      item.collectionCensoredName
+        .toLocaleLowerCase()
+        .startsWith(searchValue.toLocaleLowerCase())
+    );
+
+    setMusic(filteredMockData);
+    setLoading(false); // Останавливаем состояние загрузки
+    
+    /*setLoading(true); // Устанавливаем состояние загрузки
     getMusicByName(searchValue)
       .then((response) => {
-        setMusic(
-          response.results.filter((item) => item.wrapperType === "track")
+        // Фильтруем треки, оставляя только те, где `wrapperType` равен "track"
+        const filteredTracks = response.results.filter((item) => item.wrapperType === "track");
+        setMusic(filteredTracks);
+      })
+      .catch(() => {
+        // В случае ошибки используем mock данные, фильтруем по названию альбома
+        const filteredMockData = SONGS_MOCK.results.filter((item) =>
+          item.collectionCensoredName
+            .toLocaleLowerCase()
+            .startsWith(searchValue.toLocaleLowerCase())
         );
-        setLoading(false);
-      });
+        setMusic(filteredMockData);
+      })
+      .finally(() => setLoading(false)); // Останавливаем состояние загрузки в любом случае*/
   };
+
   const handleCardClick = (id: number) => {
     // клик на карточку, переход на страницу альбома
     navigate(`${ROUTES.ALBUMS}/${id}`);
   };
-
 
   return (
     <div className="container">
@@ -42,13 +64,13 @@ const ITunesPage: FC = () => {
         onSubmit={handleSearch}
       />
 
-      {loading && ( // здесь можно было использовать тернарный оператор, но это усложняет читаемость
+      {loading && (
         <div className="loadingBg">
           <Spinner animation="border" />
         </div>
       )}
       {!loading &&
-        (!music.length /* Проверка на существование данных */ ? (
+        (!music.length ? (
           <div>
             <h1>К сожалению, пока ничего не найдено :(</h1>
           </div>
