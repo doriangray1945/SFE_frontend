@@ -1,7 +1,7 @@
 import "./ITunesPage.css";
 import { FC, useState } from "react";
 import { Col, Row, Spinner } from "react-bootstrap";
-import { City, getCityByName } from '../modules/itunesApi';
+import { City, CitiesList } from '../modules/itunesApi';
 import InputField from "../components/InputField/InputField";
 import { BreadCrumbs } from "../components/BreadCrumbs/BreadCrumbs";
 import { ROUTES, ROUTE_LABELS } from '../../Routes';
@@ -30,10 +30,13 @@ const CitiesPage: FC = () => {
     setLoading(false); // Останавливаем состояние загрузки*/
 
     setLoading(true); // Устанавливаем состояние загрузки
-    getCityByName(searchValue)
+    CitiesList(searchValue)
       .then((response) => {
         // Фильтруем треки, оставляя только те, где `wrapperType` равен "track"
-        const filteredCities = response.cities.filter((item) => item.name === searchValue);
+        const filteredCities = response.cities.filter((item) => item.name 
+        .toLocaleLowerCase()
+        .startsWith(searchValue.toLocaleLowerCase())
+      );
         setCities(filteredCities);
       })
       .catch(() => {

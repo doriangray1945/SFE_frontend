@@ -67,7 +67,7 @@ import { FC, useEffect, useState } from "react";
 import { BreadCrumbs } from "../components/BreadCrumbs/BreadCrumbs";
 import { ROUTES, ROUTE_LABELS } from "../../Routes";
 import { useParams } from "react-router-dom";
-import { City, getCityById } from "../modules/itunesApi";
+import { City, GetCityById } from "../modules/itunesApi";
 import { Col, Row, Spinner, Image } from "react-bootstrap";
 import defaultImage from "../components/MusicCard/DefaultImage.jpg";
 import { CITIES_MOCK } from "../modules/mock";
@@ -79,16 +79,22 @@ export const AlbumPage: FC = () => {
 
   useEffect(() => {
     if (!id) return;
-    getCityById(id)
-      .then((response) => setPageData(response.cities[0]))
-      .catch(
-        () =>
-          setPageData(
-            CITIES_MOCK.cities.find(
-              (city) => String(city.city_id) == id
-            )
-          ) 
-      );
+
+    GetCityById(id)
+      .then((response) => {
+          console.log("Server Responseeee:", response);
+          const cityData = response;
+          console.log("Found City Data:", cityData);
+          setPageData(cityData);
+      })
+      .catch(() => {
+          console.log("Using Mock Data");
+          const mockCityData = CITIES_MOCK.cities.find(
+              (city) => String(city.city_id) === id
+          );
+          console.log("Found Mock Data:", mockCityData);
+          setPageData(mockCityData);
+      });
   }, [id]);
 
 

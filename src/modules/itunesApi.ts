@@ -10,21 +10,22 @@ export interface City {
 
 export interface CitiesResult {
   cities: City[];
-  resultCount: number;
 }
 
 // Функция для поиска городов по имени
-export const getCityByName = async (name = ""): Promise<CitiesResult> => {
-  return fetch(`http://localhost:8000/cities/?city_name=${name}/`).then(
-    (response) => response.json()
-  );
+export const CitiesList = async (name = ""): Promise<CitiesResult> => {
+  const response = await fetch(`api/cities/?city_name=${name}`);
+  console.log("OOOOhhhO", response);
+  return response.json()
 };
 
 // Функция для поиска города по ID
-export const getCityById = async (id: number | string): Promise<CitiesResult> => {
-  return fetch(`http://localhost:8000/cities/${id}/`).then(
-    (response) => response.json()
-  );
+export const GetCityById = async (id: number | string): Promise<City> => {
+  const response = await fetch(`http://localhost:8000/cities/${id}`);
+  if (response.ok) {
+    console.log("OOOOOOO", response);
+  }
+  return response.json();
 };
 
 
