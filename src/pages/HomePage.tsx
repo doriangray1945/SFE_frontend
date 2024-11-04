@@ -8,13 +8,12 @@ export const HomePage: FC = () => {
     <Container>
       <Row>
         <Col md={6}>
-          <h1>Itunes Music</h1>
+          <h1>Сервис для работодателей</h1>
           <p>
-            Добро пожаловать в Itunes Music! Здесь вы можете найти музыку на
-            любой вкус.
+            ПРОМО
           </p>
-          <Link to={ROUTES.ALBUMS}>
-            <Button variant="primary">Просмотреть музыку</Button>
+          <Link to={ROUTES.CITIES}>
+            <Button variant="primary">Доступные города для размещения вакансии</Button>
           </Link>
         </Col>
       </Row>

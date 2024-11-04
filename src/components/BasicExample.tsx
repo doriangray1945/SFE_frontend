@@ -14,7 +14,7 @@ export function BasicExample() { // Используем export перед об�
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link href={ ROUTES.HOME }>Home</Nav.Link>
-            <Nav.Link href={ ROUTES.ALBUMS }>Albums</Nav.Link>
+            <Nav.Link href={ ROUTES.CITIES }>Cities</Nav.Link>
             <NavDropdown title="Dropdown" id="basic-nav-dropdown">
               <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
               <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>

@@ -67,25 +67,25 @@ import { FC, useEffect, useState } from "react";
 import { BreadCrumbs } from "../components/BreadCrumbs/BreadCrumbs";
 import { ROUTES, ROUTE_LABELS } from "../../Routes";
 import { useParams } from "react-router-dom";
-import { ITunesMusic, getAlbumById } from "../modules/itunesApi";
+import { City, getCityById } from "../modules/itunesApi";
 import { Col, Row, Spinner, Image } from "react-bootstrap";
 import defaultImage from "../components/MusicCard/DefaultImage.jpg";
-import { SONGS_MOCK } from "../modules/mock";
+import { CITIES_MOCK } from "../modules/mock";
 
 export const AlbumPage: FC = () => {
-  const [pageData, setPageData] = useState<ITunesMusic>();
+  const [pageData, setPageData] = useState<City>();
 
   const { id } = useParams(); // ид страницы, пример: "/albums/12"
 
   useEffect(() => {
     if (!id) return;
-    getAlbumById(id)
-      .then((response) => setPageData(response.results[0]))
+    getCityById(id)
+      .then((response) => setPageData(response.cities[0]))
       .catch(
         () =>
           setPageData(
-            SONGS_MOCK.results.find(
-              (album) => String(album.collectionId) == id
+            CITIES_MOCK.cities.find(
+              (city) => String(city.city_id) == id
             )
           ) 
       );
@@ -96,8 +96,8 @@ export const AlbumPage: FC = () => {
     <div>
       <BreadCrumbs
         crumbs={[
-          { label: ROUTE_LABELS.ALBUMS, path: ROUTES.ALBUMS },
-          { label: pageData?.collectionCensoredName || "Альбом" },
+          { label: ROUTE_LABELS.CITIES, path: ROUTES.CITIES },
+          { label: pageData?.name || "Название города" },
         ]}
       />
       {pageData ? ( // проверка на наличие данных, иначе загрузка
@@ -105,15 +105,15 @@ export const AlbumPage: FC = () => {
           <Row>
             <Col md={6}>
               <p>
-                Альбом: <strong>{pageData.collectionCensoredName}</strong>
+                Название города: <strong>{pageData.name}</strong>
               </p>
               <p>
-                Исполнитель: <strong>{pageData.artistName}</strong>
+                Описание: <strong>{pageData.description}</strong>
               </p>
             </Col>
             <Col md={6}>
               <Image
-                src={pageData.artworkUrl100 || defaultImage} // дефолтное изображение, если нет artworkUrl100
+                src={pageData.url || defaultImage} // дефолтное изображение, если нет artworkUrl100
                 alt="Картинка"
                 width={100}
               />
