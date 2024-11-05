@@ -7,7 +7,7 @@ import { City, GetCityById } from "../modules/itunesApi";
 import { Col, Row, Spinner, Image, Container } from "react-bootstrap";
 import defaultImage from "../components/MusicCard/DefaultImage.jpg";
 import { CITIES_MOCK } from "../modules/mock";
-import Header from "../components/Header/header";
+import Header from "../components/Header/Header";
 
 export const CityPage: FC = () => {
   const [cityData, setCityData] = useState<City>();

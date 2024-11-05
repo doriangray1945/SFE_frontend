@@ -25,7 +25,7 @@
   justify-content: center;
   align-items: center;
   margin-top: 63px;
-  margin-bottom: 63px;
+  margin-bottom: 40px;
 }
 
 .cities-title h1 {
@@ -82,4 +82,56 @@ width: 100%;
   gap: 25px;
   justify-content: space-between;
   margin-top: 15px;
+}
+
+.cities-not-found h1 {
+  font-family: 'Arial', sans-serif;
+  font-weight: bold;
+  font-size: 44px;
+  color: black;
+  letter-spacing: -0.01em; /* Отрицательное значение для уменьшения интервала между буквами */
+  width: 582px;
+  height: 102px;
+  text-align: left;
+}
+
+.search-icon{
+  width: 29px;
+  height: 23px;
+  position: absolute;
+  margin-left: 12px;
+  margin-top: 14px;
+}
+
+.btn-favorites{
+  position: absolute;
+  width: 58px;
+  height: 58px;
+  display: flex;
+  align-items: center; /* Выравнивание по вертикали */
+  justify-content: center; /* Выравнивание по горизонтали */
+  margin-top: 47px;
+  margin-left: -46px;
+}
+
+.btn-favorites img{
+  height: 100%;
+  object-fit: cover;
+}
+
+.badge {
+  position: absolute;
+  top: -10px;
+  right: 5px;
+  width: 21px;
+  height: 21px;
+  background-color: #CF0000;
+  color: white; /* Цвет текста */
+  font-family: 'Arial', sans-serif;
+  font-weight: bold; /* Жирный шрифт */
+  font-size: 18px; /* Размер шрифта */
+  display: flex;
+  align-items: center; /* Центрирует по вертикали */
+  justify-content: center; /* Центрирует по горизонтали */
+  text-align: center; /
 }

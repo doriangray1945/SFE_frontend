@@ -2,13 +2,14 @@ import "./ITunesPage.css";
 import { FC, useState } from "react";
 import { Col, Row, Spinner, Form, Button } from "react-bootstrap";
 import { City, CitiesList } from '../modules/itunesApi';
-import InputField from "../components/InputField/InputField";
 import { BreadCrumbs } from "../components/BreadCrumbs/BreadCrumbs";
 import { ROUTES, ROUTE_LABELS } from '../../Routes';
 import { CityCard } from '../components/MusicCard/MusicCard';
 import { useNavigate } from "react-router-dom";
 import { CITIES_MOCK } from "../modules/mock";
-import Header from "../components/Header/header";
+import Header from "../components/Header/Header";
+import searchImg from "./search-image.png";
+import favoriteImg from "./favorites-btn.png" 
 
 const CitiesPage: FC = () => {
   const [searchValue, setSearchValue] = useState("");
@@ -75,7 +76,7 @@ const CitiesPage: FC = () => {
               <Row>
                 <Col md={7}>
                   <div className="search-input">
-                    <img src="/images/search-image.png" alt="Search Icon" className="search-icon" />
+                    <img src={searchImg} alt="Search Icon" className="search-icon" />
                     <Form.Control
                       type="text"
                       placeholder="Поиск"
@@ -91,8 +92,8 @@ const CitiesPage: FC = () => {
                   </Button>
                 </Col>
                 <Col md={2}>
-                  <a href="/applications/123" className="btn-favorites">
-                    <img src="/images/favorites-btn.png" alt="Избранное" />
+                  <a href="/" className="btn-favorites">
+                    <img src={favoriteImg} alt="Избранное" />
                     <span className="badge rounded-pill position-absolute">0</span>
                   </a>
                 </Col>
@@ -100,9 +101,9 @@ const CitiesPage: FC = () => {
             </Form>
 
             {loading ? (
-              <div className="loadingBg">
-                <Spinner animation="border" />
-              </div>
+                <div className="loadingBg">
+                  <Spinner animation="border" />
+                </div>
             ) : (
               <Row xs={4} md={4} className="g-4 cards-wrapper">
                 {city.length ? (
@@ -119,10 +120,13 @@ const CitiesPage: FC = () => {
                     </Col>
                   ))
                 ) : (
-                  <h1>К сожалению, пока ничего не найдено :(</h1>
+                  <section className="cities-not-found">
+                    <h1>К сожалению, пока ничего не найдено :(</h1>
+                  </section>
                 )}
               </Row>
             )}
+            <div style={{ height: '500px' }}></div>
           </main>
         </section>
       </div>
