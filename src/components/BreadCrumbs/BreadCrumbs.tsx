@@ -23,7 +23,7 @@ export const BreadCrumbs: FC<BreadCrumbsProps> = (props) => {
       </li>
       {!!crumbs.length &&
         crumbs.map((crumb, index) => (
-          <React.Fragment key={index}>
+          <React.Fragment key={index}> 
             <li className="slash">/</li>
             {index === crumbs.length - 1 ? (
               <li>{crumb.label}</li>

@@ -20,44 +20,32 @@ export const CityCard: FC<Props> = ({
     url,
     imageClickHandler
 }) => (
-    <Card className="card">
-        <Card.Img
-            className="cardImage"
-            variant="top"
-            src={url || defaultImage}
-            height={100}
-            width={100}
-            onClick={imageClickHandler}
-        />
-        <Card.Body>
-            <div className="textStyle">
-                <Card.Title>{city_name}</Card.Title>
+    <div className="city-card">
+        <Card className="card">
+            <div className="city-card-body">
+                <div className="city-card-img">
+                    <Card.Img
+                        variant="top"
+                        src={url || defaultImage}
+                        alt={city_name}
+                        onClick={imageClickHandler} // обработчик клика по изображению
+                    />
+                </div>
+                <h5 className="city-name">{city_name}</h5>
+                <p className="city-info">
+                    Население: <span className="statistics">{population}</span><br />
+                    Средняя зарплата: <span className="statistics">{salary} тыс.</span><br />
+                    Уровень безработицы: <span className="statistics">{unemployment_rate} %</span>
+                </p>
+                <Button 
+                    className="city-btn" 
+                    onClick={() => imageClickHandler() /* Здесь можно добавить логику для перехода на страницу города */}
+                >
+                    Подробнее
+                </Button>
             </div>
-            <div className="textStyle">
-                <Card.Text>
-                    {population}
-                </Card.Text>
-            </div>
-            <div className="textStyle">
-                <Card.Text>
-                    {salary}
-                </Card.Text>
-            </div>
-            <div className="textStyle">
-                <Card.Text>
-                    {unemployment_rate}
-                </Card.Text>
-            </div>
-            <Button
-                className="cardButton"
-                //href={details_url}
-                target="_blank"
-                variant="primary"
-            >
-                Подробнее о городе
-            </Button>
-        </Card.Body>
-    </Card>
+        </Card>
+    </div>
 );
 
 

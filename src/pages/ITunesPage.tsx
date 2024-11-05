@@ -1,6 +1,6 @@
 import "./ITunesPage.css";
 import { FC, useState } from "react";
-import { Col, Row, Spinner } from "react-bootstrap";
+import { Col, Row, Spinner, Form, Button } from "react-bootstrap";
 import { City, CitiesList } from '../modules/itunesApi';
 import InputField from "../components/InputField/InputField";
 import { BreadCrumbs } from "../components/BreadCrumbs/BreadCrumbs";
@@ -8,6 +8,7 @@ import { ROUTES, ROUTE_LABELS } from '../../Routes';
 import { CityCard } from '../components/MusicCard/MusicCard';
 import { useNavigate } from "react-router-dom";
 import { CITIES_MOCK } from "../modules/mock";
+import Header from "../components/Header/header";
 
 const CitiesPage: FC = () => {
   const [searchValue, setSearchValue] = useState("");
@@ -57,42 +58,74 @@ const CitiesPage: FC = () => {
   };
 
   return (
-    <div className="container">
-      <BreadCrumbs crumbs={[{ label: ROUTE_LABELS.CITIES }]} />
-      
-      <InputField
-        value={searchValue}
-        setValue={(value) => setSearchValue(value)}
-        loading={loading}
-        onSubmit={handleSearch}
-      />
+    <div >
+      <Header/>
+      <div className="container-2">
+        <BreadCrumbs crumbs={[{ label: ROUTE_LABELS.CITIES }]} />
 
-      {loading && (
-        <div className="loadingBg">
-          <Spinner animation="border" />
-        </div>
-      )}
-      {!loading &&
-        (!city.length ? (
-          <div>
-            <h1>К сожалению, пока ничего не найдено :(</h1>
-          </div>
-        ) : (
-          <Row xs={4} md={4} className="g-4">
-            {city.map((item, index) => (
-              <Col key={index}>
-                <CityCard
-                  url={item.url}
-                  city_name={item.name}
-                  population={item.population}
-                  salary={item.salary}
-                  unemployment_rate={item.unemployment_rate}
-                  imageClickHandler={() => handleCardClick(item.city_id)}
-                />
-              </Col>
-            ))}
-          </Row>
-        ))}
+        <main className="container">
+          <section className="cities-title">
+            <h1>Города для размещения Вашей вакансии</h1>
+          </section>
+        </main>
+
+        <section className="cities-and-search">
+          <main className="container">
+            <Form onSubmit={(e) => { e.preventDefault(); handleSearch(); }} className="search-bar">
+              <Row>
+                <Col md={7}>
+                  <div className="search-input">
+                    <img src="/images/search-image.png" alt="Search Icon" className="search-icon" />
+                    <Form.Control
+                      type="text"
+                      placeholder="Поиск"
+                      value={searchValue}
+                      onChange={(e) => setSearchValue(e.target.value)}
+                      className="inp-text"
+                    />
+                  </div>
+                </Col>
+                <Col md={3}>
+                  <Button type="submit" className="search-button">
+                    Найти
+                  </Button>
+                </Col>
+                <Col md={2}>
+                  <a href="/applications/123" className="btn-favorites">
+                    <img src="/images/favorites-btn.png" alt="Избранное" />
+                    <span className="badge rounded-pill position-absolute">0</span>
+                  </a>
+                </Col>
+              </Row>
+            </Form>
+
+            {loading ? (
+              <div className="loadingBg">
+                <Spinner animation="border" />
+              </div>
+            ) : (
+              <Row xs={4} md={4} className="g-4 cards-wrapper">
+                {city.length ? (
+                  city.map((item) => (
+                    <Col key={item.city_id}>
+                      <CityCard
+                        url={item.url}
+                        city_name={item.name}
+                        population={item.population}
+                        salary={item.salary}
+                        unemployment_rate={item.unemployment_rate}
+                        imageClickHandler={() => handleCardClick(item.city_id)}
+                      />
+                    </Col>
+                  ))
+                ) : (
+                  <h1>К сожалению, пока ничего не найдено :(</h1>
+                )}
+              </Row>
+            )}
+          </main>
+        </section>
+      </div>
     </div>
   );
 };

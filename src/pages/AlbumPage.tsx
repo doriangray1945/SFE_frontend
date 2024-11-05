@@ -1,79 +1,16 @@
-/*import "./AlbumPage.css";
-import { FC, useEffect, useState } from "react";
-import { BreadCrumbs } from "../components/BreadCrumbs/BreadCrumbs";
-import { ROUTES, ROUTE_LABELS } from "../../Routes";
-import { useParams } from "react-router-dom";
-import { ITunesMusic } from "../modules/itunesApi";
-import { Col, Row, Spinner, Image } from "react-bootstrap";
-import defaultImage from "../components/MusicCard/DefaultImage.jpg";
-import { SONGS_MOCK } from "../modules/mock";
-
-export const AlbumPage: FC = () => {
-  const [pageData, setPageData] = useState<ITunesMusic>();
-
-  const { id } = useParams();
-
-  useEffect(() => {
-    if (!id) return;
-
-    const mockData = SONGS_MOCK.results.find(
-      (album) => String(album.collectionId) === id
-    );
-
-    setPageData(mockData);
-  }, [id]);
-
-  return (
-    <div>
-      <BreadCrumbs
-        crumbs={[
-          { label: ROUTE_LABELS.ALBUMS, path: ROUTES.ALBUMS },
-          { label: pageData?.collectionCensoredName || "Альбом" },
-        ]}
-      />
-      {pageData ? (
-        <div className="container">
-          <Row>
-            <Col md={6}>
-              <p>
-                Альбом: <strong>{pageData.collectionCensoredName}</strong>
-              </p>
-              <p>
-                Исполнитель: <strong>{pageData.artistName}</strong>
-              </p>
-            </Col>
-            <Col md={6}>
-              <Image
-                src={pageData.artworkUrl100 || defaultImage}
-                alt="Картинка"
-                width={100}
-              />
-            </Col>
-          </Row>
-        </div>
-      ) : (
-        <div className="album_page_loader_block">
-          <Spinner animation="border" />
-        </div>
-      )}
-    </div>
-  );
-};*/
-
-
-
 import "./AlbumPage.css";
 import { FC, useEffect, useState } from "react";
 import { BreadCrumbs } from "../components/BreadCrumbs/BreadCrumbs";
 import { ROUTES, ROUTE_LABELS } from "../../Routes";
 import { useParams } from "react-router-dom";
 import { City, GetCityById } from "../modules/itunesApi";
-import { Col, Row, Spinner, Image } from "react-bootstrap";
+import { Col, Row, Spinner, Image, Container } from "react-bootstrap";
 import defaultImage from "../components/MusicCard/DefaultImage.jpg";
 import { CITIES_MOCK } from "../modules/mock";
+import Header from "../components/Header/header";
 
-export const AlbumPage: FC = () => {
-  const [pageData, setPageData] = useState<City>();
+export const CityPage: FC = () => {
+  const [cityData, setCityData] = useState<City>();
 
   const { id } = useParams(); // ид страницы, пример: "/albums/12"
 
@@ -85,21 +22,71 @@ export const AlbumPage: FC = () => {
           console.log("Server Responseeee:", response);
           const cityData = response;
           console.log("Found City Data:", cityData);
-          setPageData(cityData);
+          setCityData(cityData);
       })
       .catch(() => {
           console.log("Using Mock Data");
-          const mockCityData = CITIES_MOCK.cities.find(
+          const cityData = CITIES_MOCK.cities.find(
               (city) => String(city.city_id) === id
           );
-          console.log("Found Mock Data:", mockCityData);
-          setPageData(mockCityData);
+          console.log("Found Mock Data:", cityData);
+          setCityData(cityData);
       });
   }, [id]);
 
+  if (!cityData) {
+    return (
+      <div className="city-page-loader">
+        <Spinner animation="border" />
+      </div>
+    );
+  }
 
   return (
-    <div>
+    <Container fluid>
+      <Header/>
+      <div className="city-banner">
+        <Image src={cityData.url || defaultImage} alt={cityData.name} fluid />
+      </div>
+      <section className="city-page-container">
+        <BreadCrumbs
+            crumbs={[
+              { label: ROUTE_LABELS.CITIES, path: ROUTES.CITIES },
+              { label: cityData?.name || "Название города" },
+            ]}
+        />
+        <main className="container">
+          <div className="city-content">
+            <h1>{cityData.name} - Возможности для бизнеса и поиска сотрудников</h1>
+            <h5>{cityData.description}</h5>
+          </div>
+        </main>
+      </section>
+      <main className="container">
+        <div className="info">
+          <Row>
+            <Col md={1}>
+              <div className="info-number">!</div>
+            </Col>
+            <Col md={11}>
+              <div className="info-text">
+                <p>Статистика по рынку труда</p>
+                <ul>
+                  <li>Население: {cityData.population} человек.</li>
+                  <li>Средняя зарплата: {cityData.salary} тыс. руб.</li>
+                  <li>Уровень безработицы: {cityData.unemployment_rate}%.</li>
+                </ul>
+              </div>
+            </Col>
+          </Row>
+        </div>
+      </main>
+    </Container>
+  );
+};
+
+
+    /*<div>
       <BreadCrumbs
         crumbs={[
           { label: ROUTE_LABELS.CITIES, path: ROUTES.CITIES },
@@ -127,10 +114,10 @@ export const AlbumPage: FC = () => {
           </Row>
         </div>
       ) : (
-        <div className="album_page_loader_block">{/* загрузка */} 
+        <div className="album_page_loader_block">{/* загрузка *//*} 
           <Spinner animation="border" />
         </div>
       )}
     </div>
   );
-};
+};*/

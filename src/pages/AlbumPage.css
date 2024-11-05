@@ -1,6 +1,73 @@
-.album_page_loader_block {
+/*.album_page_loader_block {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-  }
+  }*/
+
+.city-banner img{
+    width: 100%;
+    height: 144px;
+    object-fit: cover;
+}
+
+.city-page-container {
+    background-color: #ECF4FF;
+    max-width: 100%;
+    width: 100vw;
+    padding-top: 59px;
+    padding-bottom: 66px;
+}
+
+.city-content h1{
+    font-family: 'Arial', sans-serif;
+    font-weight: bold;
+    font-size: 38px;
+    color: #000000;
+    line-height: 51px;
+    margin-bottom: 48px;
+}
+
+.city_content h5{
+    font-family: 'Arial', sans-serif;
+    font-weight: normal;
+    font-size: 20px;
+    color: #393939;
+    width: 1123px;
+    height: auto;
+}
+
+.info-number {
+    width: 45px;
+    height: 45px;
+    background-color: #fff;
+    color: #1890FF;
+    font-size: 24px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    border: 2px solid #1890FF;
+}
+
+.info{
+    margin-top: 97px;
+    margin-bottom: 211px;
+}
+
+.info-text p{
+    font-weight: 700;
+    margin-bottom: 1.5px;
+    letter-spacing: 0;
+}
+
+.info-text {
+    color: #393939;
+    font-size: 20px;
+    line-height: 1.3; /* уменьшенное расстояние между строками */
+    font-family: 'Arial', sans-serif;
+    font-stretch: condensed; /* Узкий шрифт */
+    letter-spacing: 0.08em;
+}
+

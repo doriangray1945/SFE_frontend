@@ -1,4 +1,4 @@
-.container {
+/*.container {
   display: flex;
   flex-direction: column;
   padding: 20px 40px;
@@ -12,4 +12,74 @@
   .container{
       min-width: auto;
   }
+}*/
+
+.container-2 {
+  width: 100vw;
+  max-width: 100%;
+}
+
+.cities-title {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 63px;
+  margin-bottom: 63px;
+}
+
+.cities-title h1 {
+  font-family: 'Arial', sans-serif;
+  font-weight: bold;
+  font-size: 44px;
+  color: black;
+  letter-spacing: -0.01em; /* Отрицательное значение для уменьшения интервала между буквами */
+  width: 582px;
+  height: 102px;
+  text-align: center;
+}
+
+.cities-and-search {
+background-color: #ECF4FF;
+width: 100%;
+}
+
+.inp-text {
+  width: 771px;
+  height: 51px;
+  margin: 47px 0;
+  border-radius: 12px; /* Добавляем скругление здесь */
+  background-color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  font-family: 'Arial', sans-serif;
+  font-size: 20px;
+  color: #9799A4;
+  padding-left: 50px; /* Отступ от левого края для иконки */
+  border-color: #CACFD0;
+  border-width: 1px;
+}
+
+.search-button {
+  margin-top: 47px;
+  margin-left: 40px;
+  height: 51px;
+  width: 198px;
+  font-family: 'Arial', sans-serif;
+  font-weight: bold;
+  font-size: 20px;
+  background-color: #1890FF;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.cards-wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 25%));
+  gap: 25px;
+  justify-content: space-between;
+  margin-top: 15px;
 }
