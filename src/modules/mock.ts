@@ -1,4 +1,4 @@
-import { CitiesResult } from "./itunesApi";
+import { CitiesResult } from "./citiesApi";
 
 export const CITIES_MOCK: CitiesResult = { 
   cities: [
@@ -9,7 +9,7 @@ export const CITIES_MOCK: CitiesResult = {
       salary: "35",
       unemployment_rate: "6.1",
       description: "Элиста – столица Калмыкии, город, сочетающий в себе традиции кочевого народа и современный образ жизни.  Развитая инфраструктура и уникальный колорит Элисты привлекают как туристов, так и специалистов, готовых к развитию региона.",
-      url: "http://localhost:9000/images/1.png",
+      url: "",
     },
     {
       city_id: 2,
@@ -18,7 +18,7 @@ export const CITIES_MOCK: CitiesResult = {
       salary: "150",
       unemployment_rate: "3.4",
       description: "Москва — это крупнейший экономический центр России, где сосредоточено множество высококвалифицированных специалистов и ведущих компаний. Размещение вакансии в этом городе открывает доступ к широкому рынку труда и перспективным кандидатам.",
-      url: "http://localhost:9000/images/2.png",
+      url: "",
     },
   ],
 };

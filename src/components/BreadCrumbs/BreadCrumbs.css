@@ -8,6 +8,8 @@
     display: flex;
     gap: 10px;
     padding: 20px;
+    font-size: 20px;  /* задаем размер текста */
+    font-family: "Arial", sans-serif;  /* устанавливаем шрифт */
   }
   
   .breadcrumbs * {

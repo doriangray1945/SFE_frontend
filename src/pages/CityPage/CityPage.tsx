@@ -1,13 +1,13 @@
-import "./AlbumPage.css";
+import "./CityPage.css";
 import { FC, useEffect, useState } from "react";
-import { BreadCrumbs } from "../components/BreadCrumbs/BreadCrumbs";
-import { ROUTES, ROUTE_LABELS } from "../../Routes";
+import { BreadCrumbs } from "../../components/BreadCrumbs/BreadCrumbs";
+import { ROUTES, ROUTE_LABELS } from "../../../Routes";
 import { useParams } from "react-router-dom";
-import { City, GetCityById } from "../modules/itunesApi";
-import { Col, Row, Spinner, Image, Container } from "react-bootstrap";
-import defaultImage from "../components/MusicCard/DefaultImage.jpg";
-import { CITIES_MOCK } from "../modules/mock";
-import Header from "../components/Header/Header";
+import { City, GetCityById } from "../../modules/citiesApi";
+import { Col, Row, Spinner, Image } from "react-bootstrap";
+import defaultImage from "../../static/images/DefaultImage.jpg";
+import { CITIES_MOCK } from "../../modules/mock";
+import Header from "../../components/Header/Header";
 
 export const CityPage: FC = () => {
   const [cityData, setCityData] = useState<City>();
@@ -36,14 +36,16 @@ export const CityPage: FC = () => {
 
   if (!cityData) {
     return (
-      <div className="city-page-loader">
-        <Spinner animation="border" />
+      <div className="container-1">
+        <div className="city_page_loader_block">
+          <Spinner animation="border" />
+        </div>
       </div>
     );
   }
 
   return (
-    <Container fluid>
+    <div className="container-1">
       <Header/>
       <div className="city-banner">
         <Image src={cityData.url || defaultImage} alt={cityData.name} fluid />
@@ -81,7 +83,7 @@ export const CityPage: FC = () => {
           </Row>
         </div>
       </main>
-    </Container>
+    </div>
   );
 };
 

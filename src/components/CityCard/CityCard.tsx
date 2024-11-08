@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { Button, Card } from 'react-bootstrap';
-import "./MusicCard.css";
-import defaultImage from "./DefaultImage.jpg";
+import "./CityCard.css";
+import defaultImage from "../../static/images/DefaultImage.jpg";
 
 interface Props {
     city_name: string;
@@ -39,7 +39,7 @@ export const CityCard: FC<Props> = ({
                 </p>
                 <Button 
                     className="city-btn" 
-                    onClick={() => imageClickHandler() /* Здесь можно добавить логику для перехода на страницу города */}
+                    onClick={() => imageClickHandler() }
                 >
                     Подробнее
                 </Button>

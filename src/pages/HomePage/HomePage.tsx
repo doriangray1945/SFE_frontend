@@ -1,14 +1,14 @@
 import { FC } from "react";
 import { Link } from "react-router-dom";
-import { ROUTES } from '../../Routes';
+import { ROUTES } from '../../../Routes';
 import { Button, Col, Row, Image } from "react-bootstrap";
-import IntroImg from "./intro.png"
-import Header from "../components/Header/Header";
+import IntroImg from "../../static/images/intro.png"
+import Header from "../../components/Header/Header";
 import './HomePage.css'
 
 export const HomePage: FC = () => {
   return (
-    <main className="container-2">
+    <main className="container-1">
       <Header />
       <div className="container">
         <div className="intro">

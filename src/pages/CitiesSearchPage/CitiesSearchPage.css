@@ -14,9 +14,18 @@
   }
 }*/
 
+.containerLoading {
+  display: flex;
+  align-items: center; /* Центрирует по вертикали */
+  justify-content: center; /* Центрирует по горизонтали */
+
+}
+
 .container-2 {
   width: 100vw;
   max-width: 100%;
+  position: fixed;
+  top: 120px;
 }
 
 .cities-title {
@@ -24,7 +33,6 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 63px;
   margin-bottom: 40px;
 }
 
@@ -120,11 +128,10 @@ width: 100%;
 }
 
 .badge {
-  position: absolute;
   top: -10px;
   right: 5px;
-  width: 21px;
-  height: 21px;
+  width: 25px;
+  height: 25px;
   background-color: #CF0000;
   color: white; /* Цвет текста */
   font-family: 'Arial', sans-serif;

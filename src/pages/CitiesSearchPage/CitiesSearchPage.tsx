@@ -1,15 +1,15 @@
-import "./ITunesPage.css";
-import { FC, useState } from "react";
+import "./CitiesSearchPage.css";
+import { FC, useState, useEffect } from "react";
 import { Col, Row, Spinner, Form, Button } from "react-bootstrap";
-import { City, CitiesList } from '../modules/itunesApi';
-import { BreadCrumbs } from "../components/BreadCrumbs/BreadCrumbs";
-import { ROUTES, ROUTE_LABELS } from '../../Routes';
-import { CityCard } from '../components/MusicCard/MusicCard';
+import { City, CitiesList } from '../../modules/citiesApi';
+import { BreadCrumbs } from "../../components/BreadCrumbs/BreadCrumbs";
+import { ROUTES, ROUTE_LABELS } from '../../../Routes';
+import { CityCard } from '../../components/CityCard/CityCard';
 import { useNavigate } from "react-router-dom";
-import { CITIES_MOCK } from "../modules/mock";
-import Header from "../components/Header/Header";
-import searchImg from "./search-image.png";
-import favoriteImg from "./favorites-btn.png" 
+import { CITIES_MOCK } from "../../modules/mock";
+import Header from "../../components/Header/Header";
+import searchImg from "../../static/images/search-image.png";
+import favoriteImg from "../../static/images/favorites-btn.png" 
 
 const CitiesPage: FC = () => {
   const [searchValue, setSearchValue] = useState("");
@@ -53,13 +53,17 @@ const CitiesPage: FC = () => {
       .finally(() => setLoading(false)); // Останавливаем состояние загрузки в любом случае*/
   };
 
+  useEffect(() => {
+    handleSearch(); // Вызов handleSearch при монтировании
+  }, []); 
+
   const handleCardClick = (city_id: number) => {
     // клик на карточку, переход на страницу альбома
     navigate(`${ROUTES.CITIES}/${city_id}`);
   };
 
   return (
-    <div >
+    <div>
       <Header/>
       <div className="container-2">
         <BreadCrumbs crumbs={[{ label: ROUTE_LABELS.CITIES }]} />
@@ -101,9 +105,9 @@ const CitiesPage: FC = () => {
             </Form>
 
             {loading ? (
-                <div className="loadingBg">
-                  <Spinner animation="border" />
-                </div>
+              <div className="containerLoading">
+                <Spinner animation="border" />
+              </div>
             ) : (
               <Row xs={4} md={4} className="g-4 cards-wrapper">
                 {city.length ? (
@@ -126,7 +130,7 @@ const CitiesPage: FC = () => {
                 )}
               </Row>
             )}
-            <div style={{ height: '500px' }}></div>
+            <div style={{ height: '250px' }}></div>
           </main>
         </section>
       </div>

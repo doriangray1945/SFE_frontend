@@ -13,8 +13,8 @@ export interface CitiesResult {
 }
 
 // Функция для поиска городов по имени
-export const CitiesList = async (name = ""): Promise<CitiesResult> => {
-  const response = await fetch(`api/cities/?city_name=${name}`);
+export const CitiesList = async (id: number | string): Promise<CitiesResult> => {
+  const response = await fetch(`api/cities/${id}`);
   console.log("OOOOhhhO", response);
   return response.json()
 };

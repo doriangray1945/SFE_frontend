@@ -5,6 +5,14 @@
     height: 100vh;
   }*/
 
+
+.city_page_loader_block {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
 .city-banner img{
     width: 100%;
     height: 144px;
