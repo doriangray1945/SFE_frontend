@@ -18,13 +18,12 @@
   display: flex;
   align-items: center; /* Центрирует по вертикали */
   justify-content: center; /* Центрирует по горизонтали */
-
 }
 
 .container-2 {
   width: 100vw;
   max-width: 100%;
-  position: fixed;
+  position: relative;
   top: 120px;
 }
 
@@ -48,8 +47,8 @@
 }
 
 .cities-and-search {
-background-color: #ECF4FF;
-width: 100%;
+  background-color: #ECF4FF;
+  width: 100%;
 }
 
 .inp-text {

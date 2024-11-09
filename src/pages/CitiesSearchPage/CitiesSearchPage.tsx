@@ -63,7 +63,7 @@ const CitiesPage: FC = () => {
   };
 
   return (
-    <div>
+    <div style={{ minHeight: '100vh' }}>
       <Header/>
       <div className="container-2">
         <BreadCrumbs crumbs={[{ label: ROUTE_LABELS.CITIES }]} />
