@@ -14,18 +14,18 @@ export interface CitiesResult {
 
 // Функция для поиска городов по имени
 export const CitiesList = async (name: string): Promise<CitiesResult> => {
-  const response = await fetch(`api/cities/?city_name=${name}`);
-  console.log("OOOOhhhO", response);
-  return response.json()
+  const response = await fetch(`/api/cities/?city_name=${name}`);
+  const data = await response.json();
+  console.log("OOOOhhhO", data);
+  return data
 };
 
 // Функция для поиска города по ID
-export const GetCityById = async (id: number | string): Promise<City> => {
-  const response = await fetch(`http://localhost:8000/cities/${id}`);
-  if (response.ok) {
-    console.log("OOOOOOO", response);
-  }
-  return response.json();
+export const GetCityById = async (id: number | string): Promise<CitiesResult> => {
+  const response = await fetch(`/api/cities/?city_id=${id}`);
+  const data = await response.json();
+  console.log("OOOO0000O", data);
+  return data
 };
 
 
