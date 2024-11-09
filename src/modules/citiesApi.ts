@@ -12,7 +12,7 @@ export interface CitiesResult {
   cities: City[];
 }
 
-// Функция для поиска городов по имени
+
 export const CitiesList = async (name: string): Promise<CitiesResult> => {
   const response = await fetch(`/api/cities/?city_name=${name}`);
   const data = await response.json();
@@ -20,9 +20,9 @@ export const CitiesList = async (name: string): Promise<CitiesResult> => {
   return data
 };
 
-// Функция для поиска города по ID
-export const GetCityById = async (id: number | string): Promise<CitiesResult> => {
-  const response = await fetch(`/api/cities/?city_id=${id}`);
+
+export const GetCityById = async (id: number | string): Promise<City> => {
+  const response = await fetch(`/api/cities/${id}/`);
   const data = await response.json();
   console.log("OOOO0000O", data);
   return data

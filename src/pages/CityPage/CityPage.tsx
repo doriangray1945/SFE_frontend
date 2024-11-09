@@ -20,7 +20,7 @@ export const CityPage: FC = () => {
     GetCityById(id)
       .then((response) => {
           console.log("Server Responseeee:", response);
-          const cityData = response.cities[0];
+          const cityData = response;
           console.log("Found City Data:", cityData);
           setCityData(cityData);
       })
