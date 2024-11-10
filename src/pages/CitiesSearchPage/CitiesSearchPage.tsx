@@ -11,27 +11,25 @@ import Header from "../../components/Header/Header";
 import favoriteImg from "../../static/images/favorites-btn.png"
 import InputField from "../../components/InputField/InputField"
 
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchCitiesStart, fetchCitiesSuccess, fetchCitiesFailure } from '../../slices/citiesSlice';
+
+
 const CitiesPage: FC = () => {
   const [searchValue, setSearchValue] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [cities, setCities] = useState<City[]>([]);
 
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  // Извлекаем данные из Redux Store
+  const { cities, loading, error } = useSelector((state: any) => state.cities);
+
+
   const handleSearch = () => {
-    /*setLoading(true);
   
-  // Фильтрация данных из SONGS_MOCK на основе введенного значения
-    const filteredMockData = SONGS_MOCK.results.filter((item) =>
-      item.collectionCensoredName
-        .toLocaleLowerCase()
-        .startsWith(searchValue.toLocaleLowerCase())
-    );
+    dispatch(fetchCitiesStart()); // Стартуем загрузку
+    console.log('Dispatching fetchCitiesStart');
 
-    setMusic(filteredMockData);
-    setLoading(false); // Останавливаем состояние загрузки*/
-
-    setLoading(true); // Устанавливаем состояние загрузки
     CitiesList(searchValue)
       .then((response) => {
         // Фильтруем треки, оставляя только те, где `wrapperType` равен "track"
@@ -39,18 +37,11 @@ const CitiesPage: FC = () => {
         .toLocaleLowerCase()
         .startsWith(searchValue.toLocaleLowerCase())
       );
-        setCities(filteredCities);
+        dispatch(fetchCitiesSuccess(filteredCities));
       })
       .catch(() => {
-        // В случае ошибки используем mock данные, фильтруем по названию альбома
-        const filteredMockData = CITIES_MOCK.cities.filter((item) =>
-          item.name
-            .toLocaleLowerCase()
-            .startsWith(searchValue.toLocaleLowerCase())
-        );
-        setCities(filteredMockData);
+        dispatch(fetchCitiesFailure("Ошибка при загрузке данных"));
       })
-      .finally(() => setLoading(false)); // Останавливаем состояние загрузки в любом случае*/
   };
 
   useEffect(() => {
@@ -100,7 +91,7 @@ const CitiesPage: FC = () => {
             ) : (
               <Row xs={4} md={4} className="g-4 cards-wrapper">
                 {cities.length ? (
-                  cities.map((item) => (
+                  cities.map((item: City) => (
                     <Col key={item.city_id}>
                       <CityCard
                         url={item.url}
