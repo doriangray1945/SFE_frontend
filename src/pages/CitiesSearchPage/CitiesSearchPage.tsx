@@ -1,6 +1,6 @@
 import "./CitiesSearchPage.css";
 import { FC, useState, useEffect } from "react";
-import { Col, Row, Spinner, Form, Button } from "react-bootstrap";
+import { Col, Row, Spinner } from "react-bootstrap";
 import { City, CitiesList } from '../../modules/citiesApi';
 import { BreadCrumbs } from "../../components/BreadCrumbs/BreadCrumbs";
 import { ROUTES, ROUTE_LABELS } from '../../../Routes';
@@ -8,13 +8,13 @@ import { CityCard } from '../../components/CityCard/CityCard';
 import { useNavigate } from "react-router-dom";
 import { CITIES_MOCK } from "../../modules/mock";
 import Header from "../../components/Header/Header";
-import searchImg from "../../static/images/search-image.png";
-import favoriteImg from "../../static/images/favorites-btn.png" 
+import favoriteImg from "../../static/images/favorites-btn.png"
+import InputField from "../../components/InputField/InputField"
 
 const CitiesPage: FC = () => {
   const [searchValue, setSearchValue] = useState("");
   const [loading, setLoading] = useState(false);
-  const [city, setCities] = useState<City[]>([]);
+  const [cities, setCities] = useState<City[]>([]);
 
   const navigate = useNavigate();
 
@@ -54,7 +54,7 @@ const CitiesPage: FC = () => {
   };
 
   useEffect(() => {
-    handleSearch(); // Вызов handleSearch при монтировании
+    handleSearch(); // при монтировании
   }, []); 
 
   const handleCardClick = (city_id: number) => {
@@ -76,33 +76,22 @@ const CitiesPage: FC = () => {
 
         <section className="cities-and-search">
           <main className="container">
-            <Form onSubmit={(e) => { e.preventDefault(); handleSearch(); }} className="search-bar">
-              <Row>
-                <Col md={7}>
-                  <div className="search-input">
-                    <img src={searchImg} alt="Search Icon" className="search-icon" />
-                    <Form.Control
-                      type="text"
-                      placeholder="Поиск"
-                      value={searchValue}
-                      onChange={(e) => setSearchValue(e.target.value)}
-                      className="inp-text"
-                    />
-                  </div>
-                </Col>
-                <Col md={3}>
-                  <Button type="submit" className="search-button">
-                    Найти
-                  </Button>
-                </Col>
-                <Col md={2}>
-                  <a href="/" className="btn-favorites">
-                    <img src={favoriteImg} alt="Избранное" />
-                    <span className="badge rounded-pill position-absolute">0</span>
-                  </a>
-                </Col>
-              </Row>
-            </Form>
+            <Row>
+              <Col md={10}>
+                <InputField
+                  value={searchValue}
+                  setValue={(value) => setSearchValue(value)}
+                  loading={loading}
+                  onSubmit={handleSearch}
+                />
+              </Col>
+              <Col md={2}>
+                <a href="/" className="btn-favorites">
+                  <img src={favoriteImg} alt="Избранное" />
+                  <span className="badge rounded-pill position-absolute">0</span>
+                </a>
+              </Col>
+            </Row>
 
             {loading ? (
               <div className="containerLoading">
@@ -110,8 +99,8 @@ const CitiesPage: FC = () => {
               </div>
             ) : (
               <Row xs={4} md={4} className="g-4 cards-wrapper">
-                {city.length ? (
-                  city.map((item) => (
+                {cities.length ? (
+                  cities.map((item) => (
                     <Col key={item.city_id}>
                       <CityCard
                         url={item.url}
