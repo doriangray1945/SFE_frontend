@@ -1,5 +1,6 @@
+// CitiesPage.tsx
 import "./CitiesSearchPage.css";
-import { FC, useState, useEffect } from "react";
+import { FC, useEffect } from "react";
 import { Col, Row, Spinner } from "react-bootstrap";
 import { City, CitiesList } from '../../modules/citiesApi';
 import { BreadCrumbs } from "../../components/BreadCrumbs/BreadCrumbs";
@@ -10,46 +11,41 @@ import { CITIES_MOCK } from "../../modules/mock";
 import Header from "../../components/Header/Header";
 import favoriteImg from "../../static/images/favorites-btn.png"
 import InputField from "../../components/InputField/InputField"
-
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchCitiesStart, fetchCitiesSuccess, fetchCitiesFailure } from '../../slices/citiesSlice';
-
+import { useSelector, useDispatch } from 'react-redux';
+import { setSearchValue, setCities, setLoading } from '../../slices/citiesSlice';
+import { RootState } from '../../store';
 
 const CitiesPage: FC = () => {
-  const [searchValue, setSearchValue] = useState("");
-
   const dispatch = useDispatch();
+  const searchValue = useSelector((state: RootState) => state.cities.searchValue);
+  const cities = useSelector((state: RootState) => state.cities.cities);
+  const loading = useSelector((state: RootState) => state.cities.loading);
+
   const navigate = useNavigate();
 
-  // Извлекаем данные из Redux Store
-  const { cities, loading, error } = useSelector((state: any) => state.cities);
-
-
   const handleSearch = () => {
-  
-    dispatch(fetchCitiesStart()); // Стартуем загрузку
-    console.log('Dispatching fetchCitiesStart');
-
+    dispatch(setLoading(true));
     CitiesList(searchValue)
       .then((response) => {
-        // Фильтруем треки, оставляя только те, где `wrapperType` равен "track"
-        const filteredCities = response.cities.filter((item) => item.name 
-        .toLocaleLowerCase()
-        .startsWith(searchValue.toLocaleLowerCase())
-      );
-        dispatch(fetchCitiesSuccess(filteredCities));
+        const filteredCities = response.cities.filter((item) => 
+          item.name.toLocaleLowerCase().startsWith(searchValue.toLocaleLowerCase())
+        );
+        dispatch(setCities(filteredCities));
       })
       .catch(() => {
-        dispatch(fetchCitiesFailure("Ошибка при загрузке данных"));
+        const filteredMockData = CITIES_MOCK.cities.filter((item) =>
+          item.name.toLocaleLowerCase().startsWith(searchValue.toLocaleLowerCase())
+        );
+        dispatch(setCities(filteredMockData));
       })
+      .finally(() => dispatch(setLoading(false)));
   };
 
   useEffect(() => {
-    handleSearch(); // при монтировании
-  }, []); 
+    handleSearch();
+  }, []);
 
   const handleCardClick = (city_id: number) => {
-    // клик на карточку, переход на страницу альбома
     navigate(`${ROUTES.CITIES}/${city_id}`);
   };
 
@@ -71,7 +67,7 @@ const CitiesPage: FC = () => {
               <Col md={10}>
                 <InputField
                   value={searchValue}
-                  setValue={(value) => setSearchValue(value)}
+                  setValue={(value) => dispatch(setSearchValue(value))}
                   loading={loading}
                   onSubmit={handleSearch}
                 />

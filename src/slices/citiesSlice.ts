@@ -1,45 +1,26 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
-interface City {
-  name: string;
-  population: string;
-  salary: string;
-  unemployment_rate: string;
-  description: string;
-  url: string;
-}
-
-interface CitiesState {
-  cities: City[];
-  loading: boolean;
-  error: string | null;
-}
-
-const initialState: CitiesState = {
+const initialState = {
+  searchValue: '',
   cities: [],
   loading: false,
-  error: null,
 };
 
 const citiesSlice = createSlice({
   name: 'cities',
   initialState,
   reducers: {
-    fetchCitiesStart: (state) => {
-      state.loading = true;
-      state.error = null;
+    setSearchValue(state, action) {
+      state.searchValue = action.payload;
     },
-    fetchCitiesSuccess: (state, action: PayloadAction<City[]>) => {
-      state.loading = false;
+    setCities(state, action) {
       state.cities = action.payload;
     },
-    fetchCitiesFailure: (state, action: PayloadAction<string>) => {
-      state.loading = false;
-      state.error = action.payload;
+    setLoading(state, action) {
+      state.loading = action.payload;
     },
   },
 });
 
-export const { fetchCitiesStart, fetchCitiesSuccess, fetchCitiesFailure } = citiesSlice.actions;
-
+export const { setSearchValue, setCities, setLoading } = citiesSlice.actions;
 export default citiesSlice.reducer;
