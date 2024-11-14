@@ -13,14 +13,8 @@ const citiesSlice = createSlice({
     setSearchValue(state, action) {
       state.searchValue = action.payload;
     },
-    setCities(state, action) {
-      state.cities = action.payload;
-    },
-    setLoading(state, action) {
-      state.loading = action.payload;
-    },
   },
 });
 
-export const { setSearchValue, setCities, setLoading } = citiesSlice.actions;
+export const { setSearchValue } = citiesSlice.actions;
 export default citiesSlice.reducer;
