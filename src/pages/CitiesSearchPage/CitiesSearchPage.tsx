@@ -1,6 +1,5 @@
-// CitiesPage.tsx
 import "./CitiesSearchPage.css";
-import { FC, useEffect } from "react";
+import { FC, useState, useEffect } from "react";
 import { Col, Row, Spinner } from "react-bootstrap";
 import { City, CitiesList } from '../../modules/citiesApi';
 import { BreadCrumbs } from "../../components/BreadCrumbs/BreadCrumbs";
@@ -11,41 +10,55 @@ import { CITIES_MOCK } from "../../modules/mock";
 import Header from "../../components/Header/Header";
 import favoriteImg from "../../static/images/favorites-btn.png"
 import InputField from "../../components/InputField/InputField"
-import { useSelector, useDispatch } from 'react-redux';
-import { setSearchValue, setCities, setLoading } from '../../slices/citiesSlice';
-import { RootState } from '../../store';
 
 const CitiesPage: FC = () => {
-  const dispatch = useDispatch();
-  const searchValue = useSelector((state: RootState) => state.cities.searchValue);
-  const cities = useSelector((state: RootState) => state.cities.cities);
-  const loading = useSelector((state: RootState) => state.cities.loading);
+  const [searchValue, setSearchValue] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [cities, setCities] = useState<City[]>([]);
 
   const navigate = useNavigate();
 
   const handleSearch = () => {
-    dispatch(setLoading(true));
+    /*setLoading(true);
+  
+  // Фильтрация данных из SONGS_MOCK на основе введенного значения
+    const filteredMockData = SONGS_MOCK.results.filter((item) =>
+      item.collectionCensoredName
+        .toLocaleLowerCase()
+        .startsWith(searchValue.toLocaleLowerCase())
+    );
+
+    setMusic(filteredMockData);
+    setLoading(false); // Останавливаем состояние загрузки*/
+
+    setLoading(true); // Устанавливаем состояние загрузки
     CitiesList(searchValue)
       .then((response) => {
-        const filteredCities = response.cities.filter((item) => 
-          item.name.toLocaleLowerCase().startsWith(searchValue.toLocaleLowerCase())
-        );
-        dispatch(setCities(filteredCities));
+        // Фильтруем треки, оставляя только те, где `wrapperType` равен "track"
+        const filteredCities = response.cities.filter((item) => item.name 
+        .toLocaleLowerCase()
+        .startsWith(searchValue.toLocaleLowerCase())
+      );
+        setCities(filteredCities);
       })
       .catch(() => {
+        // В случае ошибки используем mock данные, фильтруем по названию альбома
         const filteredMockData = CITIES_MOCK.cities.filter((item) =>
-          item.name.toLocaleLowerCase().startsWith(searchValue.toLocaleLowerCase())
+          item.name
+            .toLocaleLowerCase()
+            .startsWith(searchValue.toLocaleLowerCase())
         );
-        dispatch(setCities(filteredMockData));
+        setCities(filteredMockData);
       })
-      .finally(() => dispatch(setLoading(false)));
+      .finally(() => setLoading(false)); // Останавливаем состояние загрузки в любом случае*/
   };
 
   useEffect(() => {
-    handleSearch();
-  }, []);
+    handleSearch(); // при монтировании
+  }, []); 
 
   const handleCardClick = (city_id: number) => {
+    // клик на карточку, переход на страницу альбома
     navigate(`${ROUTES.CITIES}/${city_id}`);
   };
 
@@ -67,13 +80,13 @@ const CitiesPage: FC = () => {
               <Col md={10}>
                 <InputField
                   value={searchValue}
-                  setValue={(value) => dispatch(setSearchValue(value))}
+                  setValue={(value) => setSearchValue(value)}
                   loading={loading}
                   onSubmit={handleSearch}
                 />
               </Col>
               <Col md={2}>
-                <a href="/" className="btn-favorites">
+                <a /*href=""*/ className="btn-favorites">
                   <img src={favoriteImg} alt="Избранное" />
                   <span className="badge rounded-pill position-absolute">0</span>
                 </a>
@@ -87,7 +100,7 @@ const CitiesPage: FC = () => {
             ) : (
               <Row xs={4} md={4} className="g-4 cards-wrapper">
                 {cities.length ? (
-                  cities.map((item: City) => (
+                  cities.map((item) => (
                     <Col key={item.city_id}>
                       <CityCard
                         url={item.url}
