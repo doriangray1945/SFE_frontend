@@ -86,7 +86,7 @@ const CitiesPage: FC = () => {
                 />
               </Col>
               <Col md={2}>
-                <a href="/" className="btn-favorites">
+                <a /*href=""*/ className="btn-favorites">
                   <img src={favoriteImg} alt="Избранное" />
                   <span className="badge rounded-pill position-absolute">0</span>
                 </a>
