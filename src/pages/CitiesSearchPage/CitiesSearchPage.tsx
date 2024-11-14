@@ -39,7 +39,7 @@ const CitiesPage: FC = () => {
         );
         setCities(filteredMockData);
       })
-      .finally(() => setLoading(false));;
+      .finally(() => setLoading(false));
   };
 
   useEffect(() => {
