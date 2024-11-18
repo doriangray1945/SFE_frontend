@@ -101,3 +101,28 @@
   justify-content: center; /* Центрирует по горизонтали */
   text-align: center; /
 }
+
+@media (max-width: 480px) {
+  .container-2 {
+    width: 100%;
+  }
+
+  .cities-title {
+    margin-bottom: 10px;
+  }
+
+  .cities-title h1 {
+    font-family: 'Arial', sans-serif;
+    font-weight: bold;
+    font-size: 32px;
+    color: black;
+    letter-spacing: -0.01em; /* Отрицательное значение для уменьшения интервала между буквами */
+    text-align: center;
+    width: 100%;
+    line-height: 1.2; 
+  }
+
+  .cards-wrapper {
+    grid-template-columns: 1fr; /* Каждая карточка займет 100% ширины */
+  }
+}

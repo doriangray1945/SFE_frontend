@@ -3,18 +3,29 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import { ROUTES } from '../../../Routes';
 import "./NavigationBar.css"
+import { Link } from 'react-router-dom';
 
 export function NavigationBar() {
   return (
     <Navbar bg="light" expand="lg" className="navbar-container">
       <Container className="flex-column">
-        <Navbar.Brand href={ROUTES.HOME} className="navbar-brand">SFE</Navbar.Brand>
+        <Navbar.Brand as={Link} to={ROUTES.HOME} className="navbar-brand">
+          SFE
+        </Navbar.Brand>
         <div className="navbar-underline"></div>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="navbar-nav flex-column">
-            <Nav.Link href={ROUTES.HOME} className="nav-link">Главная</Nav.Link>
-            <Nav.Link href={ROUTES.CITIES} className="nav-link">Доступные города</Nav.Link>
+            <Nav.Item>
+              <Nav.Link as={Link} to={ROUTES.HOME} className="nav-link">
+                Главная
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link as={Link} to={ROUTES.CITIES} className="nav-link">
+                Доступные города
+              </Nav.Link>
+            </Nav.Item>
           </Nav>
         </Navbar.Collapse>
       </Container>
