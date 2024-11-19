@@ -65,7 +65,7 @@ const CitiesPage: FC = () => {
         <section className="cities-and-search">
           <main className="container">
             <Row>
-              <Col md={10}>
+              <Col xs={10} sm={10} md={10}>
                 <InputField
                   value={searchValue}
                   setValue={(value) => dispatch(setSearchValue(value))}
@@ -73,7 +73,7 @@ const CitiesPage: FC = () => {
                   onSubmit={handleSearch}
                 />
               </Col>
-              <Col md={2}>
+              <Col xs={2} sm={2} md={2}>
                 <a /*href="/"*/ className="btn-favorites">
                   <img src={favoriteImg} alt="Избранное" />
                   <span className="badge rounded-pill position-absolute">0</span>

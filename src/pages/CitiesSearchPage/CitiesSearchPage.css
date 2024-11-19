@@ -25,6 +25,7 @@
   max-width: 100%;
   position: relative;
   top: 120px;
+  justify-content: center;
 }
 
 .cities-title {
@@ -108,13 +109,14 @@
   }
 
   .cities-title {
-    margin-bottom: 10px;
+    margin-bottom: 0;
+    height: 85px;
   }
 
   .cities-title h1 {
     font-family: 'Arial', sans-serif;
     font-weight: bold;
-    font-size: 32px;
+    font-size: 30px;
     color: black;
     letter-spacing: -0.01em; /* Отрицательное значение для уменьшения интервала между буквами */
     text-align: center;
@@ -122,7 +124,29 @@
     line-height: 1.2; 
   }
 
+  .cities-not-found h1 {
+    font-size: 30px;
+    width: 350px;
+    height: 50px;
+  }
+  
+  .btn-favorites{
+    width: 45px;
+    height: 45px;
+    margin-top: 25px;
+    margin-left: 2px;
+  }
+  
+  .badge {
+    top: -6px;
+    right: 5px;
+    width: 17px;
+    height: 17px;
+    font-size: 14px; /* Размер шрифта */
+  }
+
   .cards-wrapper {
-    grid-template-columns: 1fr; /* Каждая карточка займет 100% ширины */
+    margin-top: 5px;
+    gap: 10px;
   }
 }

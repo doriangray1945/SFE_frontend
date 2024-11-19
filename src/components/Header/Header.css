@@ -40,3 +40,20 @@
     height: 100%;
     object-fit: cover;
 }
+
+@media (max-width: 480px) {
+    .navbar {
+        height: 70px;
+    }
+    
+    .logo {
+        width: 45px;
+        height: 45px;
+        font-size: 22px;
+    }
+    
+    .home-btn {
+        width: 42px;
+        height: 50px;
+    }
+}

@@ -28,6 +28,7 @@
     border-radius: 12px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    justify-content: center;
 }
 
 .search-icon{
@@ -40,41 +41,24 @@
 
 @media (max-width: 480px) {
     .inp-text {
-        width: 300px;
+        width: 240px;
         height: 40px;
-        margin: 47px 0;
-        border-radius: 12px; /* Добавляем скругление здесь */
-        background-color: #FFFFFF;
-        display: flex;
-        align-items: center;
-        font-family: 'Arial', sans-serif;
-        font-size: 20px;
-        color: #9799A4;
-        padding-left: 50px; /* Отступ от левого края для иконки */
-        border-color: #CACFD0;
-        border-width: 1px;
+        margin-top: 25px;
+        margin-bottom: 5px;
+        font-size: 18px;
     }
       
     .search-button {
-        margin-top: 47px;
-        margin-left: 80px;
-        height: 51px;
-        width: 198px;
-        font-family: 'Arial', sans-serif;
-        font-weight: bold;
-        font-size: 20px;
-        background-color: #1890FF;
-        color: #fff;
-        border: none;
-        border-radius: 12px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
+        margin-top: 25px;
+        margin-left: 28px;
+        height: 40px;
+        width: 75px;
+        font-size: 18px;
     }
     
     .search-icon{
         width: 24px;
         height: 19px;
-        position: absolute;
         margin-left: 12px;
         margin-top: 10px;
     }

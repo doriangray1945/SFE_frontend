@@ -13,7 +13,7 @@ interface Props {
 const InputField: FC<Props> = ({ value, setValue, onSubmit, loading }) => (
     <div className="search-bar">
         <Row>
-            <Col md={8}>
+            <Col xs={8} sm={8} md={8}>
                 <div className="search-input">
                     <img src={searchImg} alt="Search Icon" className="search-icon" />
                     <input
@@ -25,7 +25,7 @@ const InputField: FC<Props> = ({ value, setValue, onSubmit, loading }) => (
                     />
                 </div>
             </Col>
-            <Col md={4}>
+            <Col xs={4} sm={4} md={4}>
                 <Button disabled={loading} className="search-button" onClick={onSubmit}>
                     Найти
                 </Button>
