@@ -48,9 +48,9 @@ export const CityPage: FC = () => {
     <div className="container-1">
       <Header/>
       <div className="city-banner">
-        <Image src={cityData.url || defaultImage} alt={cityData.name} fluid />
+        <Image src={cityData.url || defaultImage} alt={cityData.name}></Image>
       </div>
-      <section className="city-page-container">
+      <div className="city-page-container">
         <BreadCrumbs
             crumbs={[
               { label: ROUTE_LABELS.CITIES, path: ROUTES.CITIES },
@@ -63,14 +63,14 @@ export const CityPage: FC = () => {
             <h5>{cityData.description}</h5>
           </div>
         </main>
-      </section>
+      </div>
       <main className="container">
         <div className="info">
           <Row>
-            <Col md={1}>
+            <Col xs={1} sm={1} md={1}>
               <div className="info-number">!</div>
             </Col>
-            <Col md={11}>
+            <Col xs={11} sm={11} md={11}>
               <div className="info-text">
                 <p>Статистика по рынку труда</p>
                 <ul>

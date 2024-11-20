@@ -21,9 +21,6 @@
 
 .city-page-container {
     background-color: #ECF4FF;
-    max-width: 100%;
-    width: 100vw;
-    padding-top: 59px;
     padding-bottom: 66px;
 }
 
@@ -79,3 +76,34 @@
     letter-spacing: 0.08em;
 }
 
+@media (max-width: 480px) {
+    .city-banner img{
+        height: 190px;
+    }
+    
+    .city-content h1{
+        font-size: 28px;
+        line-height: 30px;
+        margin-bottom: 38px;
+    }
+    
+    .city_content h5{
+        font-size: 16px;
+    }
+    
+    .info-number {
+        width: 35px;
+        height: 35px;
+        font-size: 22px;
+    }
+    
+    .info{
+        margin-top: 77px;
+        margin-bottom: 150px;
+    }
+    
+    .info-text {
+        font-size: 16px;
+        margin-left: 15px;
+    }
+}

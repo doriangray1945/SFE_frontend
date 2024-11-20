@@ -7,9 +7,11 @@
     list-style: none;
     display: flex;
     gap: 10px;
-    padding: 20px;
     font-size: 20px;  /* задаем размер текста */
     font-family: "Arial", sans-serif;  /* устанавливаем шрифт */
+    padding-top: 60px;
+    padding-bottom: 50px;
+    padding-left: 20px;
   }
   
   .breadcrumbs * {
@@ -33,10 +35,8 @@
   @media (max-width: 480px) {
     .breadcrumbs {
       gap: 10px;
-      padding: 10px;
-      margin-left: 5px;
-      margin-top: 0;
+      padding-bottom: 15px;
+      padding-top: 50px;
       font-size: 16px;  /* задаем размер текста */
-      font-family: "Arial", sans-serif;  /* устанавливаем шрифт */
     }
   }

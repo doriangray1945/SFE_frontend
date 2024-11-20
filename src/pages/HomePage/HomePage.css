@@ -55,3 +55,37 @@
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
+
+@media (max-width: 480px) {
+    .intro {
+        top: 60px;
+        position: relative;
+    }
+    
+    .intro h1 {
+        font-size: 30px;
+        height: 5px;
+        width: 100%;
+    }
+    
+    .intro p {
+        font-size: 20px;
+        width: 380px;
+        height: auto;
+        margin-top: 50px;
+    }
+    
+    .intro img {
+        width: 315px;
+        height: 270px;
+        margin-top: 20px;
+        margin-left: 0;
+    }
+    
+    .to-cities-button {
+        margin-top: 15px;
+        height: 35px;
+        width: 380px;
+        font-size: 15px;
+    }
+}
