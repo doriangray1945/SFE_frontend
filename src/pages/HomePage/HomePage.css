@@ -4,36 +4,37 @@
 }
 
 .intro {
-    top: 300px;
-    position: fixed;
+    position: relative;
 }
 
 .intro h1 {
     font-family: 'Arial', sans-serif;
     font-weight: bold;
-    font-size: 64px;
+    font-size: clamp(1.94rem, 4.5vw, 4rem);
     color: black;
     letter-spacing: -0.05em; /* Отрицательное значение для уменьшения интервала между буквами */
-    height: 53px;
-    width: 799px;
+    height: auto;
+    width: clamp(100%, 60vw, 60vw);
+    margin-top: 9vh;
 }
 
 .intro p {
     font-family: 'Arial', sans-serif;
     font-weight: normal;
-    font-size: 20px;
+    font-size: clamp(1.2rem, 1vw, 3rem);
     color: #393939;
-    line-height: 26px;
-    width: 675px;
-    height: 136px;
-    margin-top: 38px;
+    line-height: clamp(1.6rem, 2.6vh, 2.6vh);
+    width: clamp(100%, 30vw, 30vw);
+    height: auto;
+    margin-top: 3vh;
 }
 
 .intro img {
     width: 415px;
     height: 337px;
-    margin-top: 20px;
-    margin-left: 100px;
+    margin-top: 11vh;
+    margin-left: 7vw;
+    position: relative;
 }
 
 .highlight {
@@ -42,12 +43,12 @@
 }
 
 .to-cities-button {
-    margin-top: 25px;
-    height: 51px;
-    width: 500px;
+    margin-top: 2vh;
+    height: auto;
+    width: 100%;
     font-family: 'Arial', sans-serif;
     font-weight: bold;
-    font-size: 20px;
+    font-size: clamp(1rem, 0.93vw, 0.93vw);
     background-color: #1890FF;
     color: #fff;
     border: none;
@@ -56,36 +57,14 @@
     transition: background-color 0.3s ease;
 }
 
-@media (max-width: 480px) {
-    .intro {
-        top: 60px;
-        position: relative;
-    }
-    
+@media (max-width: 578px) {
     .intro h1 {
-        font-size: 30px;
-        height: 5px;
-        width: 100%;
+        margin-top: 25vh;
     }
-    
-    .intro p {
-        font-size: 20px;
-        width: 380px;
-        height: auto;
-        margin-top: 50px;
-    }
-    
+
     .intro img {
-        width: 315px;
-        height: 270px;
-        margin-top: 20px;
-        margin-left: 0;
-    }
-    
-    .to-cities-button {
-        margin-top: 15px;
-        height: 35px;
-        width: 380px;
-        font-size: 15px;
+        margin-top: 0;
+        margin-left: calc((100% - 415px) * 0.5);
+        margin-bottom: 4vh;
     }
 }
