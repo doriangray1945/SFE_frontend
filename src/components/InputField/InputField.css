@@ -1,27 +1,30 @@
+.search-bar {
+    position: relative;
+}
+
 .inp-text {
-    width: 771px;
-    height: 51px;
-    margin: 47px 0;
+    height: clamp(30px, 5vh, 5vh);
+    width: 100%;
+    margin: 4vh 0;
     border-radius: 12px; /* Добавляем скругление здесь */
     background-color: #FFFFFF;
     display: flex;
     align-items: center;
     font-family: 'Arial', sans-serif;
-    font-size: 20px;
+    font-size: clamp(18px, 2.5vh, 2.5vh);
     color: #9799A4;
-    padding-left: 50px; /* Отступ от левого края для иконки */
+    padding-left: clamp(50px, 3vw, 3vw); /* Отступ от левого края для иконки */
     border-color: #CACFD0;
     border-width: 1px;
 }
-  
+
 .search-button {
-    margin-top: 47px;
-    margin-left: 80px;
-    height: 51px;
-    width: 198px;
+    margin-top: 4vh;
+    width: 100%;
+    height: clamp(30px, 5vh, 5vh);
     font-family: 'Arial', sans-serif;
     font-weight: bold;
-    font-size: 20px;
+    font-size: clamp(18px, 2.4vh, 2.4vh);
     background-color: #1890FF;
     color: #fff;
     border: none;
@@ -32,14 +35,26 @@
 }
 
 .search-icon{
-    width: 29px;
-    height: 23px;
+    height: clamp(18px, 2.5vh, 2.5vh);
     position: absolute;
-    margin-left: 12px;
-    margin-top: 14px;
+    margin-left: clamp(10px, 1vw, 1vw);
+    margin-top: 1.2vh;
 }
 
-@media (max-width: 480px) {
+/*@media (max-width: 850px){
+    .search-button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 1350px) and (min-width: 851px) {
+    .search-button {
+        width: 50%;
+        margin-right: 0;
+    }
+}
+
+/*@media (max-width: 480px) {
     .inp-text {
         width: 240px;
         height: 40px;
@@ -62,4 +77,4 @@
         margin-left: 12px;
         margin-top: 10px;
     }
-}
+}*/

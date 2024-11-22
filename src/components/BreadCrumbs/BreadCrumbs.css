@@ -7,10 +7,10 @@
     list-style: none;
     display: flex;
     gap: 10px;
-    font-size: 20px;  /* задаем размер текста */
+    font-size: clamp(16px, 2.2vh, 2.2vh);  /* задаем размер текста */
     font-family: "Arial", sans-serif;  /* устанавливаем шрифт */
-    padding-top: 60px;
-    padding-bottom: 50px;
+    padding-top: 0;
+    margin-top: clamp(120px, 18vh, 18vh);
     padding-left: 20px;
   }
   
@@ -30,13 +30,4 @@
   
   .breadcrumbs li:last-child {
     color: var(--active_color);
-  }
-
-  @media (max-width: 480px) {
-    .breadcrumbs {
-      gap: 10px;
-      padding-bottom: 15px;
-      padding-top: 50px;
-      font-size: 16px;  /* задаем размер текста */
-    }
   }

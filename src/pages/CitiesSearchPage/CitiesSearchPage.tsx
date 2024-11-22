@@ -9,7 +9,6 @@ import { CityCard } from '../../components/CityCard/CityCard';
 import { useNavigate } from "react-router-dom";
 import { CITIES_MOCK } from "../../modules/mock";
 import Header from "../../components/Header/Header";
-import favoriteImg from "../../static/images/favorites-btn.png"
 import InputField from "../../components/InputField/InputField"
 import { useSelector, useDispatch } from 'react-redux';
 import { setSearchValue } from '../../slices/citiesSlice';
@@ -51,65 +50,50 @@ const CitiesPage: FC = () => {
   };
 
   return (
-    <div style={{ minHeight: '100vh' }}>
+    <div>
       <Header/>
       <div className="container-2">
         <BreadCrumbs crumbs={[{ label: ROUTE_LABELS.CITIES }]} />
-
-        <main className="container">
-          <section className="cities-title">
+        <div className="cities-title">
             <h1>Города для размещения Вашей вакансии</h1>
-          </section>
-        </main>
+        </div>
 
-        <section className="cities-and-search">
-          <main className="container">
-            <Row>
-              <Col xs={10} sm={10} md={10}>
-                <InputField
-                  value={searchValue}
-                  setValue={(value) => dispatch(setSearchValue(value))}
-                  loading={loading}
-                  onSubmit={handleSearch}
-                />
-              </Col>
-              <Col xs={2} sm={2} md={2}>
-                <a /*href="/"*/ className="btn-favorites">
-                  <img src={favoriteImg} alt="Избранное" />
-                  <span className="badge rounded-pill position-absolute">0</span>
-                </a>
-              </Col>
+        <div className="cities-and-search">
+          <InputField
+            value={searchValue}
+            setValue={(value) => dispatch(setSearchValue(value))}
+            loading={loading}
+            onSubmit={handleSearch}
+          />
+
+          {loading ? (
+            <div className="containerLoading">
+              <Spinner animation="border" />
+            </div>
+          ) : (
+            <Row xs={4} sm={4} md={4} className="g-4 cards-wrapper">
+              {cities.length ? (
+                cities.map((item: City) => (
+                  <Col key={item.city_id}>
+                    <CityCard
+                      url={item.url}
+                      city_name={item.name}
+                      population={item.population}
+                      salary={item.salary}
+                      unemployment_rate={item.unemployment_rate}
+                      imageClickHandler={() => handleCardClick(item.city_id)}
+                    />
+                  </Col>
+                ))
+              ) : (
+                <section className="cities-not-found">
+                  <h1>К сожалению, пока ничего не найдено :(</h1>
+                </section>
+              )}
             </Row>
-
-            {loading ? (
-              <div className="containerLoading">
-                <Spinner animation="border" />
-              </div>
-            ) : (
-              <Row xs={4} md={4} className="g-4 cards-wrapper">
-                {cities.length ? (
-                  cities.map((item: City) => (
-                    <Col key={item.city_id}>
-                      <CityCard
-                        url={item.url}
-                        city_name={item.name}
-                        population={item.population}
-                        salary={item.salary}
-                        unemployment_rate={item.unemployment_rate}
-                        imageClickHandler={() => handleCardClick(item.city_id)}
-                      />
-                    </Col>
-                  ))
-                ) : (
-                  <section className="cities-not-found">
-                    <h1>К сожалению, пока ничего не найдено :(</h1>
-                  </section>
-                )}
-              </Row>
-            )}
-            <div style={{ height: '250px' }}></div>
-          </main>
-        </section>
+          )}
+          <div style={{ height: '250px' }}></div>
+        </div>
       </div>
     </div>
   );

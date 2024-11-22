@@ -45,9 +45,9 @@ export const CityPage: FC = () => {
   }
 
   return (
-    <div className="container-1">
+    <div>
       <Header/>
-      <div className="city-banner">
+      <div className="container-2">
         <Image src={cityData.url || defaultImage} alt={cityData.name}></Image>
       </div>
       <div className="city-page-container">
@@ -57,14 +57,14 @@ export const CityPage: FC = () => {
               { label: cityData?.name || "Название города" },
             ]}
         />
-        <main className="container">
+        <main>
           <div className="city-content">
             <h1>{cityData.name} - Возможности для бизнеса и поиска сотрудников</h1>
             <h5>{cityData.description}</h5>
           </div>
         </main>
       </div>
-      <main className="container">
+      <main>
         <div className="info">
           <Row>
             <Col xs={1} sm={1} md={1}>
