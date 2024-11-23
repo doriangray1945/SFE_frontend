@@ -24,7 +24,8 @@
 }*/
 
 .city-card {
-    width: 371px;
+    min-width: 371px;
+    flex: 1 1 371px;
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -110,6 +111,6 @@
     display: flex; /*  Делаем  кнопку  flex-контейнером  */
     align-items: center; /*  Выравниваем  по  вертикали  */
     justify-content: center;
-    margin-left: 114px;
+    margin-left: calc((100% - 143px) * 0.5);
     margin-bottom: 19px;
 }

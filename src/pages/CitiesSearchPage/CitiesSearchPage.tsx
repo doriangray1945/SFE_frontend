@@ -1,7 +1,7 @@
 // CitiesPage.tsx
 import "./CitiesSearchPage.css";
 import { FC, useEffect, useState } from "react";
-import { Col, Row, Spinner } from "react-bootstrap";
+import { Col, /*Row,*/ Spinner } from "react-bootstrap";
 import { City, CitiesList } from '../../modules/citiesApi';
 import { BreadCrumbs } from "../../components/BreadCrumbs/BreadCrumbs";
 import { ROUTES, ROUTE_LABELS } from '../../../Routes';
@@ -71,7 +71,7 @@ const CitiesPage: FC = () => {
               <Spinner animation="border" />
             </div>
           ) : (
-            <Row xs={4} sm={4} md={4} className="g-4 cards-wrapper">
+            <div /*Row xs={4} sm={4} md={4}*/ className="g-4 cards-wrapper">
               {cities.length ? (
                 cities.map((item: City) => (
                   <Col key={item.city_id}>
@@ -90,7 +90,7 @@ const CitiesPage: FC = () => {
                   <h1>К сожалению, пока ничего не найдено :(</h1>
                 </section>
               )}
-            </Row>
+            </div> /*</Row>*/
           )}
           <div style={{ height: '250px' }}></div>
         </div>

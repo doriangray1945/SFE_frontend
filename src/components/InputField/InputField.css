@@ -13,7 +13,7 @@
     font-family: 'Arial', sans-serif;
     font-size: clamp(18px, 2.5vh, 2.5vh);
     color: #9799A4;
-    padding-left: clamp(50px, 3vw, 3vw); /* Отступ от левого края для иконки */
+    padding-left: clamp(60px, 3vw, 3vw); /* Отступ от левого края для иконки */
     border-color: #CACFD0;
     border-width: 1px;
 }
