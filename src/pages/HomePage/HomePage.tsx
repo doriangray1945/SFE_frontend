@@ -11,7 +11,7 @@ export const HomePage: FC = () => {
   return (
     <div>
       <Header/>
-    <main className="container-1">
+      <main className="container-1">
         <div className="intro">
           <h1>Сервис для работодателей</h1>
           <Row>

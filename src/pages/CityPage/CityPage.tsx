@@ -47,7 +47,7 @@ export const CityPage: FC = () => {
   return (
     <div>
       <Header/>
-      <div className="container-2">
+      <div className="city-banner">
         <Image src={cityData.url || defaultImage} alt={cityData.name}></Image>
       </div>
       <div className="city-page-container">
@@ -57,32 +57,28 @@ export const CityPage: FC = () => {
               { label: cityData?.name || "Название города" },
             ]}
         />
-        <main>
-          <div className="city-content">
-            <h1>{cityData.name} - Возможности для бизнеса и поиска сотрудников</h1>
-            <h5>{cityData.description}</h5>
-          </div>
-        </main>
-      </div>
-      <main>
-        <div className="info">
-          <Row>
-            <Col xs={1} sm={1} md={1}>
-              <div className="info-number">!</div>
-            </Col>
-            <Col xs={11} sm={11} md={11}>
-              <div className="info-text">
-                <p>Статистика по рынку труда</p>
-                <ul>
-                  <li>Население: {cityData.population} человек.</li>
-                  <li>Средняя зарплата: {cityData.salary} тыс. руб.</li>
-                  <li>Уровень безработицы: {cityData.unemployment_rate}%.</li>
-                </ul>
-              </div>
-            </Col>
-          </Row>
+        <div className="city-content">
+          <h1>{cityData.name} - Возможности для бизнеса и поиска сотрудников</h1>
+          <h5>{cityData.description}</h5>
         </div>
-      </main>
+      </div>
+      <div className="info">
+        <Row>
+          <Col xs={2} sm={2} md={1}>
+            <div className="info-number">!</div>
+          </Col>
+          <Col xs={10} sm={10} md={11}>
+            <div className="info-text">
+              <p>Статистика по рынку труда</p>
+              <ul>
+                <li>Население: {cityData.population} человек.</li>
+                <li>Средняя зарплата: {cityData.salary} тыс. руб.</li>
+                <li>Уровень безработицы: {cityData.unemployment_rate}%.</li>
+              </ul>
+            </div>
+          </Col>
+        </Row>
+      </div>
     </div>
   );
 };
