@@ -5,10 +5,36 @@ import { ROUTES } from "../Routes";
 import { HomePage } from "./pages/HomePage/HomePage";
 import { NavigationBar } from "./components/NavigationBar/NavigationBar"
 import { BrowserRouter } from 'react-router-dom';
+import { useEffect } from "react";
+
+if (window && (window as any).__TAURI__) {
+
+} else {
+  console.error("Tauri API не доступен");
+}
 
 function App() {
+  useEffect(() => {
+    if ((window as any).__TAURI__) {
+      const { invoke } = (window as any).__TAURI__.tauri;
+      
+      invoke('tauri', { cmd: 'create' })
+        .then((response: any) => console.log(response))
+        .catch((error: any) => console.log(error));
+
+      return () => {
+        invoke('tauri', { cmd: 'close' })
+          .then((response: any) => console.log(response))
+          .catch((error: any) => console.log(error));
+      };
+    } else {
+      console.error("Tauri API не доступен");
+    }
+  }, []);
+
+
     return (
-      <BrowserRouter basename="/SFE_frontend">
+      <BrowserRouter basename="SFE_frontend">
         <NavigationBar />
         <Routes>
           <Route path={ROUTES.HOME} index element={<HomePage />} />
