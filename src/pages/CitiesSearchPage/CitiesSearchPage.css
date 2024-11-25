@@ -73,11 +73,10 @@ body {
 .cities-not-found h1 {
   font-family: 'Arial', sans-serif;
   font-weight: bold;
-  font-size: 44px;
+  font-size: clamp(16px, 4.5vh, 4.5vh);
   color: black;
   letter-spacing: -0.01em; /* Отрицательное значение для уменьшения интервала между буквами */
-  width: 582px;
-  height: 102px;
+  width: 100%;
   text-align: left;
 }
 
