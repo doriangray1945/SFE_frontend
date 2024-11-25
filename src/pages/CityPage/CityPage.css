@@ -88,8 +88,8 @@
 
 .info-text {
     color: #393939;
-    font-size: 2vh;
-    line-height: 2.6vh; /* уменьшенное расстояние между строками */
+    font-size: clamp(1.1rem, 2.4vh, 2.4vh);
+    line-height: clamp(1.5rem, 2.6vh, 2.6vh);
     font-family: 'Arial', sans-serif;
     font-stretch: condensed; /* Узкий шрифт */
     letter-spacing: 0.08em;
