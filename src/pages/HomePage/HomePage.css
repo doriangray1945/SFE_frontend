@@ -35,7 +35,7 @@
     position: relative;
     object-fit: cover;
     margin-top: 3vh;
-    margin-left: 10vw;
+    padding-left: 10vw;
 }
 
 .highlight {
@@ -58,7 +58,7 @@
     transition: background-color 0.3s ease;
 }
 
-@media (max-width: 576px) {
+@media (max-width: 800px) {
     .container-1 {
         padding-left: 2vw;
     }
@@ -70,6 +70,6 @@
     .intro img {
         margin-top: 0;
         margin-bottom: 4vh;
-        margin-left: calc((100% - 415px) * 0.5);
+        padding-left: calc((100% - 415px) * 0.5);
     }
 }
