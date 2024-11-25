@@ -1,5 +1,5 @@
 .container-1 {
-    width: clamp(450px, 100%, 100%);
+    width: clamp(calc(450px - 25vw), calc(100% - 25vw), calc(100% - 25vw));
     padding-left: 25vw;
 }
 
@@ -34,8 +34,7 @@
     height: 330px;
     position: relative;
     object-fit: cover;
-    margin-top: 3vh;
-    margin-left: 10vw;
+    margin-left: 17vw;
 }
 
 .highlight {
@@ -58,9 +57,21 @@
     transition: background-color 0.3s ease;
 }
 
+@media (max-width: 800px) {
+    .container-1 {
+        padding-left: 4vw;
+        width: clamp(calc(380px - 4vw), calc(100% - 4vw), calc(100% - 4vw));
+    }
+
+    .intro img {
+        margin-left: 14vw;
+    }        
+}
+
 @media (max-width: 576px) {
     .container-1 {
         padding-left: 2vw;
+        width: clamp(calc(380px - 2vw), calc(100% - 2vw), calc(100% - 2vw));
     }
 
     .intro {
