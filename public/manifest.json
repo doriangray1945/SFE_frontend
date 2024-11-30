@@ -1,6 +1,6 @@
 {
-    "name": "Tile Notes",
-    "short_name": "Tile Notes",
+    "name": "Сервис для работодателей",
+    "short_name": "SFE",
     "start_url": "/",
     "display": "standalone",
     "background_color": "#fdfdfd",
