@@ -1,7 +1,7 @@
 {
-    "name": "Tile Notes",
-    "short_name": "Tile Notes",
-    "start_url": "/",
+    "name": "Сервис для работодателей",
+    "short_name": "SFE",
+    "start_url": "/SFE_frontend",
     "display": "standalone",
     "background_color": "#fdfdfd",
     "theme_color": "#db4938",
