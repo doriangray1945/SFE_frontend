@@ -1,7 +1,7 @@
 {
     "name": "Сервис для работодателей",
     "short_name": "SFE",
-    "start_url": "/",
+    "start_url": "/SFE_frontend",
     "display": "standalone",
     "background_color": "#fdfdfd",
     "theme_color": "#db4938",
