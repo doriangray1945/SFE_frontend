@@ -1,6 +1,6 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
-  "productName": "Сервис для работодателей",
+  "productName": "SFE_tauri",
   "version": "0.1.0",
   "identifier": "com.tauri.dev",
   "build": {
@@ -12,7 +12,7 @@
   "app": {
     "windows": [
       {
-        "title": "sfe-frontend",
+        "title": "Сервис для работодателей",
         "width": 800,
         "height": 600,
         "resizable": true,
