@@ -38,6 +38,18 @@
     border: none;
 }
 
+.login-btn {
+    height: clamp(45px, 8vh, 8vh);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: blue;
+    border: none;
+    font-family: 'Arial', sans-serif;
+    font-weight: bold;
+    font-size: clamp(16px, 2vh, 2vh);
+}
+
 .home-btn:active,
 .home-btn:hover {
     background-color: #000000 !important;  /* Сохраняем исходный цвет фона */

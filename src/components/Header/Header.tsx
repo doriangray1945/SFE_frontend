@@ -14,6 +14,11 @@ const Header: React.FC = () => {
         <nav className="navbar">
             <div className="container d-flex align-items-center justify-content-between">
                 <div className="logo">SFE</div>
+
+                <Link to={ROUTES.LOGIN}>
+                    <Button className="login_btn">Войти</Button>
+                </Link>
+
                 {(location.pathname.includes('/applications') || location.pathname.includes('/cities')) && (
                     <Link to={ROUTES.HOME}>
                         <Button className="home-btn">
