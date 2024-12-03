@@ -14,9 +14,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setSearchValue } from '../../slices/citiesSlice';
 import { RootState } from '../../store';
 
+import { loginUser } from "../../slices/userSlice";
+
 const CitiesPage: FC = () => {
   const dispatch = useDispatch();
   const searchValue = useSelector((state: RootState) => state.cities.searchValue);
+  const user = useSelector((state: RootState) => state.user.user);
   
   const [loading, setLoading] = useState(false);
   const [cities, setCities] = useState<City[]>([]);

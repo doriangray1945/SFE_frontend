@@ -1,10 +1,4 @@
-export interface User {
-  username: string;
-  password: string;
-}
-
-  
-export const Login = async (username: string, password: string): Promise<User> => {
+export const Login = async (username: string, password: string): Promise<string> => {
   const response = await fetch(`/api/login/`, {
     method: 'POST',
     headers: {
@@ -12,13 +6,16 @@ export const Login = async (username: string, password: string): Promise<User> =
     },
     body: JSON.stringify({ username, password })
   });
-  
+
+  // Проверка статуса HTTP (например, 200 или 400)
   if (!response.ok) { 
-    console.log("Errorrrr");
+    const errorText = await response.text();  // Читаем текст ошибки
+    throw new Error(errorText || 'Ошибка авторизации');
   }
-  
-  /*const data: User = await response.json(); 
-  console.log("YES", data);
-  return data; */
+
+  // Читаем текст ответа (например, "status:ok")
+  const data = await response.text();
+  console.log('Ответ от сервера:', data);
+
+  return data;  // Возвращаем текстовое значение
 };
-  

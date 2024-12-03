@@ -3,6 +3,7 @@ import { Form, Button, Container, Alert } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { loginUser } from '../../slices/userSlice'; 
 import { Login } from '../../modules/userApi';
+import Header from "../../components/Header/Header";
 
 interface FormData {
     username: string;
@@ -20,13 +21,17 @@ const LoginPage: React.FC = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e: FormEvent) => {
+    const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         if (formData.username && formData.password) {
-            Login(formData.username, formData.password)
-                .then(() => {
-                    dispatch(loginUser(formData)); // Действие Redux
-                })
+            const response = await Login(formData.username, formData.password);
+
+            if (response === 'status:ok') {
+                dispatch(loginUser({ username: formData.username }));  // Действие Redux для обновления состояния
+                console.log('Авторизация успешна');
+            } else {
+                console.error('Ошибка авторизации:', response);
+            }
         } else {
             setError('Заполните все поля');
         }
@@ -34,6 +39,7 @@ const LoginPage: React.FC = () => {
 
     return (
         <Container className="mt-5">
+        <Header/>
         <h2>Вход</h2>
         {error && <Alert variant="danger">{error}</Alert>}
         <Form onSubmit={handleSubmit}>
