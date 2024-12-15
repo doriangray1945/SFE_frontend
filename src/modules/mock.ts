@@ -1,3 +1,4 @@
+import { count } from "console";
 import { CitiesResult } from "./citiesApi";
 
 export const CITIES_MOCK: CitiesResult = { 
@@ -48,4 +49,6 @@ export const CITIES_MOCK: CitiesResult = {
       url: "",
     },
   ],
+  draft_vacancy_application: 0,
+  count: 0
 };

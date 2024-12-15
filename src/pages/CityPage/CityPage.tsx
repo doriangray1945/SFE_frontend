@@ -3,35 +3,36 @@ import { FC, useEffect, useState } from "react";
 import { BreadCrumbs } from "../../components/BreadCrumbs/BreadCrumbs";
 import { ROUTES, ROUTE_LABELS } from "../../../Routes";
 import { useParams } from "react-router-dom";
-import { City, GetCityById } from "../../modules/citiesApi";
+import { Cities } from '../../api/Api'
 import { Col, Row, Spinner, Image } from "react-bootstrap";
 import defaultImage from "../../static/images/DefaultImage.jpg";
 import { CITIES_MOCK } from "../../modules/mock";
 import Header from "../../components/Header/Header";
+import { api } from '../../api';
 
 export const CityPage: FC = () => {
-  const [cityData, setCityData] = useState<City>();
+  const [cityData, setCityData] = useState<Cities>();
 
   const { id } = useParams(); // ид страницы, пример: "/albums/12"
 
   useEffect(() => {
     if (!id) return;
 
-    GetCityById(id)
-      .then((response) => {
-          console.log("Server Responseeee:", response);
-          const cityData = response;
-          console.log("Found City Data:", cityData);
-          setCityData(cityData);
-      })
-      .catch(() => {
-          console.log("Using Mock Data");
-          const cityData = CITIES_MOCK.cities.find(
-              (city) => String(city.city_id) === id
-          );
-          console.log("Found Mock Data:", cityData);
-          setCityData(cityData);
-      });
+    const fetchCityData = async () => {
+      try {
+        const response = await api.cities.citiesRead(id);
+        const cityData = response.data;
+        setCityData(cityData);
+      } catch {
+        const cityData = CITIES_MOCK.cities.find(
+          (city) => String(city.city_id) === id
+        );
+        setCityData(cityData);
+      }
+    };
+  
+    fetchCityData();
+
   }, [id]);
 
   if (!cityData) {
@@ -82,40 +83,3 @@ export const CityPage: FC = () => {
     </div>
   );
 };
-
-
-    /*<div>
-      <BreadCrumbs
-        crumbs={[
-          { label: ROUTE_LABELS.CITIES, path: ROUTES.CITIES },
-          { label: pageData?.name || "Название города" },
-        ]}
-      />
-      {pageData ? ( // проверка на наличие данных, иначе загрузка
-        <div className="container">
-          <Row>
-            <Col md={6}>
-              <p>
-                Название города: <strong>{pageData.name}</strong>
-              </p>
-              <p>
-                Описание: <strong>{pageData.description}</strong>
-              </p>
-            </Col>
-            <Col md={6}>
-              <Image
-                src={pageData.url || defaultImage} // дефолтное изображение, если нет artworkUrl100
-                alt="Картинка"
-                width={100}
-              />
-            </Col>
-          </Row>
-        </div>
-      ) : (
-        <div className="album_page_loader_block">{/* загрузка *//*} 
-          <Spinner animation="border" />
-        </div>
-      )}
-    </div>
-  );
-};*/

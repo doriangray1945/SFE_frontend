@@ -1,3 +1,5 @@
+import { api } from '../api'
+
 export interface City {
   city_id: number;
   name: string;
@@ -10,21 +12,34 @@ export interface City {
 
 export interface CitiesResult {
   cities: City[];
+  draft_vacancy_application: number,
+  count: number
+}
+
+export interface VacancyApplication {
+  app_id: number,
+  city_id: City[],
+  count: number
 }
 
 
 export const CitiesList = async (name: string): Promise<CitiesResult> => {
   const response = await fetch(`/api/cities/?city_name=${name}`);
   const data = await response.json();
-  console.log("OOOOhhhO", data);
   return data
 };
 
 
-export const GetCityById = async (id: number | string): Promise<City> => {
-  const response = await fetch(`/api/cities/${id}/`);
+export const GetCityById = async (city_id: number | string): Promise<City> => {
+  const response = await fetch(`/api/cities/${city_id}/`);
   const data = await response.json();
-  console.log("OOOO0000O", data);
+  return data
+};
+
+
+export const GetVacancyApplicationById = async (app_id: number | string): Promise<VacancyApplication> => {
+  const response = await fetch(`/api/vacancy_applications/${app_id}/`);
+  const data = await response.json();
   return data
 };
 

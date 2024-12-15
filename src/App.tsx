@@ -6,6 +6,7 @@ import { CityPage } from "./pages/CityPage/CityPage";
 import CitiesPage from "./pages/CitiesSearchPage/CitiesSearchPage";
 import { HomePage } from "./pages/HomePage/HomePage";
 import LoginPage from "./pages/LoginPage/LoginPage"
+import VacancyApplicationPage from "./pages/VacancyApplicationPage/VacancyApplicationPage";
 
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
           <Route path={ROUTES.LOGIN} index element={<LoginPage />} />
           <Route path={ROUTES.CITIES} element={<CitiesPage />} />
           <Route path={`${ROUTES.CITIES}/:id`} element={<CityPage />} />
+          <Route path={`${ROUTES.VACANCYAPPLICATION}/:id`} element={<VacancyApplicationPage />} />
         </Routes>
       </BrowserRouter>
     );

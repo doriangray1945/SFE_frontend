@@ -2,18 +2,15 @@ import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { Form, Button, Container, Alert } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { loginUser } from '../../slices/userSlice'; 
-import { Login } from '../../modules/userApi';
 import Header from "../../components/Header/Header";
+import { api } from '../../api';
+import { User } from '../../api/Api'
 
-interface FormData {
-    username: string;
-    password: string;
-}
 
 const LoginPage: React.FC = () => {
     const dispatch = useDispatch();
 
-    const [formData, setFormData] = useState<FormData>({ username: '', password: '' });
+    const [formData, setFormData] = useState<User>({ username: '', password: ''});
     const [error, setError] = useState<string | null>(null);
 
 
@@ -23,19 +20,36 @@ const LoginPage: React.FC = () => {
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
+      
         if (formData.username && formData.password) {
-            const response = await Login(formData.username, formData.password);
-
-            if (response === 'status:ok') {
-                dispatch(loginUser({ username: formData.username }));  // Действие Redux для обновления состояния
-                console.log('Авторизация успешна');
+          try {
+            const userData = await api.login.loginCreate({ username: formData.username, password: formData.password });
+            console.log(userData.data);
+      
+            if (userData.data.username) {
+              dispatch(
+                loginUser({
+                  username: userData.data.username,
+                  password: userData.data.password,
+                  is_staff: userData.data.is_staff,
+                  is_superuser: userData.data.is_superuser,
+                })
+              );
+              console.log('Авторизация успешна');
             } else {
-                console.error('Ошибка авторизации:', response);
+              console.error('Не удалось авторизоваться: ответ сервера некорректен');
+              setError('Ответ сервера некорректен');
             }
+          } catch (error) {
+            // Обработка ошибок
+            console.error('Ошибка авторизации');
+            setError('Ошибка авторизации');
+          }
         } else {
-            setError('Заполните все поля');
+          setError('Заполните все поля');
         }
     };
+      
 
     return (
         <Container className="mt-5">

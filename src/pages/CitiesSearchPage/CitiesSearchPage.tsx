@@ -2,7 +2,6 @@
 import "./CitiesSearchPage.css";
 import { FC, useEffect, useState } from "react";
 import { Col, /*Row,*/ Spinner } from "react-bootstrap";
-import { City, CitiesList } from '../../modules/citiesApi';
 import { BreadCrumbs } from "../../components/BreadCrumbs/BreadCrumbs";
 import { ROUTES, ROUTE_LABELS } from '../../../Routes';
 import { CityCard } from '../../components/CityCard/CityCard';
@@ -10,45 +9,55 @@ import { useNavigate } from "react-router-dom";
 import { CITIES_MOCK } from "../../modules/mock";
 import Header from "../../components/Header/Header";
 import InputField from "../../components/InputField/InputField"
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux'; 
 import { setSearchValue } from '../../slices/citiesSlice';
 import { RootState } from '../../store';
-
-import { loginUser } from "../../slices/userSlice";
+import { setAppId, setCounT } from "../../slices/VacancyApplicationSlice";
+import { api } from '../../api';
+import { Cities } from '../../api/Api'
 
 const CitiesPage: FC = () => {
   const dispatch = useDispatch();
   const searchValue = useSelector((state: RootState) => state.cities.searchValue);
-  const user = useSelector((state: RootState) => state.user.user);
   
   const [loading, setLoading] = useState(false);
-  const [cities, setCities] = useState<City[]>([]);
+  const [cities, setCities] = useState<Cities[]>([]);
+
+  const [vacancy_application, setVacancyApplication] = useState<number | null>(null);
+  const [count, setCount] = useState<number | null | undefined>(null);
 
   const navigate = useNavigate();
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
     setLoading(true);
-    CitiesList(searchValue)
-      .then((response) => {
-        const filteredCities = response.cities.filter((item) => 
-          item.name.toLocaleLowerCase().startsWith(searchValue.toLocaleLowerCase())
-        );
-        setCities(filteredCities);
-      })
-      .catch(() => {
-        const filteredMockData = CITIES_MOCK.cities.filter((item) =>
-          item.name.toLocaleLowerCase().startsWith(searchValue.toLocaleLowerCase())
-        );
-        setCities(filteredMockData);
-      })
-      .finally(() => setLoading(false));
+    try {
+      const response = await api.cities.citiesList();
+      const app_id = response.data.draft_vacancy_application;
+      const count = response.data.count;
+      dispatch(setAppId(app_id));
+      dispatch(setCounT(count));
+
+      const filteredCities = response.data.cities.filter((item) => 
+        item.name && item.name.toLocaleLowerCase().startsWith(searchValue.toLocaleLowerCase())
+      );
+      
+      setCities(filteredCities);
+      setVacancyApplication( app_id != null ? app_id : null );
+      setCount(count);
+    } catch {
+      const filteredMockData = CITIES_MOCK.cities.filter((item) =>
+        item.name.toLocaleLowerCase().startsWith(searchValue.toLocaleLowerCase()));
+      setCities(filteredMockData);
+    } finally {
+      setLoading(false);
+    } 
   };
 
   useEffect(() => {
     handleSearch();
   }, []);
 
-  const handleCardClick = (city_id: number) => {
+  const handleCardClick = (city_id: number | undefined) => {
     navigate(`${ROUTES.CITIES}/${city_id}`);
   };
 
@@ -67,6 +76,8 @@ const CitiesPage: FC = () => {
             setValue={(value) => dispatch(setSearchValue(value))}
             loading={loading}
             onSubmit={handleSearch}
+            app_id={vacancy_application}
+            count={count}
           />
 
           {loading ? (
@@ -76,9 +87,10 @@ const CitiesPage: FC = () => {
           ) : (
             <div /*Row xs={4} sm={4} md={4}*/ className="g-4 cards-wrapper">
               {cities.length ? (
-                cities.map((item: City) => (
+                cities.map((item: Cities) => (
                   <Col key={item.city_id}>
                     <CityCard
+                      city_id={item.city_id}
                       url={item.url}
                       city_name={item.name}
                       population={item.population}
