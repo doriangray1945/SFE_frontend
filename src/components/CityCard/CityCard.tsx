@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Button, Card } from 'react-bootstrap';
+import { Button, Card, Row, Col } from 'react-bootstrap';
 import "./CityCard.css";
 import defaultImage from "../../static/images/DefaultImage.jpg";
 import { useSelector } from 'react-redux'; 
@@ -29,82 +29,98 @@ export const CityCard: FC<Props> = ({
     imageClickHandler,
     count
 }) => {
-    const { pathname } = useLocation();
 
-    const handlerAdd = async (city_id: number | undefined) => {
+    const { pathname } = useLocation();
+    const app_id = useSelector((state: RootState) => state.VacancyApplication.app_id);
+
+    const handlerAdd = async () => {
         if (city_id) return await api.cities.citiesAddToVacancyApplicationCreate(city_id.toString());
         return
+    }
+
+    const handlerDelete = async () => {
+        if (city_id && app_id) return await api.citiesVacancyApplications.citiesVacancyApplicationsDeleteCityFromVacancyApplicationDelete(app_id.toString(), city_id.toString());
+        return
+    }
+
+    const handlerChange = async (count: number) => {
+        if (count && app_id && city_id) return await api.citiesVacancyApplications.citiesVacancyApplicationsUpdateVacancyApplicationUpdate(app_id.toString(), city_id.toString(), { count })
     }
 
     const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
 
     if (pathname === "/cities") {
         return (
-        <div className="city-card">
-            <Card className="card">
-                <div className="city-card-body">
-                    <div className="city-card-img">
-                        <Card.Img
-                            variant="top"
-                            src={url || defaultImage}
-                            alt={city_name}
-                            onClick={imageClickHandler} // обработчик клика по изображению
-                        />
-                    </div>
-                    <h5 className="city-name">{city_name}</h5>
-                    <p className="city-info">
-                        Население: <span className="statistics">{population}</span><br />
-                        Средняя зарплата: <span className="statistics">{salary} тыс.</span><br />
-                        Уровень безработицы: <span className="statistics">{unemployment_rate} %</span>
-                    </p>
-                    <Button 
-                        className="city-btn" 
-                        onClick={() => imageClickHandler() }
-                    >
-                        Подробнее
-                    </Button>
-                    {(isAuthenticated == true ) && (
-                        <Button className="city-btn" onClick={() => handlerAdd(city_id) }>
-                            Добавить
+            <div className="city-card">
+                <Card className="card">
+                    <div className="city-card-body">
+                        <div className="city-card-img">
+                            <Card.Img
+                                variant="top"
+                                src={url || defaultImage}
+                                alt={city_name}
+                                onClick={imageClickHandler} // обработчик клика по изображению
+                            />
+                        </div>
+                        <h5 className="city-name">{city_name}</h5>
+                        <p className="city-info">
+                            Население: <span className="statistics">{population}</span><br />
+                            Средняя зарплата: <span className="statistics">{salary} тыс.</span><br />
+                            Уровень безработицы: <span className="statistics">{unemployment_rate} %</span>
+                        </p>
+                        <Button 
+                            className="city-btn" 
+                            onClick={() => imageClickHandler() }
+                        >
+                            Подробнее
                         </Button>
-                    )}
-                </div>
-            </Card>
-        </div>
+                        {(isAuthenticated == true ) && (
+                            <Button className="city-btn" onClick={() => handlerAdd() }>
+                                Добавить
+                            </Button>
+                        )}
+                    </div>
+                </Card>
+            </div>
         );
     }
 
-    if (pathname === "/vacancy_application") {
+    if (pathname.includes("/vacancy_application")) {
         return (
             <div className="fav-card">
-                <div className="row">
-                    <div className="col-md-2 d-flex justify-center">
-                        <img src={url || defaultImage} alt={city_name} />
-                    </div>
-                    <div className="col-md-10">
+                <Row>
+                    <Col xs={2} sm={2} md={2}>
+                        <div className="d-flex justify-center">
+                            <img src={url || defaultImage} alt={city_name} />
+                        </div>
+                    </Col>
+                    <Col xs={10} sm={10} md={10}>
                         <div className="fav-card-body">
                             <h5>{city_name}</h5>
                             <div className="form-group">
-                                <div className="row">
-                                    <div className="col-md-3">
+                                <Row>
+                                    <Col xs={3} sm={3} md={3}>
                                         <label className="form-label">Количество вакансий: </label>
-                                    </div>
-                                    <div className="col-md-9">
+                                    </Col>
+                                    <Col xs={9} sm={9} md={9}>
                                         <input
-                                            disabled
                                             type="number"
                                             className="form-control"
-                                            value={count || 0}
+                                            value={count}
+                                            onChange={(event => handlerChange(Number(event.target.value)))}
                                         />
-                                    </div>
-                                </div>
+                                    </Col>
+                                </Row>
                             </div>
                             <a onClick={() => imageClickHandler()} className="fav-btn-open">
                                 Открыть
                             </a>
+                            <Button className="fav-btn-open" onClick={() => handlerDelete()}>
+                                Удалить
+                            </Button>
                         </div>
-                    </div>
-                </div>
+                    </Col>
+                </Row>
             </div>
         );
     }
@@ -112,58 +128,9 @@ export const CityCard: FC<Props> = ({
     return null;
 };
 
-
-
-
-
-
-
-/*import { FC } from 'react';
-import { Button, Card } from 'react-bootstrap';
-import "./MusicCard.css";
-import image from "./DefaultImage.jpg";
-
-interface Props {
-    artworkUrl100: string;
-    artistName: string;
-    collectionCensoredName: string;
-    trackViewUrl: string;
-    imageClickHandler: () => void;
-}
-
-export const MusicCard: FC<Props> = ({
-    artworkUrl100,
-    artistName,
-    collectionCensoredName,
-    trackViewUrl,
-    imageClickHandler // добавляем пропс
-}) => (
-    <Card className="card">
-        <Card.Img
-            className="cardImage"
-            variant="top"
-            src={artworkUrl100 || image}
-            height={100}
-            width={100}
-            onClick={imageClickHandler} // добавляем onClick для вызова imageClickHandler
-        />
-        <Card.Body>
-            <div className="textStyle">
-                <Card.Title>{artistName}</Card.Title>
-            </div>
-            <div className="textStyle">
-                <Card.Text>
-                    {collectionCensoredName}
-                </Card.Text>
-            </div>
-            <Button
-                className="cardButton"
-                href={trackViewUrl}
-                target="_blank"
-                variant="primary"
-            >
-                Открыть в ITunes
-            </Button>
-        </Card.Body>
-    </Card>
-);*/
+/*CityCard.tsx:42 Uncaught (in promise) TypeError: Cannot read properties of undefined (reading 'toString')
+    at handlerDelete (CityCard.tsx:42:136)
+    at onClick (CityCard.tsx:114:77)
+handlerDelete	@	CityCard.tsx:42
+onClick	@	CityCard.tsx:114
+*/

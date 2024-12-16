@@ -10,6 +10,8 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { useDispatch } from 'react-redux';
 import { logoutUser } from '../../slices/userSlice'; 
+import { setAppId, setCount } from '../../slices/VacancyApplicationSlice';
+import { api } from '../../api';
 
 
 const Header: React.FC = () => {
@@ -17,9 +19,12 @@ const Header: React.FC = () => {
     const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
     const dispatch = useDispatch();
 
-    const handleExit = ()  => {
+    const handleExit = async ()  => {
         dispatch(logoutUser());
-        console.log('Выход успешен');
+        dispatch(setAppId(null));
+        dispatch(setCount(0));
+
+        return await api.logout.logoutCreate();
     }
 
     return (

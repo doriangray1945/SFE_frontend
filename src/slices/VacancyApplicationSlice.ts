@@ -17,11 +17,11 @@ const VacancyApplicationSlice = createSlice({
     setAppId: (state, action) => {
       state.app_id = action.payload;
     },
-    setCounT: (state, action) => {
+    setCount: (state, action) => {
       state.count = action.payload;
     },
   },
 });
 
-export const { setAppId, setCounT } = VacancyApplicationSlice.actions;
+export const { setAppId, setCount } = VacancyApplicationSlice.actions;
 export default VacancyApplicationSlice.reducer;

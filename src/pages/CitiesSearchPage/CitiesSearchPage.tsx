@@ -12,7 +12,7 @@ import InputField from "../../components/InputField/InputField"
 import { useSelector, useDispatch } from 'react-redux'; 
 import { setSearchValue } from '../../slices/citiesSlice';
 import { RootState } from '../../store';
-import { setAppId, setCounT } from "../../slices/VacancyApplicationSlice";
+import { setAppId, setCount } from "../../slices/VacancyApplicationSlice";
 import { api } from '../../api';
 import { Cities } from '../../api/Api'
 
@@ -23,8 +23,8 @@ const CitiesPage: FC = () => {
   const [loading, setLoading] = useState(false);
   const [cities, setCities] = useState<Cities[]>([]);
 
-  const [vacancy_application, setVacancyApplication] = useState<number | null>(null);
-  const [count, setCount] = useState<number | null | undefined>(null);
+  const app_id = useSelector((state: RootState) => state.VacancyApplication.app_id);
+  const count = useSelector((state: RootState) => state.VacancyApplication.count);
 
   const navigate = useNavigate();
 
@@ -35,15 +35,13 @@ const CitiesPage: FC = () => {
       const app_id = response.data.draft_vacancy_application;
       const count = response.data.count;
       dispatch(setAppId(app_id));
-      dispatch(setCounT(count));
+      dispatch(setCount(count));
 
       const filteredCities = response.data.cities.filter((item) => 
         item.name && item.name.toLocaleLowerCase().startsWith(searchValue.toLocaleLowerCase())
       );
       
       setCities(filteredCities);
-      setVacancyApplication( app_id != null ? app_id : null );
-      setCount(count);
     } catch {
       const filteredMockData = CITIES_MOCK.cities.filter((item) =>
         item.name.toLocaleLowerCase().startsWith(searchValue.toLocaleLowerCase()));
@@ -76,7 +74,7 @@ const CitiesPage: FC = () => {
             setValue={(value) => dispatch(setSearchValue(value))}
             loading={loading}
             onSubmit={handleSearch}
-            app_id={vacancy_application}
+            app_id={app_id}
             count={count}
           />
 
