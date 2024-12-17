@@ -23,9 +23,6 @@ const CitiesPage: FC = () => {
   const [loading, setLoading] = useState(false);
   const [cities, setCities] = useState<Cities[]>([]);
 
-  const app_id = useSelector((state: RootState) => state.VacancyApplication.app_id);
-  const count = useSelector((state: RootState) => state.VacancyApplication.count);
-
   const navigate = useNavigate();
 
   const handleSearch = async () => {
@@ -40,7 +37,7 @@ const CitiesPage: FC = () => {
       const filteredCities = response.data.cities.filter((item) => 
         item.name && item.name.toLocaleLowerCase().startsWith(searchValue.toLocaleLowerCase())
       );
-      
+       
       setCities(filteredCities);
     } catch {
       const filteredMockData = CITIES_MOCK.cities.filter((item) =>
@@ -61,7 +58,9 @@ const CitiesPage: FC = () => {
 
   return (
     <div>
-      <Header/>
+      <Header
+        onChange={handleSearch}
+      />
       <div className="container-2">
         <BreadCrumbs crumbs={[{ label: ROUTE_LABELS.CITIES }]} />
         <div className="cities-title">
@@ -74,8 +73,6 @@ const CitiesPage: FC = () => {
             setValue={(value) => dispatch(setSearchValue(value))}
             loading={loading}
             onSubmit={handleSearch}
-            app_id={app_id}
-            count={count}
           />
 
           {loading ? (

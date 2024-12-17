@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { Button, Card, Row, Col } from 'react-bootstrap';
 import "./CityCard.css";
 import defaultImage from "../../static/images/DefaultImage.jpg";
@@ -16,6 +16,8 @@ interface Props {
     url: string | null | undefined;
     imageClickHandler: () => void;
     count?: number;
+    onDelete?: (cityId: number) => void;
+    isDraft?: boolean;
 }
 
 
@@ -27,11 +29,16 @@ export const CityCard: FC<Props> = ({
     unemployment_rate,
     url,
     imageClickHandler,
-    count
+    count,
+    onDelete,
+    isDraft
 }) => {
 
     const { pathname } = useLocation();
     const app_id = useSelector((state: RootState) => state.VacancyApplication.app_id);
+    const [localCount, setLocalCount] = useState(count);
+
+    const [isDraftApplication, setIsDraftApplication] = useState(isDraft); 
 
     const handlerAdd = async () => {
         if (city_id) return await api.cities.citiesAddToVacancyApplicationCreate(city_id.toString());
@@ -39,12 +46,18 @@ export const CityCard: FC<Props> = ({
     }
 
     const handlerDelete = async () => {
-        if (city_id && app_id) return await api.citiesVacancyApplications.citiesVacancyApplicationsDeleteCityFromVacancyApplicationDelete(app_id.toString(), city_id.toString());
-        return
+        if (city_id && app_id) {
+            await api.citiesVacancyApplications.citiesVacancyApplicationsDeleteCityFromVacancyApplicationDelete(app_id.toString(), city_id.toString());
+            if (onDelete) {
+                onDelete(city_id);
+            }
+        }
     }
 
-    const handlerChange = async (count: number) => {
-        if (count && app_id && city_id) return await api.citiesVacancyApplications.citiesVacancyApplicationsUpdateVacancyApplicationUpdate(app_id.toString(), city_id.toString(), { count })
+    const handlerChange = async (newCount: number) => {
+        setLocalCount(newCount);
+
+        if (newCount && app_id && city_id) return await api.citiesVacancyApplications.citiesVacancyApplicationsUpdateVacancyApplicationUpdate(app_id.toString(), city_id.toString(), { count: newCount })
     }
 
     const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
@@ -106,18 +119,20 @@ export const CityCard: FC<Props> = ({
                                         <input
                                             type="number"
                                             className="form-control"
-                                            value={count}
+                                            value={localCount}
                                             onChange={(event => handlerChange(Number(event.target.value)))}
                                         />
                                     </Col>
                                 </Row>
                             </div>
                             <a onClick={() => imageClickHandler()} className="fav-btn-open">
-                                Открыть
+                                Подробнее
                             </a>
-                            <Button className="fav-btn-open" onClick={() => handlerDelete()}>
-                                Удалить
-                            </Button>
+                            {(isAuthenticated == true ) && (isDraftApplication) && (
+                                <Button className="fav-btn-open" onClick={() => handlerDelete()}>
+                                    Удалить
+                                </Button>
+                            )}
                         </div>
                     </Col>
                 </Row>
@@ -127,10 +142,3 @@ export const CityCard: FC<Props> = ({
 
     return null;
 };
-
-/*CityCard.tsx:42 Uncaught (in promise) TypeError: Cannot read properties of undefined (reading 'toString')
-    at handlerDelete (CityCard.tsx:42:136)
-    at onClick (CityCard.tsx:114:77)
-handlerDelete	@	CityCard.tsx:42
-onClick	@	CityCard.tsx:114
-*/

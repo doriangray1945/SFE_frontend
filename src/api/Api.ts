@@ -603,20 +603,31 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       }),
 
     /**
-     * @description Функция регистрации новых пользователей Если пользователя c указанным в request email ещё нет, в БД будет добавлен новый пользователь.
+     * @description Регистрация нового пользователя (только username и password)
      *
      * @tags user
      * @name UserCreate
      * @request POST:/user/
      * @secure
      */
-    userCreate: (data: User, params: RequestParams = {}) =>
-      this.request<User, any>({
+    userCreate: (
+      data: {
+        /** Имя пользователя */
+        username: string;
+        /**
+         * Пароль пользователя
+         * @minLength 8
+         */
+        password: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<void, void>({
         path: `/user/`,
         method: "POST",
         body: data,
         secure: true,
-        format: "json",
+        type: ContentType.Json,
         ...params,
       }),
 
@@ -667,6 +678,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: "PUT",
         body: data,
         secure: true,
+        type: ContentType.Json,
         format: "json",
         ...params,
       }),
@@ -707,9 +719,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
            * Дата и время создания заявки.
            * @format date-time
            */
-          date_created?: string;
+          date_created: string;
           /** Имя пользователя, который создал заявку. */
-          creator?: string;
+          creator: string;
           /** Имя модератора, обработавшего заявку (если есть). */
           moderator?: string | null;
           /**
@@ -883,7 +895,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       this.request<
         VacancyApplications,
         | {
-            /** @example "Не заполнены обязательные поля: vacancy_name, vacancy_responsibilities." */
+            /** @example "Не заполнены данные о вакансии." */
             Ошибка?: string;
           }
         | {
@@ -910,7 +922,18 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request PUT:/vacancy_applications/{app_id}/update_vacancy/
      * @secure
      */
-    vacancyApplicationsUpdateVacancyUpdate: (appId: string, params: RequestParams = {}) =>
+    vacancyApplicationsUpdateVacancyUpdate: (
+      appId: string,
+      data: {
+        /** @example "Senior Developer" */
+        vacancy_name?: string;
+        /** @example "Develop new features and maintain existing ones" */
+        vacancy_responsibilities?: string;
+        /** @example "3+ years experience in React and Node.js" */
+        vacancy_requirements?: string;
+      },
+      params: RequestParams = {},
+    ) =>
       this.request<
         VacancyApplications,
         | {
@@ -924,7 +947,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       >({
         path: `/vacancy_applications/${appId}/update_vacancy/`,
         method: "PUT",
+        body: data,
         secure: true,
+        type: ContentType.Json,
         format: "json",
         ...params,
       }),

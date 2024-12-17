@@ -9,6 +9,7 @@ import { RootState } from '../../store';
 export const NavigationBar = () => {
 
   const username = useSelector((state: RootState) => state.user.username);
+  const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
 
   return (
       <nav className='nav'>
@@ -17,9 +18,12 @@ export const NavigationBar = () => {
             SFE
           </Navbar.Brand>
           <div className='nav__links'>
-            <NavLink to='' className='nav__link'>{ username }</NavLink>
+            <NavLink to={ROUTES.PROFILE} className='nav__link'>{ username }</NavLink>
             <NavLink to={ROUTES.HOME} className='nav__link'>Главная</NavLink>
             <NavLink to={ROUTES.CITIES} className='nav__link'>Доступные города</NavLink>
+            {(isAuthenticated == true ) && (
+              <NavLink to={ROUTES.VACANCYAPPLICATION} className='nav__link'>Заявки на создание вакансий</NavLink>
+            )}
           </div>
           <div className='nav__mobile-wrapper' onClick={(event) => event.currentTarget.classList.toggle('active')}>
             <div className='nav__mobile-target' />

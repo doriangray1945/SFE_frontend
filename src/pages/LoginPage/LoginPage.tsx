@@ -29,10 +29,15 @@ const LoginPage: React.FC = () => {
             if (userData.data.username) {
               dispatch(
                 loginUser({
+                  id: userData.data.id,
                   username: userData.data.username,
                   password: userData.data.password,
                   is_staff: userData.data.is_staff,
                   is_superuser: userData.data.is_superuser,
+                  email: userData.data.email,
+                  first_name: userData.data.first_name,
+                  last_name: userData.data.last_name,
+                  date_joined: userData.data.date_joined 
                 })
               );
               console.log('Авторизация успешна');

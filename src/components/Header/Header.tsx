@@ -11,10 +11,14 @@ import { RootState } from '../../store';
 import { useDispatch } from 'react-redux';
 import { logoutUser } from '../../slices/userSlice'; 
 import { setAppId, setCount } from '../../slices/VacancyApplicationSlice';
+import { setSearchValue } from '../../slices/citiesSlice'; 
 import { api } from '../../api';
 
+interface Props {
+    onChange?: () => void
+}
 
-const Header: React.FC = () => {
+const Header: React.FC <Props> = ({ onChange }) => {
     const location = useLocation();
     const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
     const dispatch = useDispatch();
@@ -23,7 +27,12 @@ const Header: React.FC = () => {
         dispatch(logoutUser());
         dispatch(setAppId(null));
         dispatch(setCount(0));
+        dispatch(setSearchValue(''));
 
+        if (onChange) {
+            onChange();  
+        }
+        
         return await api.logout.logoutCreate();
     }
 
@@ -35,6 +44,12 @@ const Header: React.FC = () => {
                 {(isAuthenticated == false ) && (
                     <Link to={ROUTES.LOGIN}>
                         <Button className="login_btn">Войти</Button>
+                    </Link>
+                )}
+
+                {(isAuthenticated == false ) && (
+                    <Link to={ROUTES.REGISTER}>
+                        <Button className="login_btn">Регистрация</Button>
                     </Link>
                 )}
 
