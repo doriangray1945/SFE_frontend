@@ -1,12 +1,16 @@
 import { useEffect, useState } from 'react';
 import { ROUTES } from '../../../Routes';
-import { Col, Button, Form } from "react-bootstrap";
+import { Col, Button, Form, Row, Image, Alert } from "react-bootstrap";
 import { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CityCard } from '../../components/CityCard/CityCard';
 import { api } from '../../api';
 import { useParams } from "react-router-dom";
-
+import Header from "../../components/Header/Header";
+import { BreadCrumbs } from "../../components/BreadCrumbs/BreadCrumbs";
+import { ROUTE_LABELS } from '../../../Routes';
+import "./VacancyApplicationPage.css"
+import FavImage from "../../static/images/favorites.png"
 
 const VacancyApplicationPage: FC = () => {
   const [isDraft, setIsDraft] = useState(false); 
@@ -95,111 +99,111 @@ const VacancyApplicationPage: FC = () => {
   };
 
   return (
-    <main className="container">
-      <section className="fav-content">
-        <div className="row">
-          <div className="col-md-8">
-            <h1>Вакансия</h1>
-            <div style={{ height: '26px' }} />
-          </div>
-          <div className="col-md-4">
-            <img src="/static/images/favorites.png" className="intro-image" alt="Вакансия" />
+    <div>
+      <Header />
+        <div className="container-2">
+          <BreadCrumbs crumbs={[
+            { label: ROUTE_LABELS.VACANCYAPPLICATION },
+            { label: vacancyData?.vacancy_name || "Название вакансии" },
+          ]} />    
+          <div className="fav-content">
+            {error && <Alert variant="danger" style={{ width: '15vw'}}>{error}</Alert>}
+            <Row>
+                <Col md={8} xs={8}>
+                  <h1>Вакансия</h1>
+                </Col>
+                <Col md={4} xs={4}>
+                  <Image src={FavImage}></Image>
+                </Col>
+            </Row>
+            {!isDraft ? (
+              <div>
+                <h4>Название вакансии: {vacancyData.vacancy_name}</h4>
+                <h4>Обязанности: {vacancyData.vacancy_responsibilities}</h4>
+                <h4>Требования: {vacancyData.vacancy_requirements}</h4>
+              </div>
+            ) : (
+              <Form onSubmit={handleSubmit}>
+                <Form.Group controlId="vacancy_name">
+                  <h4>Название вакансии</h4>
+                  <Form.Control
+                    type="text"
+                    name="vacancy_name"
+                    value={vacancyData.vacancy_name}
+                    onChange={handleInputChange}
+                    required
+                    disabled={!isDraft}
+                  />
+                </Form.Group>
+
+                <Form.Group controlId="vacancy_responsibilities">
+                  <h4>Обязанности</h4>
+                  <Form.Control
+                    as="textarea"
+                    name="vacancy_responsibilities"
+                    value={vacancyData.vacancy_responsibilities}
+                    onChange={handleInputChange}
+                    rows={4}
+                    required
+                    disabled={!isDraft}
+                  />
+                </Form.Group>
+
+                <Form.Group controlId="vacancy_requirements">
+                  <h4>Требования</h4>
+                  <Form.Control
+                    as="textarea"
+                    name="vacancy_requirements"
+                    value={vacancyData.vacancy_requirements} 
+                    onChange={handleInputChange}
+                    rows={4}
+                    required
+                    disabled={!isDraft}
+                  />
+                </Form.Group>
+
+                <Button type="submit" disabled={isLoading || !isDraft} className="save-button" onClick={handleSaveVacancy}>
+                  {isLoading ? 'Обновляется...' : 'Сохранить изменения'}
+                </Button>
+              </Form>
+            )}
+            <div style={{ height: '3vh'}}></div>
+            <h1>Выбранные города для размещения Вашей вакансии</h1>
+            
+            <div className="cards-wrapper-2 d-flex flex-column">
+              {cities.length ? (
+                cities.map((item) => (
+                  <Col key={item.city_id?.city_id}>
+                    <CityCard
+                      city_id={item.city_id?.city_id}
+                      url={item.city_id?.url}
+                      city_name={item.city_id?.name}
+                      population={item.city_id?.population}
+                      salary={item.city_id?.salary}
+                      unemployment_rate={item.city_id?.unemployment_rate}
+                      imageClickHandler={() => handleCardClick(item.city_id?.city_id)}
+                      count={item.count}
+                      onDelete={handleDelete}
+                      isDraft={isDraft}
+                    />
+                  </Col>
+                ))
+              ) : (
+                <section className="cities-not-found">
+                  <h1>К сожалению, пока ничего не найдено :(</h1>
+                </section>
+              )}
+            </div>
+            <div style={{ height: '3vh'}}></div>
+            {(isDraft) && (
+              <Button className="save-button" onClick={handleSubmit} disabled={!isDraft || !allowedForSubmitted}>
+                Оформить
+              </Button>
+            )}
+            <div style={{ height: '10vh'}}></div>
           </div>
         </div>
-
-        <h2>Данные о вакансии</h2>
-        {!isDraft ? (
-          <div>
-            <h3>Название вакансии:</h3>
-            <h3>{vacancyData.vacancy_name}</h3>
-
-            <h3>Обязанности:</h3>
-            <h3>{vacancyData.vacancy_responsibilities}</h3>
-
-            <h3>Требования:</h3>
-            <h3>{vacancyData.vacancy_requirements}</h3>
-          </div>
-        ) : (
-          <Form onSubmit={handleSubmit}>
-            <Form.Group controlId="vacancy_name">
-              <Form.Label>Название вакансии</Form.Label>
-              <Form.Control
-                type="text"
-                name="vacancy_name"
-                value={vacancyData.vacancy_name}
-                onChange={handleInputChange}
-                required
-                disabled={!isDraft}
-              />
-            </Form.Group>
-
-            <Form.Group controlId="vacancy_responsibilities">
-              <Form.Label>Обязанности</Form.Label>
-              <Form.Control
-                as="textarea"
-                name="vacancy_responsibilities"
-                value={vacancyData.vacancy_responsibilities}
-                onChange={handleInputChange}
-                rows={4}
-                required
-                disabled={!isDraft}
-              />
-            </Form.Group>
-
-            <Form.Group controlId="vacancy_requirements">
-              <Form.Label>Требования</Form.Label>
-              <Form.Control
-                as="textarea"
-                name="vacancy_requirements"
-                value={vacancyData.vacancy_requirements} 
-                onChange={handleInputChange}
-                rows={4}
-                required
-                disabled={!isDraft}
-              />
-            </Form.Group>
-
-            <Button type="submit" disabled={isLoading || !isDraft} className="mt-3" onClick={handleSaveVacancy}>
-              {isLoading ? 'Обновляется...' : 'Сохранить изменения'}
-            </Button>
-          </Form>
-        )}
-
-        <h1>Выбранные города для размещения Вашей вакансии</h1>
-        <div style={{ height: '20px' }} />
-
-        <div className="cards-wrapper d-flex flex-column">
-          {cities.length ? (
-            cities.map((item) => (
-              <Col key={item.city_id?.city_id}>
-                <CityCard
-                  city_id={item.city_id?.city_id}
-                  url={item.city_id?.url}
-                  city_name={item.city_id?.name}
-                  population={item.city_id?.population}
-                  salary={item.city_id?.salary}
-                  unemployment_rate={item.city_id?.unemployment_rate}
-                  imageClickHandler={() => handleCardClick(item.city_id?.city_id)}
-                  count={item.count}
-                  onDelete={handleDelete}
-                  isDraft={isDraft}
-                />
-              </Col>
-            ))
-          ) : (
-            <section className="cities-not-found">
-              <h1>К сожалению, пока ничего не найдено :(</h1>
-            </section>
-          )}
-        </div>
-        {(isDraft) && (
-          <Button className="search-button" onClick={handleSubmit} disabled={!isDraft || !allowedForSubmitted}>
-            Оформить
-          </Button>
-        )}
-        <div style={{ height: '222px' }} />
-      </section>
-    </main>
+    </div>
   );
 };
 

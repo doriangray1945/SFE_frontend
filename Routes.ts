@@ -12,6 +12,6 @@ export const ROUTES = {
     CITIES: "Города",
     LOGIN: "Авторизация",
     REGISTER: "Регистрация",
-    VACANCYAPPLICATION: "Заявка на создание вакансии",
+    VACANCYAPPLICATION: "Заявки на создание вакансии",
     PROFILE: "Личный кабинет"
   };

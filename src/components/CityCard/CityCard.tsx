@@ -115,7 +115,7 @@ export const CityCard: FC<Props> = ({
                                     <Col xs={9} sm={9} md={9}>
                                         <input
                                             type="number"
-                                            className="form-control"
+                                            className="localcount"
                                             value={localCount}
                                             onChange={(event => handlerChange(Number(event.target.value)))}
                                             disabled={!isDraft}
@@ -123,14 +123,20 @@ export const CityCard: FC<Props> = ({
                                     </Col>
                                 </Row>
                             </div>
-                            <a onClick={() => imageClickHandler()} className="fav-btn-open">
-                                Подробнее
-                            </a>
-                            {(isAuthenticated == true ) && (isDraft) && (
-                                <Button className="fav-btn-open" onClick={() => handlerDelete()}>
-                                    Удалить
-                                </Button>
-                            )}
+                            <Row>
+                                <Col md={3} xs={3}>
+                                    <a onClick={() => imageClickHandler()} className="fav-btn-open">
+                                        Подробнее
+                                    </a>
+                                </Col>
+                                <Col md={3} xs={3}>
+                                    {(isAuthenticated == true ) && (isDraft) && (
+                                        <Button className="fav-btn-open" onClick={() => handlerDelete()}>
+                                            Удалить
+                                        </Button>
+                                    )}
+                                </Col>
+                            </Row>
                         </div>
                     </Col>
                 </Row>

@@ -1,7 +1,12 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppDispatch, RootState } from '../../store';
-import { updateUserDataAsync } from '../../slices/userSlice'; 
+import { updateUserDataAsync } from '../../slices/userSlice';
+import Header from "../../components/Header/Header";
+import { BreadCrumbs } from "../../components/BreadCrumbs/BreadCrumbs";
+import { ROUTE_LABELS } from '../../../Routes';
+import "./UserProfilePage.css"
+import { Button, Alert } from 'react-bootstrap';
 
 const UserProfilePage = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -47,73 +52,51 @@ const UserProfilePage = () => {
     };
 
     return (
-        <div className="container mx-auto mt-10 px-4">
-            <h2 className="text-2xl font-semibold mb-4">Личный кабинет</h2>
-
-            {error && <div className="bg-red-500 text-white p-4 rounded">{error}</div>}
-
-            <div className="bg-[#1A1D2B] p-6 rounded-md">
-                <div className="mb-6">
-                    <h3 className="text-xl font-semibold">Данные пользователя</h3>
-                    <div className="mb-4">
-                        <div className="flex items-center">
-                            <label className="text-gray-300">Имя пользователя:</label>
-                            <span className="ml-4 text-gray-400">{username}</span>
-                        </div>
-                        <div className="flex items-center mt-4">
-                            <label className="text-gray-300">Email:</label>
-                            <input
-                                type="email"
-                                placeholder={email}
-                                value={newEmail}
-                                onChange={(e) => setNewEmail(e.target.value)}
-                                className="ml-4 px-4 py-2 text-red-800 rounded-md"
-                            />
-                        </div>
-                    </div>
-
-                    <div className="mb-6">
-                        <button
+        <div>
+            <Header />
+            <div className="container-2">
+                <BreadCrumbs crumbs={[{ label: ROUTE_LABELS.PROFILE }]} />
+                <div className="cities-title">
+                    <h1>Личный кабинет</h1>
+                    {error && <Alert variant="danger">{error}</Alert>}
+                </div>
+                <div className="profile-container">
+                    <label className="username">Имя пользователя: </label>
+                    <span className="username">{username}</span>
+                    <div className="change-email">
+                        <label className="email">Email: </label>
+                        <input
+                            type="email"
+                            placeholder={email}
+                            value={newEmail}
+                            onChange={(e) => setNewEmail(e.target.value)}
+                            className="form-change"
+                        />
+                        <Button
                             onClick={handleEmailChange}
-                            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                            className="btn-change"
                         >
                             Сохранить EMail
-                        </button>
+                        </Button>
                     </div>
-                </div>
-
-                <div className="mb-6">
-                    <h3 className="text-xl font-semibold">Смена пароля</h3>
-                    <div className="flex items-center mt-4">
-                        <label className="text-gray-300">Новый пароль:</label>
+                    <div className="change-password">
+                        <label className="email">Новый пароль:</label>
                         <input
                             type="password"
                             value={newPassword}
                             onChange={(e) => setNewPassword(e.target.value)}
-                            className="ml-4 px-4 py-2 text-red-800 rounded-md"
+                            className="form-change"
                         />
-                    </div>
-
-                    <div className="mt-4">
-                        <button
+                        <Button
                             onClick={handlePasswordChange}
-                            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-green-600"
+                            className="btn-change"
                         >
                             Изменить пароль
-                        </button>
+                        </Button>
                     </div>
                 </div>
-
-                <div className="mt-4">
-                    <button
-                        onClick={handleEmailChange}
-                        className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600"
-                    >
-                        Изменить email
-                    </button>
-                </div>
             </div>
-        </div>
+        </div> 
     );
 };
 

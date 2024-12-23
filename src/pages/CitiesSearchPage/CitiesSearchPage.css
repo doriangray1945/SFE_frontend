@@ -22,7 +22,7 @@
 
 .container-2 {
   width: clamp(400px, 100vw, 100vw);
-  padding-top: clamp(120px, 18.2vh, 18.2vh);;
+  padding-top: clamp(120px, 18.2vh, 18.2vh);
 }
 
 .cities-title {
@@ -73,7 +73,7 @@ body {
 .cities-not-found h1 {
   font-family: 'Arial', sans-serif;
   font-weight: bold;
-  font-size: clamp(16px, 4.5vh, 4.5vh);
+  font-size: clamp(16px, 4vh, 4vh);
   color: black;
   letter-spacing: -0.01em; /* Отрицательное значение для уменьшения интервала между буквами */
   width: 100%;

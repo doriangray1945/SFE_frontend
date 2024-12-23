@@ -1,0 +1,56 @@
+.fav-content {
+    padding-left: 25vw;
+}
+
+.fav-content h1{
+    font-family: 'Arial', sans-serif;
+    font-weight: bold;
+    font-size: 38px;
+    color: #000000;
+    margin-top: 5vh;
+}
+
+.fav-content h4{
+    font-family: 'Arial', sans-serif;
+    font-size: 24px;
+    color: #000000;
+    margin-bottom: 1.5vh;
+}
+
+.fav-content image {
+    margin-top: 5vh;
+}
+
+.fav-content .form-control {
+    margin-left: 2vw !important;
+    margin-bottom: 3vh;
+    width: 30vw !important;
+    background-color: #ECF4FF;
+    font-family: 'Arial', sans-serif;
+    font-size: 20px;
+}
+
+.save-button {
+    margin-top: 2vh;
+    font-family: 'Arial', sans-serif;
+    font-weight: bold;
+    font-size: clamp(14px, 2vh, 2vh);
+    background-color: #1890FF;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 2vw;
+}
+
+.cards-wrapper-2 {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding-right: 30vw;
+  }

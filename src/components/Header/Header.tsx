@@ -41,18 +41,18 @@ const Header: React.FC <Props> = ({ onChange }) => {
 
                 {(isAuthenticated == false ) && (
                     <Link to={ROUTES.LOGIN}>
-                        <Button className="login_btn">Войти</Button>
+                        <Button className="login-btn">Войти</Button>
                     </Link>
                 )}
 
                 {(isAuthenticated == false ) && (
                     <Link to={ROUTES.REGISTER}>
-                        <Button className="login_btn">Регистрация</Button>
+                        <Button className="login-btn">Регистрация</Button>
                     </Link>
                 )}
 
                 {(isAuthenticated == true) && (
-                    <Button variant="primary" type="submit" className="mt-3" onClick={ handleExit }>
+                    <Button variant="primary" type="submit" className="login-btn" onClick={ handleExit }>
                         Выйти
                     </Button>
                 )}

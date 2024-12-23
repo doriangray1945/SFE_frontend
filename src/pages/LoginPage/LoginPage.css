@@ -1,0 +1,71 @@
+.login-container {
+    width: clamp(300px, 50vw, 600px); /* Адаптивная ширина */
+    background: #ECF4FF;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Эффект тени */
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+}
+
+.container-3{
+    display: flex;
+    justify-content: center; /* Центрирование по горизонтали */
+    align-items: center;
+}
+
+.login-container .form-label {
+    font-family: 'Arial', sans-serif !important;
+    font-size: 18px !important;
+    color: black !important;
+    text-align: center !important;
+    font-weight: bold !important;
+}
+
+.login-container .form-control {
+    background-color: white !important; /* Принудительно белый фон */
+    color: black !important; /* Цвет текста */
+    width: 100% !important; /* Заполняем ширину контейнера */
+    border: 1px solid black !important; /* Чёрная рамка */
+    border-radius: 8px; /* Закруглённые углы */
+    height: 50px; /* Унифицированная высота */
+    font-family: 'Arial', sans-serif;
+    font-size: 18px;
+    padding: 0.5rem;
+    margin-left: 0 !important;
+}
+
+.login-container .form-control::placeholder {
+    color: #999 !important; /* Цвет текста плейсхолдера */
+    font-size: 18px !important; /* Размер текста плейсхолдера */
+}
+
+.login-container .form-control:focus {
+    outline: none !important; /* Убирает стандартный фокус */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5) !important;
+}
+
+.enter-button {
+    margin: 4vh;
+    width: 20vw;
+    height: clamp(30px, 4vh, 4vh);
+    font-family: 'Arial', sans-serif;
+    font-weight: bold;
+    font-size: 18px;
+    background-color: black;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.enter-button:hover {
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+}

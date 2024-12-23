@@ -1,0 +1,56 @@
+.profile-container {
+    width: 100%; /* Адаптивная ширина */
+    margin-left: 3vw;
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-container .username {
+    font-family: 'Arial', sans-serif !important;
+    font-size: 2.8vh !important;
+    color: black !important;
+    font-weight: bold !important;
+}
+
+.change-email {
+    padding-top: 2vh;
+}
+
+.email {
+    font-family: 'Arial', sans-serif !important;
+    font-size: 2.5vh !important;
+    color: black !important;
+}
+
+.form-change {
+    background-color: white !important; /* Принудительно белый фон */
+    color: black !important; /* Цвет текста */
+    width: 20vw; /* Заполняем ширину контейнера */
+    border: 1px solid black !important; /* Чёрная рамка */
+    border-radius: 8px; /* Закруглённые углы */
+    height: clamp(30px, 4vh, 4vh); /* Унифицированная высота */
+    font-family: 'Arial', sans-serif;
+    font-size: 18px;
+    padding: 0.5rem;
+    margin-left: 2vw;
+}
+
+.btn-change {
+    margin: 2vh;
+    height: clamp(30px, 4vh, 4vh);
+    font-family: 'Arial', sans-serif;
+    font-weight: bold;
+    font-size: 18px;
+    background-color: black;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.btn-change:hover {
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+}

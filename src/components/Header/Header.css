@@ -39,16 +39,33 @@
 }
 
 .login-btn {
-    height: clamp(45px, 8vh, 8vh);
+    height: clamp(45px, 4vh, 4vh);
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: blue;
-    border: none;
+    background-color: black;
+    border: 2px solid white;
+    border-radius: 8px;
     font-family: 'Arial', sans-serif;
     font-weight: bold;
     font-size: clamp(16px, 2vh, 2vh);
+    color: white;
+    text-decoration: none; /* Убирает подчеркивание */
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
 }
+
+a {
+    text-decoration: none; /* Убирает подчеркивание */
+    color: inherit; /* Использует цвет текста от родительского элемента */
+}
+
+.login-btn:hover {
+    background-color: white;
+    color: black;
+    border: white;
+}
+
 
 .home-btn:active,
 .home-btn:hover {
