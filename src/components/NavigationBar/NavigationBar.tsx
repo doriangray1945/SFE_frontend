@@ -10,6 +10,8 @@ export const NavigationBar = () => {
 
   const username = useSelector((state: RootState) => state.user.username);
   const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
+  const isStaff = useSelector((state: RootState) => state.user.is_staff);
+  const isSuperUser = useSelector((state: RootState) => state.user.is_superuser);
 
   return (
       <nav className='nav'>
@@ -24,12 +26,19 @@ export const NavigationBar = () => {
             {(isAuthenticated == true ) && (
               <NavLink to={ROUTES.VACANCYAPPLICATION} className='nav__link'>Заявки на создание вакансий</NavLink>
             )}
+            {((isSuperUser == true)) && (
+              <NavLink to={ROUTES.CITIESEDIT} className='nav__link'>Управление городами</NavLink>
+            )}
           </div>
           <div className='nav__mobile-wrapper' onClick={(event) => event.currentTarget.classList.toggle('active')}>
             <div className='nav__mobile-target' />
             <div className='nav__mobile-menu'>
+              <NavLink to={ROUTES.PROFILE} className='nav__link'>{ username }</NavLink>
               <NavLink to={ROUTES.HOME} className='nav__link'>Главная</NavLink>
               <NavLink to={ROUTES.CITIES} className='nav__link'>Доступные города</NavLink>
+              {(isAuthenticated == true ) && (
+                <NavLink to={ROUTES.VACANCYAPPLICATION} className='nav__link'>Заявки на создание вакансий</NavLink>
+              ) }
             </div>
           </div>
         </div>

@@ -4,7 +4,10 @@ export const ROUTES = {
     LOGIN: "/login",
     REGISTER: "/register",
     VACANCYAPPLICATION: "/vacancy_application",
-    PROFILE: "/user"
+    PROFILE: "/user",
+    CITIESEDIT: "/cities/edit",
+    FORBIDDEN: "/forbidden",
+    NOTFOUND: "/notfound",
   }
   export type RouteKeyType = keyof typeof ROUTES;
   export const ROUTE_LABELS: {[key in RouteKeyType]: string} = {
@@ -13,5 +16,8 @@ export const ROUTES = {
     LOGIN: "Авторизация",
     REGISTER: "Регистрация",
     VACANCYAPPLICATION: "Заявки на создание вакансии",
-    PROFILE: "Личный кабинет"
+    PROFILE: "Личный кабинет",
+    CITIESEDIT: "Управление городами",
+    FORBIDDEN: "Доступ запрещен",
+    NOTFOUND: "Не найдено",
   };

@@ -10,6 +10,10 @@ import RegisterPage from "./pages/RegisterPage/RegisterPage"
 import VacancyApplicationPage from "./pages/VacancyApplicationPage/VacancyApplicationPage";
 import VacancyApplicationHistoryPage from "./pages/VacancyApplicationHistoryPage/VacancyApplicationHistoryPage"
 import UserProfilePage from "./pages/UserProfilePage/UserProfilePage";
+import CitiesEditPage from "./pages/CitiesEditPages/CitiesEditPages";
+import CityEditPage from "./pages/CityEditPage/CityEditPage";
+import ForbiddenPage from "./pages/403/403";
+import NotFoundPage from "./pages/404/404";
 
 
 function App() {
@@ -25,6 +29,10 @@ function App() {
           <Route path={`${ROUTES.VACANCYAPPLICATION}/:app_id`} element={<VacancyApplicationPage />} />
           <Route path={`${ROUTES.VACANCYAPPLICATION}`} element={<VacancyApplicationHistoryPage />} />
           <Route path={`${ROUTES.PROFILE}`} element={< UserProfilePage/>} />
+          <Route path={`${ROUTES.CITIESEDIT}`} element={<CitiesEditPage/>} />
+          <Route path={`${ROUTES.CITIESEDIT}/:id`} element={<CityEditPage/>} />
+          <Route path={`${ROUTES.FORBIDDEN}`} element={<ForbiddenPage/>} />
+          <Route path={`${ROUTES.NOTFOUND}`} element={<NotFoundPage/>} />
         </Routes>
       </BrowserRouter>
     );
