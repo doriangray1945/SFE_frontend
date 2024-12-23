@@ -1,24 +1,19 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../../store';
-import { api } from '../../api';
-import { updateUser } from '../../slices/userSlice'; 
+import { AppDispatch, RootState } from '../../store';
+import { updateUserDataAsync } from '../../slices/userSlice'; 
 
 const UserProfilePage = () => {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
 
     const id = useSelector((state: RootState) => state.user.id);
     const email = useSelector((state: RootState) => state.user.email);
     const password = useSelector((state: RootState) => state.user.password);
     const username = useSelector((state: RootState) => state.user.username);
-    const first_name = useSelector((state: RootState) => state.user.first_name);
-    const last_name = useSelector((state: RootState) => state.user.last_name);
-    const is_staff = useSelector((state: RootState) => state.user.is_staff);
-    const is_superuser = useSelector((state: RootState) => state.user.is_superuser);
-    const date_joined = useSelector((state: RootState) => state.user.date_joined);
 
-    const [newPassword, setNewPassword] = useState(password || '');
+    const [newPassword, setNewPassword] = useState('');
     const [newEmail, setNewEmail] = useState(email || '');
+    
     const [error, setError] = useState('');
 
     const handlePasswordChange = async () => {
@@ -26,32 +21,14 @@ const UserProfilePage = () => {
             setError('Пароль должен содержать хотя бы 8 символов.');
             return;
         }
-
         if (!id) {
             setError('ID пользователя не найдено');
             return;
         }
-
         try {
-            const updatedUserData = {
-                email: newEmail,
-                password: newPassword,
-                first_name: first_name,
-                last_name: last_name,
-                date_joined: date_joined,
-                username: username,
-                is_staff: is_staff,
-                is_superuser: is_superuser
-            };
-
-            const response = await api.user.userUpdateUserUpdate(id.toString(), updatedUserData);
-
-            if (response) {
-                dispatch(updateUser({ password: newPassword }));
-                alert('Пароль успешно обновлен');
-            }
+            dispatch(updateUserDataAsync({ id, password: newPassword, username })).unwrap();
+            alert('Пароль успешно обновлен');
         } catch (error) {
-            console.error('Ошибка при изменении пароля:', error);
             setError('Не удалось обновить пароль');
         }
     };
@@ -61,28 +38,11 @@ const UserProfilePage = () => {
             setError('ID пользователя не найдено');
             return;
         }
-
         try {
-            const updatedUserData = {
-                email: newEmail,
-                password: newPassword,
-                first_name: first_name,
-                last_name: last_name,
-                date_joined: date_joined,
-                username: username,
-                is_staff: is_staff,
-                is_superuser: is_superuser
-            };
-
-            const response = await api.user.userUpdateUserUpdate(id.toString(), updatedUserData);
-            
-            if (response) {
-                dispatch(updateUser({ email: newEmail }));
-                alert('Email успешно обновлен');
-              }
+            await dispatch(updateUserDataAsync({ id, email: newEmail, username, password })).unwrap();
+            alert('Email успешно обновлен');
         } catch (error) {
-            console.error('Ошибка при изменении email:', error);
-            setError('Не удалось обновить email');
+            setError(error as string);
         }
     };
 
@@ -128,7 +88,6 @@ const UserProfilePage = () => {
                         <label className="text-gray-300">Новый пароль:</label>
                         <input
                             type="password"
-                            placeholder={password}
                             value={newPassword}
                             onChange={(e) => setNewPassword(e.target.value)}
                             className="ml-4 px-4 py-2 text-red-800 rounded-md"

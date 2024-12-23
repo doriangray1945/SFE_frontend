@@ -33,13 +33,18 @@ const VacancyApplicationPage: FC = () => {
 
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  const [allowedForSubmitted, setAllowedForSubmitted] = useState(true);
   
   const navigate = useNavigate();
 
   const handleFilter = async () => {
     try {
       const response = await api.vacancyApplications.vacancyApplicationsRead(app_id? app_id : '');
-      if (response.data.cities) setCities(response.data.cities); 
+      console.log(response.data);
+      if (response.data.cities) setCities(response.data.cities);
+      if (response.data.cities?.length == 0) setAllowedForSubmitted(false);
+
       
       setVacancyData({
         vacancy_name: response.data.vacancy_application?.vacancy_name || '',
@@ -188,7 +193,7 @@ const VacancyApplicationPage: FC = () => {
           )}
         </div>
         {(isDraft) && (
-          <Button className="search-button" onClick={handleSubmit} disabled={!isDraft}>
+          <Button className="search-button" onClick={handleSubmit} disabled={!isDraft || !allowedForSubmitted}>
             Оформить
           </Button>
         )}

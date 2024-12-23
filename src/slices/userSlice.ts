@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { api } from '../api';
 
 interface UserState {
@@ -29,7 +29,7 @@ const initialState: UserState = {
   error: null,
 };
 
-// Асинхронное действие для логина
+// Асинхронное действие для авторизации
 export const loginUserAsync = createAsyncThunk(
   'user/loginUserAsync',
   async (credentials: { username: string; password: string }, { rejectWithValue }) => {
@@ -42,6 +42,7 @@ export const loginUserAsync = createAsyncThunk(
   }
 );
 
+// Асинхронное действие для деавторизации
 export const logoutUserAsync = createAsyncThunk(
   'user/logoutUserAsync',
   async (_, { rejectWithValue }) => {
@@ -54,19 +55,23 @@ export const logoutUserAsync = createAsyncThunk(
   }
 );
 
+// Асинхронное действие для апдейта пользователя
+export const updateUserDataAsync = createAsyncThunk(
+  'user/updateUserDataAsync',
+  async ({ id, email, username, password }: { id: number; email?: string; username: string; password: string }, { rejectWithValue }) => {
+    try {
+      const response = await api.user.userUpdateUserUpdate(id.toString(), { email, username, password });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue('Ошибка при обновлении email');
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {
-    updateUser: (state, action: PayloadAction<{ email?: string; password?: string }>) => {
-      if (action.payload.email) {
-        state.email = action.payload.email;
-      }
-      if (action.payload.password) {
-        state.password = action.payload.password;
-      }
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(loginUserAsync.pending, (state) => {
@@ -106,9 +111,18 @@ const userSlice = createSlice({
       })
       .addCase(logoutUserAsync.rejected, (state, action) => {
         state.error = action.payload as string;
-      });
+      })
+
+
+      .addCase(updateUserDataAsync.fulfilled, (state, action) => {
+        state.password = action.payload.password;
+        state.email = action.payload.email;
+      })
+      .addCase(updateUserDataAsync.rejected, (state, action) => {
+        state.error = action.payload as string;
+      });        
   },
 });
 
-export const { updateUser } = userSlice.actions;
+export const {} = userSlice.actions;
 export default userSlice.reducer;
