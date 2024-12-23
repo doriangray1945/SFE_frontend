@@ -77,7 +77,7 @@ const VacancyApplicationHistoryPage = () => {
         }, POLLING_INTERVAL);
 
         return () => clearInterval(intervalId); 
-    }, [statusFilter, startDate, endDate, creatorFilter]);
+    }, [statusFilter, startDate, endDate]);
 
     useEffect(() => {
         filterApplications();
