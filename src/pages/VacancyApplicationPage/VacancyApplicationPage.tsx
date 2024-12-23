@@ -9,7 +9,6 @@ import { useParams } from "react-router-dom";
 
 
 const VacancyApplicationPage: FC = () => {
-  /*const app_id = useSelector((state: RootState) => state.VacancyApplication.app_id);*/
   const [isDraft, setIsDraft] = useState(false); 
   const { app_id } = useParams();
   
@@ -49,7 +48,7 @@ const VacancyApplicationPage: FC = () => {
       });
 
       setIsDraft(response.data.vacancy_application?.status === 1);
-    } catch (err) {
+    } catch (error) {
       setError('Ошибка при загрузке данных о вакансиях');
     }
   };
@@ -80,11 +79,9 @@ const VacancyApplicationPage: FC = () => {
     if (app_id) {
       setIsLoading(true);
       try {
-        const response = await api.vacancyApplications.vacancyApplicationsUpdateStatusUserUpdate(app_id.toString());
-        // Выводим успешный результат или выполняем действия по его сохранению
-        console.log('Vacancy updated', response.data);
+        await api.vacancyApplications.vacancyApplicationsUpdateStatusUserUpdate(app_id.toString());
         navigate(`/cities`);
-      } catch (err) {
+      } catch (error) {
         setError('Ошибка при обновлении вакансии');
       } finally {
         setIsLoading(false);

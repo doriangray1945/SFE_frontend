@@ -18,16 +18,14 @@ interface Props {
 const InputField: FC<Props> = ({ value, setValue, onSubmit, loading }) => {
 
     const navigate = useNavigate();
+    
+    const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
+    const app_id = useSelector((state: RootState) => state.vacancyApplication.app_id);
+    const count = useSelector((state: RootState) => state.vacancyApplication.count);
 
     const handleClick = (app_id: number | null) => {
         navigate(`${ROUTES.VACANCYAPPLICATION}/${app_id}`);
     };
-
-    const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
-
-    const app_id = useSelector((state: RootState) => state.VacancyApplication.app_id);
-    const count = useSelector((state: RootState) => state.VacancyApplication.count);
-
 
     return (  
         <div className="search-bar">

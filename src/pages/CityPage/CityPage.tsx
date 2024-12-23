@@ -13,12 +13,12 @@ import { api } from '../../api';
 export const CityPage: FC = () => {
   const [cityData, setCityData] = useState<Cities>();
 
-  const { id } = useParams(); // ид страницы, пример: "/albums/12"
+  const { id } = useParams();
 
   useEffect(() => {
     if (!id) return;
 
-    const fetchCityData = async () => {
+    const cityReadAsync = async () => {
       try {
         const response = await api.cities.citiesRead(id);
         const cityData = response.data;
@@ -30,9 +30,7 @@ export const CityPage: FC = () => {
         setCityData(cityData);
       }
     };
-  
-    fetchCityData();
-
+    cityReadAsync();
   }, [id]);
 
   if (!cityData) {

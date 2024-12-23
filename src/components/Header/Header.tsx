@@ -1,16 +1,14 @@
 // Header.tsx
 import React from 'react';
-import { useLocation } from 'react-router-dom';
 import './header.css';
-import homeBtn from "./home-btn.png";
 import { Link } from "react-router-dom";
 import { ROUTES } from '../../../Routes';
-import { Button, Image } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import { useSelector } from 'react-redux'; 
-import { RootState } from '../../store';
+import { AppDispatch, RootState } from '../../store';
 import { useDispatch } from 'react-redux';
-import { logoutUser } from '../../slices/userSlice'; 
-import { setAppId, setCount } from '../../slices/VacancyApplicationSlice';
+import { logoutUserAsync } from '../../slices/userSlice'; 
+import { setAppId, setCount } from '../../slices/vacancyApplicationSlice';
 import { setSearchValue } from '../../slices/citiesSlice'; 
 import { api } from '../../api';
 
@@ -19,12 +17,13 @@ interface Props {
 }
 
 const Header: React.FC <Props> = ({ onChange }) => {
-    const location = useLocation();
     const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
-    const dispatch = useDispatch();
+
+    const dispatch = useDispatch<AppDispatch>();
 
     const handleExit = async ()  => {
-        dispatch(logoutUser());
+        dispatch(logoutUserAsync());
+
         dispatch(setAppId(null));
         dispatch(setCount(0));
         dispatch(setSearchValue(''));
@@ -32,7 +31,6 @@ const Header: React.FC <Props> = ({ onChange }) => {
         if (onChange) {
             onChange();  
         }
-        
         return await api.logout.logoutCreate();
     }
 
@@ -58,17 +56,18 @@ const Header: React.FC <Props> = ({ onChange }) => {
                         Выйти
                     </Button>
                 )}
-
-                {(location.pathname.includes('/applications') || location.pathname.includes('/cities')) && (
-                    <Link to={ROUTES.HOME}>
-                        <Button className="home-btn">
-                            <Image src={ homeBtn } alt="Домой" />
-                        </Button>
-                    </Link>
-                )}
             </div>
         </nav>
     );
 };
 
 export default Header;
+
+
+/*{(location.pathname.includes('/applications') || location.pathname.includes('/cities')) && (
+                    <Link to={ROUTES.HOME}>
+                        <Button className="home-btn">
+                            <Image src={ homeBtn } alt="Домой" />
+                        </Button>
+                    </Link>
+                )} */

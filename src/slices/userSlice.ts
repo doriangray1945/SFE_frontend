@@ -1,4 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { api } from '../api';
 
 interface UserState {
   id?: number;
@@ -11,6 +12,7 @@ interface UserState {
   last_name?: string;
   password: string;
   date_joined?: string;
+  error?: string | null; 
 }
 
 const initialState: UserState = {
@@ -23,35 +25,39 @@ const initialState: UserState = {
   first_name: undefined,
   last_name: undefined,
   password: '',
-  date_joined: undefined
+  date_joined: undefined,
+  error: null,
 };
+
+// Асинхронное действие для логина
+export const loginUserAsync = createAsyncThunk(
+  'user/loginUserAsync',
+  async (credentials: { username: string; password: string }, { rejectWithValue }) => {
+    try {
+      const response = await api.login.loginCreate(credentials);
+      return response.data; 
+    } catch (error) {
+      return rejectWithValue('Ошибка авторизации'); // Возвращаем ошибку в случае неудачи
+    }
+  }
+);
+
+export const logoutUserAsync = createAsyncThunk(
+  'user/logoutUserAsync',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await api.logout.logoutCreate();
+      return response.data; 
+    } catch (error) {
+      return rejectWithValue('Ошибка при выходе из системы'); 
+    }
+  }
+);
 
 const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    loginUser: (state, action: PayloadAction<{ id?: number, username: string, password: string, is_staff?: boolean, is_superuser?: boolean, email?: string, first_name?: string, last_name?: string, date_joined?: string }>) => {
-      state.id = action.payload.id;
-      state.username = action.payload.username;
-      state.isAuthenticated = true;
-      state.is_staff = action.payload.is_staff;
-      state.is_superuser = action.payload.is_superuser;
-      state.email = action.payload.email;
-      state.first_name = action.payload.first_name;
-      state.last_name = action.payload.last_name;
-      state.date_joined = action.payload.date_joined;
-    },
-    logoutUser: (state) => {
-      state.id = NaN;
-      state.username = '';
-      state.isAuthenticated = false;
-      state.is_staff = false;
-      state.is_superuser = false;
-      state.email = undefined;
-      state.first_name = undefined;
-      state.last_name = undefined;
-      state.date_joined = undefined;
-    },
     updateUser: (state, action: PayloadAction<{ email?: string; password?: string }>) => {
       if (action.payload.email) {
         state.email = action.payload.email;
@@ -61,7 +67,48 @@ const userSlice = createSlice({
       }
     },
   },
+  extraReducers: (builder) => {
+    builder
+      .addCase(loginUserAsync.pending, (state) => {
+        state.error = null;
+      })
+      .addCase(loginUserAsync.fulfilled, (state, action) => {
+        const { id, username, password, is_staff, is_superuser, email, first_name, last_name, date_joined } = action.payload;
+        state.id = id;
+        state.username = username;
+        state.isAuthenticated = true;
+        state.password = password;
+        state.is_staff = is_staff;
+        state.is_superuser = is_superuser;
+        state.email = email;
+        state.first_name = first_name;
+        state.last_name = last_name;
+        state.date_joined = date_joined;
+        state.error = null;
+      })
+      .addCase(loginUserAsync.rejected, (state, action) => {
+        state.error = action.payload as string;
+        state.isAuthenticated = false; 
+      })
+
+
+      .addCase(logoutUserAsync.fulfilled, (state) => {
+        state.id = NaN;
+        state.username = '';
+        state.isAuthenticated = false;
+        state.is_staff = false;
+        state.is_superuser = false;
+        state.email = undefined; 
+        state.first_name = undefined;
+        state.last_name = undefined;
+        state.date_joined = undefined;
+        state.error = null;
+      })
+      .addCase(logoutUserAsync.rejected, (state, action) => {
+        state.error = action.payload as string;
+      });
+  },
 });
 
-export const { loginUser, logoutUser, updateUser } = userSlice.actions;
+export const { updateUser } = userSlice.actions;
 export default userSlice.reducer;

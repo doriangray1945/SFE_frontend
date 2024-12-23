@@ -1,5 +1,18 @@
-import { count } from "console";
-import { CitiesResult } from "./citiesApi";
+export interface City {
+  city_id: number;
+  name: string;
+  population: string; 
+  salary: string; 
+  unemployment_rate: string; 
+  description: string; 
+  url: string;
+}
+
+export interface CitiesResult {
+  cities: City[];
+  draft_vacancy_application: number,
+  count: number
+}
 
 export const CITIES_MOCK: CitiesResult = { 
   cities: [

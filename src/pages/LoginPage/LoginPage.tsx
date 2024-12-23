@@ -1,61 +1,32 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { Form, Button, Container, Alert } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
-import { loginUser } from '../../slices/userSlice'; 
+import { useDispatch, useSelector } from 'react-redux';
 import Header from "../../components/Header/Header";
-import { api } from '../../api';
+import { loginUserAsync } from '../../slices/userSlice';
 import { User } from '../../api/Api'
+import { AppDispatch, RootState } from '../../store';
 
 
 const LoginPage: React.FC = () => {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
 
     const [formData, setFormData] = useState<User>({ username: '', password: ''});
-    const [error, setError] = useState<string | null>(null);
-
+    const error = useSelector((state: RootState) => state.user.error); // Получаем ошибку из Redux
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
     const handleSubmit = async (e: FormEvent) => {
-        e.preventDefault();
-      
-        if (formData.username && formData.password) {
-          try {
-            const userData = await api.login.loginCreate({ username: formData.username, password: formData.password });
-            console.log(userData.data);
-      
-            if (userData.data.username) {
-              dispatch(
-                loginUser({
-                  id: userData.data.id,
-                  username: userData.data.username,
-                  password: userData.data.password,
-                  is_staff: userData.data.is_staff,
-                  is_superuser: userData.data.is_superuser,
-                  email: userData.data.email,
-                  first_name: userData.data.first_name,
-                  last_name: userData.data.last_name,
-                  date_joined: userData.data.date_joined 
-                })
-              );
-              console.log('Авторизация успешна');
-            } else {
-              console.error('Не удалось авторизоваться: ответ сервера некорректен');
-              setError('Ответ сервера некорректен');
-            }
-          } catch (error) {
-            // Обработка ошибок
-            console.error('Ошибка авторизации');
-            setError('Ошибка авторизации');
-          }
-        } else {
-          setError('Заполните все поля');
-        }
+      e.preventDefault();
+    
+      if (formData.username && formData.password) {
+        dispatch(loginUserAsync({ username: formData.username, password: formData.password }));
+      } else {
+        console.error('Заполните все поля');
+      }
     };
       
-
     return (
         <Container className="mt-5">
         <Header/>

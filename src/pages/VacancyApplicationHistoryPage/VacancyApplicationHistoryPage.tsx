@@ -4,7 +4,7 @@ import { ROUTES } from '../../../Routes';
 import { api } from '../../api';
 
 
-const UserApplicationsPage = () => {
+const VacancyApplicationHistoryPage = () => {
     const [applications, setApplications] = useState<{ 
         app_id?: number; 
         status?: number; 
@@ -27,9 +27,7 @@ const UserApplicationsPage = () => {
         try {
             const response = await api.vacancyApplications.vacancyApplicationsList();
             setApplications(response.data);
-            console.log(response.data);
         } catch (error) {
-            console.error('Ошибка при выполнении запроса:', error);
             setError('Ошибка при загрузке заявок');
         } finally {
             setLoading(false);
@@ -97,4 +95,4 @@ const UserApplicationsPage = () => {
     );
 };
 
-export default UserApplicationsPage;
+export default VacancyApplicationHistoryPage;

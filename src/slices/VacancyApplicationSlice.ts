@@ -11,7 +11,7 @@ const initialState: VacancyApplicationState = {
 };
 
 const VacancyApplicationSlice = createSlice({
-  name: 'VacancyApplication',
+  name: 'vacancyApplication',
   initialState,
   reducers: {
     setAppId: (state, action) => {

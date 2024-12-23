@@ -8,7 +8,7 @@ import { HomePage } from "./pages/HomePage/HomePage";
 import LoginPage from "./pages/LoginPage/LoginPage"
 import RegisterPage from "./pages/RegisterPage/RegisterPage"
 import VacancyApplicationPage from "./pages/VacancyApplicationPage/VacancyApplicationPage";
-import UserApplicationsPage from "./pages/VacancyApplicationHistoryPage/VacancyApplicationHistoryPage"
+import VacancyApplicationHistoryPage from "./pages/VacancyApplicationHistoryPage/VacancyApplicationHistoryPage"
 import UserProfilePage from "./pages/UserProfilePage/UserProfilePage";
 
 
@@ -23,7 +23,7 @@ function App() {
           <Route path={ROUTES.CITIES} element={<CitiesPage />} />
           <Route path={`${ROUTES.CITIES}/:id`} element={<CityPage />} />
           <Route path={`${ROUTES.VACANCYAPPLICATION}/:app_id`} element={<VacancyApplicationPage />} />
-          <Route path={`${ROUTES.VACANCYAPPLICATION}`} element={<UserApplicationsPage />} />
+          <Route path={`${ROUTES.VACANCYAPPLICATION}`} element={<VacancyApplicationHistoryPage />} />
           <Route path={`${ROUTES.PROFILE}`} element={< UserProfilePage/>} />
         </Routes>
       </BrowserRouter>

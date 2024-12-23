@@ -35,10 +35,10 @@ export const CityCard: FC<Props> = ({
 }) => {
 
     const { pathname } = useLocation();
-    const app_id = useSelector((state: RootState) => state.VacancyApplication.app_id);
-    const [localCount, setLocalCount] = useState(count);
-
-    const [isDraftApplication, setIsDraftApplication] = useState(isDraft); 
+    const app_id = useSelector((state: RootState) => state.vacancyApplication.app_id);
+    const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
+    
+    const [localCount, setLocalCount] = useState(count); 
 
     const handlerAdd = async () => {
         if (city_id) return await api.cities.citiesAddToVacancyApplicationCreate(city_id.toString());
@@ -56,11 +56,8 @@ export const CityCard: FC<Props> = ({
 
     const handlerChange = async (newCount: number) => {
         setLocalCount(newCount);
-
         if (newCount && app_id && city_id) return await api.citiesVacancyApplications.citiesVacancyApplicationsUpdateVacancyApplicationUpdate(app_id.toString(), city_id.toString(), { count: newCount })
     }
-
-    const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
 
     if (pathname === "/cities") {
         return (
@@ -121,6 +118,7 @@ export const CityCard: FC<Props> = ({
                                             className="form-control"
                                             value={localCount}
                                             onChange={(event => handlerChange(Number(event.target.value)))}
+                                            disabled={!isDraft}
                                         />
                                     </Col>
                                 </Row>
@@ -128,7 +126,7 @@ export const CityCard: FC<Props> = ({
                             <a onClick={() => imageClickHandler()} className="fav-btn-open">
                                 Подробнее
                             </a>
-                            {(isAuthenticated == true ) && (isDraftApplication) && (
+                            {(isAuthenticated == true ) && (isDraft) && (
                                 <Button className="fav-btn-open" onClick={() => handlerDelete()}>
                                     Удалить
                                 </Button>

@@ -23,7 +23,6 @@ const RegisterPage: React.FC = () => {
     
     if (formData.username && formData.password) {
       try {
-        // Запрос на создание нового пользователя
         const response = await api.user.userCreate({ 
           username: formData.username, 
           password: formData.password 
@@ -32,11 +31,9 @@ const RegisterPage: React.FC = () => {
         // Обработка успешной регистрации
         if (response) {
           setSuccessMessage('Регистрация успешна! Пожалуйста, войдите.');
-          setError(null); // Очистить ошибки
+          setError(null); 
         }
       } catch (error) {
-        // Обработка ошибок
-        console.error('Ошибка регистрации');
         setError('Ошибка регистрации. Попробуйте снова.');
       }
     } else {

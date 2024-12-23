@@ -8,13 +8,13 @@ import { CityCard } from '../../components/CityCard/CityCard';
 import { useNavigate } from "react-router-dom";
 import { CITIES_MOCK } from "../../modules/mock";
 import Header from "../../components/Header/Header";
-import InputField from "../../components/InputField/InputField"
-import { useSelector, useDispatch } from 'react-redux'; 
+import InputField from "../../components/InputField/InputField";
+import { useSelector, useDispatch } from 'react-redux';
 import { setSearchValue } from '../../slices/citiesSlice';
 import { RootState } from '../../store';
-import { setAppId, setCount } from "../../slices/VacancyApplicationSlice";
+import { setAppId, setCount } from "../../slices/vacancyApplicationSlice";
 import { api } from '../../api';
-import { Cities } from '../../api/Api'
+import { Cities } from '../../api/Api';
 
 const CitiesPage: FC = () => {
   const dispatch = useDispatch();
