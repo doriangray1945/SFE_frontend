@@ -103,7 +103,7 @@ const VacancyApplicationPage: FC = () => {
       <Header />
         <div className="container-2">
           <BreadCrumbs crumbs={[
-            { label: ROUTE_LABELS.VACANCYAPPLICATION },
+            { label: ROUTE_LABELS.VACANCYAPPLICATION, path: ROUTES.VACANCYAPPLICATION },
             { label: vacancyData?.vacancy_name || "Название вакансии" },
           ]} />    
           <div className="fav-content">

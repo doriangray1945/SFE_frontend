@@ -62,7 +62,7 @@ const CitiesPage: FC = () => {
         onChange={handleSearch}
       />
       <div className="container-2">
-        <BreadCrumbs crumbs={[{ label: ROUTE_LABELS.CITIES }]} />
+        <BreadCrumbs crumbs={[{ label: ROUTE_LABELS.CITIES, path: ROUTES.CITIES }]} />
         <div className="cities-title">
             <h1>Города для размещения Вашей вакансии</h1>
         </div>
