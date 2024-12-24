@@ -5,6 +5,12 @@
     color: black;
     margin-bottom: 20px;
   }
+
+  .page-container {
+    display: flex;
+    justify-content: center; /* Центрирование по горизонтали */
+    align-items: center;
+  }
   
 .loader-container {
     display: flex;
@@ -48,13 +54,13 @@
   
 .table th, .table td {
     padding: 16px;
-    text-align: left;
+    text-align: center;
   }
-  
+
 .table th {
     color: black;
     text-transform: uppercase;
-    font-weight: 500;
+    font-weight: bold;
   }
   
 .table td {

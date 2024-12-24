@@ -10,7 +10,6 @@ export const NavigationBar = () => {
 
   const username = useSelector((state: RootState) => state.user.username);
   const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
-  const isStaff = useSelector((state: RootState) => state.user.is_staff);
   const isSuperUser = useSelector((state: RootState) => state.user.is_superuser);
 
   return (
@@ -45,40 +44,3 @@ export const NavigationBar = () => {
       </nav>
   )
 }
-
-
-
-/*import React from "react";
-import Container from "react-bootstrap/Container";
-import Nav from "react-bootstrap/Nav";
-import Navbar from "react-bootstrap/Navbar";
-import { ROUTES } from "../../../Routes";
-import "./NavigationBar.css";
-import { Link } from "react-router-dom";
-
-export const NavigationBar = () => {
-  return (
-    <Navbar bg="light" expand="lg" className="navbar-container">
-      <Container>
-        <Navbar.Brand as={Link} to={ROUTES.HOME} className="navbar-brand">
-          SFE
-        </Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav"></Navbar.Toggle>
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="navbar-nav">
-            <Nav.Item>
-              <Nav.Link as={Link} to={ROUTES.HOME} className="nav-link">
-                Главная
-              </Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-              <Nav.Link as={Link} to={ROUTES.CITIES} className="nav-link">
-                Доступные города
-              </Nav.Link>
-            </Nav.Item>
-          </Nav>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
-  );
-};*/

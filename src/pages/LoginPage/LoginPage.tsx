@@ -6,7 +6,7 @@ import { loginUserAsync } from '../../slices/userSlice';
 import { User } from '../../api/Api'
 import { AppDispatch, RootState } from '../../store';
 import { BreadCrumbs } from "../../components/BreadCrumbs/BreadCrumbs";
-import { ROUTE_LABELS } from '../../../Routes';
+import { ROUTES, ROUTE_LABELS } from '../../../Routes';
 import "./LoginPage.css";
 
 
@@ -34,7 +34,7 @@ const LoginPage: React.FC = () => {
         <div>
             <Header />
             <div className="container-2">
-                <BreadCrumbs crumbs={[{ label: ROUTE_LABELS.LOGIN }]} />
+                <BreadCrumbs crumbs={[{ label: ROUTE_LABELS.LOGIN, path: ROUTES.LOGIN }]} />
                 <div className="cities-title">
                     <h1>Рады снова Вас видеть!</h1>
                 </div>

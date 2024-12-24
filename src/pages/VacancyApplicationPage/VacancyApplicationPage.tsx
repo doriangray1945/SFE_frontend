@@ -11,6 +11,8 @@ import { BreadCrumbs } from "../../components/BreadCrumbs/BreadCrumbs";
 import { ROUTE_LABELS } from '../../../Routes';
 import "./VacancyApplicationPage.css"
 import FavImage from "../../static/images/favorites.png"
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 const VacancyApplicationPage: FC = () => {
   const [isDraft, setIsDraft] = useState(false); 
@@ -42,13 +44,21 @@ const VacancyApplicationPage: FC = () => {
   
   const navigate = useNavigate();
 
+  const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
+
   const handleFilter = async () => {
+    if (!isAuthenticated) {
+      navigate(`${ROUTES.FORBIDDEN}`);
+      return
+    }
     try {
       const response = await api.vacancyApplications.vacancyApplicationsRead(app_id? app_id : '');
-      console.log(response.data);
+      if (!response.data.vacancy_application) {
+        navigate(`${ROUTES.NOTFOUND}`);
+        return
+      }
       if (response.data.cities) setCities(response.data.cities);
       if (response.data.cities?.length == 0) setAllowedForSubmitted(false);
-
       
       setVacancyData({
         vacancy_name: response.data.vacancy_application?.vacancy_name || '',
@@ -64,7 +74,7 @@ const VacancyApplicationPage: FC = () => {
 
   useEffect(() => {
     handleFilter();
-  }, [app_id]);
+  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;

@@ -18,6 +18,7 @@ interface Props {
     count?: number;
     onDelete?: (cityId: number) => void;
     isDraft?: boolean;
+    isAdd?: () => void;
 }
 
 
@@ -31,7 +32,8 @@ export const CityCard: FC<Props> = ({
     imageClickHandler,
     count,
     onDelete,
-    isDraft
+    isDraft,
+    isAdd
 }) => {
 
     const { pathname } = useLocation();
@@ -41,7 +43,11 @@ export const CityCard: FC<Props> = ({
     const [localCount, setLocalCount] = useState(count); 
 
     const handlerAdd = async () => {
-        if (city_id) return await api.cities.citiesAddToVacancyApplicationCreate(city_id.toString());
+        if (city_id) {
+            const response = await api.cities.citiesAddToVacancyApplicationCreate(city_id.toString());
+            if (isAdd) isAdd();
+            return response
+        }
         return
     }
 

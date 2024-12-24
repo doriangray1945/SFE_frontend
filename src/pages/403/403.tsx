@@ -1,13 +1,17 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { ROUTES, ROUTE_LABELS } from '../../../Routes';
+import { ROUTES} from '../../../Routes';
 import "./403.css";
+import Header from "../../components/Header/Header";
+
 
 const ForbiddenPage: React.FC = () => {
     const navigate = useNavigate();
 
     return (
-        <div className="forbidden-container">
+        <div>
+            <Header/>
+            <div className="forbidden-container">
             <h1 className="forbidden-title">403</h1>
             <p className="forbidden-message">Доступ запрещён</p>
             <button 
@@ -15,6 +19,7 @@ const ForbiddenPage: React.FC = () => {
                 onClick={() => navigate(ROUTES.HOME)}>
                 Вернуться на главную
             </button>
+        </div>
         </div>
     );
 };

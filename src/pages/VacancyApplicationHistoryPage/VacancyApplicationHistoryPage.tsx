@@ -6,6 +6,9 @@ import Header from "../../components/Header/Header";
 import { BreadCrumbs } from "../../components/BreadCrumbs/BreadCrumbs";
 import { ROUTE_LABELS } from '../../../Routes';
 import { Alert } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
+import { useNavigate } from "react-router-dom";
 
 
 const POLLING_INTERVAL = 10000; // Poll every 10 seconds
@@ -27,14 +30,22 @@ const VacancyApplicationHistoryPage = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
+    const navigate = useNavigate();
+
     // Для фильтра
     const [statusFilter, setStatusFilter] = useState<number>(NaN); // Status filter
     const [startDate, setStartDate] = useState<string>(''); // Start date filter
     const [endDate, setEndDate] = useState<string>(''); // End date filter
     const [creatorFilter, setCreatorFilter] = useState<string>(''); // Creator filter
 
+    const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
+    const isSuperUser = useSelector((state: RootState) => state.user.is_superuser);
 
     const fetchApplications = async () => {
+        if (!isAuthenticated) {
+            navigate(`${ROUTES.FORBIDDEN}`);
+            return
+        }
         setLoading(true);
         setError('');
         try {
@@ -90,7 +101,9 @@ const VacancyApplicationHistoryPage = () => {
             <Header />
             <div className="container-2">
                 <BreadCrumbs crumbs={[{ label: ROUTE_LABELS.VACANCYAPPLICATION, path: ROUTES.VACANCYAPPLICATION }]} />
-                <h1 className="cities-title">Заявки на создание вакансий</h1>
+                <div className="cities-title">
+                    <h1>Заявки на создание вакансий</h1>
+                </div>
                 <div className='page-container'>
                     {/* Filters */}
                     <div className="filters mb-4">
@@ -173,7 +186,7 @@ const VacancyApplicationHistoryPage = () => {
                                             <td>
                                                 <Link to={`${ROUTES.VACANCYAPPLICATION}/${application.app_id}`}>Просмотр</Link>
                                                 {/* Change Status buttons */}
-                                                {application.status !== 4 && application.status !== 5 && (
+                                                {application.status !== 4 && application.status !== 5 && (isSuperUser) && (
                                                     <div className="mt-2">
                                                         <button
                                                             onClick={() => handleStatusChange(application.app_id!, 4)} // Set to "Завершена"

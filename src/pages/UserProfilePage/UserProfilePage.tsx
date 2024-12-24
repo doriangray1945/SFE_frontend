@@ -1,15 +1,18 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppDispatch, RootState } from '../../store';
 import { updateUserDataAsync } from '../../slices/userSlice';
 import Header from "../../components/Header/Header";
 import { BreadCrumbs } from "../../components/BreadCrumbs/BreadCrumbs";
-import { ROUTE_LABELS } from '../../../Routes';
+import { ROUTES, ROUTE_LABELS } from '../../../Routes';
 import "./UserProfilePage.css"
 import { Button, Alert } from 'react-bootstrap';
+import { useNavigate } from "react-router-dom";
+
 
 const UserProfilePage = () => {
     const dispatch = useDispatch<AppDispatch>();
+    const navigate = useNavigate();
 
     const id = useSelector((state: RootState) => state.user.id);
     const email = useSelector((state: RootState) => state.user.email);
@@ -20,6 +23,8 @@ const UserProfilePage = () => {
     const [newEmail, setNewEmail] = useState(email || '');
     
     const [error, setError] = useState('');
+
+    const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
 
     const handlePasswordChange = async () => {
         if (!newPassword || newPassword.length < 8) {
@@ -51,11 +56,18 @@ const UserProfilePage = () => {
         }
     };
 
+    useEffect(() => {
+        if (!isAuthenticated) {
+            navigate(`${ROUTES.FORBIDDEN}`);
+            return
+        }
+    }, []);
+
     return (
         <div>
             <Header />
             <div className="container-2">
-                <BreadCrumbs crumbs={[{ label: ROUTE_LABELS.PROFILE }]} />
+                <BreadCrumbs crumbs={[{ label: ROUTE_LABELS.PROFILE, path: ROUTES.PROFILE }]} />
                 <div className="cities-title">
                     <h1>Личный кабинет</h1>
                     {error && <Alert variant="danger">{error}</Alert>}

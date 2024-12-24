@@ -92,6 +92,7 @@ const CitiesPage: FC = () => {
                       salary={item.salary}
                       unemployment_rate={item.unemployment_rate}
                       imageClickHandler={() => handleCardClick(item.city_id)}
+                      isAdd={handleSearch}
                     />
                   </Col>
                 ))

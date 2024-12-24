@@ -4,7 +4,7 @@ import Header from "../../components/Header/Header";
 import { api } from '../../api';
 import { User } from '../../api/Api';
 import { BreadCrumbs } from "../../components/BreadCrumbs/BreadCrumbs";
-import { ROUTE_LABELS } from '../../../Routes';
+import { ROUTES, ROUTE_LABELS } from '../../../Routes';
 
 
 const RegisterPage: React.FC = () => {
@@ -48,7 +48,7 @@ const RegisterPage: React.FC = () => {
     <div>
       <Header />
       <div className="container-2">
-        <BreadCrumbs crumbs={[{ label: ROUTE_LABELS.REGISTER }]} />
+        <BreadCrumbs crumbs={[{ label: ROUTE_LABELS.REGISTER, path: ROUTES.REGISTER }]} />
         <div className="cities-title">
             <h1>Добро пожаловать!</h1>
         </div>
