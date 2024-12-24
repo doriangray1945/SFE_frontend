@@ -11,6 +11,7 @@ import { logoutUserAsync } from '../../slices/userSlice';
 import { setAppId, setCount } from '../../slices/vacancyApplicationSlice';
 import { setSearchValue } from '../../slices/citiesSlice'; 
 import { api } from '../../api';
+import { useNavigate } from "react-router-dom";
 
 interface Props {
     onChange?: () => void
@@ -19,6 +20,7 @@ interface Props {
 const Header: React.FC <Props> = ({ onChange }) => {
     const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
 
+    const navigate = useNavigate();
     const dispatch = useDispatch<AppDispatch>();
 
     const handleExit = async ()  => {
@@ -28,9 +30,10 @@ const Header: React.FC <Props> = ({ onChange }) => {
         dispatch(setCount(0));
         dispatch(setSearchValue(''));
 
-        if (onChange) {
-            onChange();  
-        }
+        navigate('/cities');
+
+        if (onChange) onChange();
+          
         return await api.logout.logoutCreate();
     }
 

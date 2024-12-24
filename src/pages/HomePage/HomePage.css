@@ -4,8 +4,7 @@
 }
 
 .intro {
-    position: relative;
-    padding-top: clamp(120px, 30vh, 30vh);
+    padding-top: clamp(120px, 35vh, 35vh);
 }
 
 .intro h1 {
@@ -35,6 +34,7 @@
     position: relative;
     object-fit: cover;
     margin-left: 17vw;
+    margin-top: -10vh;
 }
 
 .highlight {
@@ -65,6 +65,7 @@
 
     .intro img {
         margin-left: 14vw;
+        margin-top: 0;
     }        
 }
 
