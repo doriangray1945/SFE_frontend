@@ -189,20 +189,20 @@ const VacancyApplicationHistoryPage = () => {
                                                 {application.status !== 4 && application.status !== 5 && (isSuperUser) && (
                                                     <div className="mt-2">
                                                         <button
-                                                            onClick={() => handleStatusChange(application.app_id!, 4)} // Set to "Завершена"
-                                                            className="text-blue-500"
+                                                            onClick={() => handleStatusChange(application.app_id!, 4)} 
+                                                            className="edit-button"
                                                         >
                                                             Завершить
                                                         </button>
                                                         <button
-                                                            onClick={() => handleStatusChange(application.app_id!, 5)} // Set to "Отклонена"
-                                                            className="ml-2 text-red-500"
+                                                            onClick={() => handleStatusChange(application.app_id!, 5)}
+                                                            className="edit-button"
                                                         >
                                                             Отклонить
                                                         </button>
                                                     </div>
                                                 )}
-                                            </td>
+                                             </td>
                                         </tr>
                                     ))}
                                 </tbody>
