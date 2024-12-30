@@ -22,7 +22,7 @@ interface CitiesState {
 
 export const fetchCitiesList = createAsyncThunk(
   'cities/fetchCitiesList',
-  async (_, { getState, rejectWithValue }) => {
+  async (_, { getState, dispatch, rejectWithValue }) => {
     const { cities }: any = getState();
     try {
       const response = await api.cities.citiesList();
@@ -33,8 +33,8 @@ export const fetchCitiesList = createAsyncThunk(
       const app_id = response.data.draft_vacancy_application;
       const count = response.data.count;
 
-      setAppId(app_id);
-      setCount(count);
+      dispatch(setAppId(app_id));
+      dispatch(setCount(count));
 
       return filteredCities;
     } catch (error) {
