@@ -6,32 +6,14 @@ import Header from "../../components/Header/Header";
 import { BreadCrumbs } from "../../components/BreadCrumbs/BreadCrumbs";
 import { ROUTE_LABELS } from '../../../Routes';
 import { Alert } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
+import { useSelector, useDispatch } from 'react-redux';
+import { AppDispatch, RootState } from '../../store';
 import { useNavigate } from "react-router-dom";
-
+import { fetchVacancyApplicationList } from '../../slices/vacancyApplicationSlice';
 
 const POLLING_INTERVAL = 2000;
 
 const VacancyApplicationHistoryPage = () => {
-    const [applications, setApplications] = useState<{ 
-        app_id?: number; 
-        status?: number; 
-        date_created: string; 
-        creator: string; 
-        moderator?: string | null; 
-        date_submitted?: string | null; 
-        date_completed?: string | null; 
-        vacancy_name?: string | null; 
-        vacancy_responsibilities?: string | null; 
-        vacancy_requirements?: string | null; 
-        duration_days?: number | null; 
-    }[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState('');
-
-    const navigate = useNavigate();
-
     // Для фильтра
     const [statusFilter, setStatusFilter] = useState<number>(NaN); // Status filter
     const [startDate, setStartDate] = useState<string>(''); // Start date filter
@@ -41,25 +23,21 @@ const VacancyApplicationHistoryPage = () => {
     const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
     const isSuperUser = useSelector((state: RootState) => state.user.is_superuser);
 
+    const navigate = useNavigate();
+    const dispatch = useDispatch<AppDispatch>();
+
+    const { applications, loading, error } = useSelector((state: RootState) => state.vacancyApplication);
+
     const fetchApplications = async () => {
         if (!isAuthenticated) {
             navigate(`${ROUTES.FORBIDDEN}`);
             return
         }
-        setLoading(true);
-        setError('');
-        try {
-            const response = await api.vacancyApplications.vacancyApplicationsList({
-                status: statusFilter || undefined,
-                date_submitted_start: startDate || undefined,
-                date_submitted_end: endDate || undefined
-            });
-            setApplications(response.data);
-        } catch (error) {
-            setError('Ошибка при загрузке заявок');
-        } finally {
-            setLoading(false);
-        }
+        dispatch(fetchVacancyApplicationList({
+            status: statusFilter || undefined,
+            date_submitted_start: startDate || undefined,
+            date_submitted_end: endDate || undefined
+        }));
     };
 
     // Смена статуса
@@ -68,7 +46,7 @@ const VacancyApplicationHistoryPage = () => {
             await api.vacancyApplications.vacancyApplicationsUpdateStatusAdminUpdate(appId.toString(), { status: newStatus });
             fetchApplications(); 
         } catch (error) {
-            setError('Ошибка при обновлении статуса заявки');
+            alert('Ошибка при обновлении статуса заявки');
         }
     };
 
@@ -80,7 +58,7 @@ const VacancyApplicationHistoryPage = () => {
                 application.creator.toLowerCase().includes(creatorFilter.toLowerCase())
             );
         }
-        setApplications(filtered);
+        return filtered;
     };
 
     useEffect(() => {

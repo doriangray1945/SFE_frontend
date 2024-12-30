@@ -1,25 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import './CitiesEditPages.css';
 import { ROUTES, ROUTE_LABELS } from '../../../Routes';
 import { Cities } from '../../api/Api';
 import { api } from '../../api';
-import { CITIES_MOCK } from "../../modules/mock";
-import { RootState } from '../../store';
+import { AppDispatch, RootState } from '../../store';
 import Header from "../../components/Header/Header";
 import { BreadCrumbs } from "../../components/BreadCrumbs/BreadCrumbs";
 import { Alert } from 'react-bootstrap';
-
+import {fetchCitiesList } from '../../slices/citiesSlice';
+import { Image } from "react-bootstrap";
+import defaultImage from "../../static/images/DefaultImage.jpg";
 
 const CitiesEditPage: React.FC = () => {
+    const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
 
-    const [cities, setCities] = useState<Cities[]>([]);
+    const { cities, error } = useSelector((state: RootState) => state.cities);
 
     const [newCity, setNewCity] = useState<Partial<Cities>>({});
-    const [error, setError] = useState<string | null>(null);
-
+    
     const isSuperUser = useSelector((state: RootState) => state.user.is_superuser);
 
     const handleFetchCities = async () => {
@@ -27,22 +28,16 @@ const CitiesEditPage: React.FC = () => {
             navigate(`${ROUTES.FORBIDDEN}`);
             return
         }
-        try {
-          const response = await api.cities.citiesList();
-          setCities(response.data.cities);
-        } catch {
-          const filteredMockData = CITIES_MOCK.cities;
-          setCities(filteredMockData);
-        }
+        dispatch(fetchCitiesList());
       };
     
-      useEffect(() => {
+    useEffect(() => {
         handleFetchCities();
-      }, [cities]);
+    }, [dispatch]);
 
     const handleAddCity = async () => {
         if (!newCity.name || !newCity.population || !newCity.salary || !newCity.unemployment_rate || !newCity.description) {
-            setError('Введите все данные!');
+            alert('Введите все данные!');
             return;
         }
 
@@ -66,7 +61,7 @@ const CitiesEditPage: React.FC = () => {
                 url: null,
             });
         } catch (error) {
-            setError('Не удалось добавить город.');
+            alert('Не удалось добавить город.');
         }
     };
 
@@ -74,7 +69,7 @@ const CitiesEditPage: React.FC = () => {
         try {
             await api.cities.citiesDeleteCityDelete(cityId.toString());
         } catch (error) {
-            setError('Не удалось удалить город.');
+            alert('Не удалось удалить город.');
             console.log(error);
         }
     };
@@ -99,6 +94,7 @@ const CitiesEditPage: React.FC = () => {
                             <thead>
                                 <tr>
                                     <th>Название</th>
+                                    <th>Изображение</th>
                                     <th>Население</th>
                                     <th>Средняя зарплата</th>
                                     <th>Уровень безработицы</th>
@@ -110,6 +106,10 @@ const CitiesEditPage: React.FC = () => {
                                 {cities.map((city) => (
                                     <tr key={city.city_id}>
                                         <td>{city.name}</td>
+                                        <td><div className="citiesTable">
+                                                <Image src={city.url || defaultImage} alt={city.name}></Image>
+                                            </div>
+                                        </td>
                                         <td>{city.population}</td>
                                         <td>{city.salary}</td>
                                         <td>{city.unemployment_rate}</td>

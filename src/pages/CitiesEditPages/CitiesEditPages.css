@@ -61,3 +61,8 @@
     border-color: black;
     outline: none;
 }
+
+.citiesTable img {
+    width: 110px;
+    height: auto;
+}

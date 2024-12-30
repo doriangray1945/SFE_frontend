@@ -1,39 +1,30 @@
 import "./CityPage.css";
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect } from "react";
 import { BreadCrumbs } from "../../components/BreadCrumbs/BreadCrumbs";
 import { ROUTES, ROUTE_LABELS } from "../../../Routes";
 import { useParams } from "react-router-dom";
-import { Cities } from '../../api/Api'
 import { Col, Row, Spinner, Image } from "react-bootstrap";
 import defaultImage from "../../static/images/DefaultImage.jpg";
-import { CITIES_MOCK } from "../../modules/mock";
 import Header from "../../components/Header/Header";
-import { api } from '../../api';
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "../../store";
+import { RootState } from "../../store";
+import { fetchCity } from "../../slices/citiesSlice";
 
 export const CityPage: FC = () => {
-  const [cityData, setCityData] = useState<Cities>();
+  const dispatch = useDispatch<AppDispatch>();
 
   const { id } = useParams();
+
+  const { city } = useSelector((state: RootState) => state.cities);
 
   useEffect(() => {
     if (!id) return;
 
-    const cityReadAsync = async () => {
-      try {
-        const response = await api.cities.citiesRead(id);
-        const cityData = response.data;
-        setCityData(cityData);
-      } catch {
-        const cityData = CITIES_MOCK.cities.find(
-          (city) => String(city.city_id) === id
-        );
-        setCityData(cityData);
-      }
-    };
-    cityReadAsync();
+    dispatch(fetchCity(id));
   }, [id]);
 
-  if (!cityData) {
+  if (!city) {
     return (
       <div className="container-1">
         <div className="city_page_loader_block">
@@ -47,18 +38,18 @@ export const CityPage: FC = () => {
     <div>
       <Header/>
       <div className="city-banner">
-        <Image src={cityData.url || defaultImage} alt={cityData.name}></Image>
+        <Image src={city.url || defaultImage} alt={city.name}></Image>
       </div>
       <div className="city-page-container">
         <BreadCrumbs
             crumbs={[
               { label: ROUTE_LABELS.CITIES, path: ROUTES.CITIES },
-              { label: cityData?.name || "Название города" },
+              { label: city?.name || "Название города" },
             ]}
         />
         <div className="city-content">
-          <h1>{cityData.name} - Возможности для бизнеса и поиска сотрудников</h1>
-          <h5>{cityData.description}</h5>
+          <h1>{city.name} - Возможности для бизнеса и поиска сотрудников</h1>
+          <h5>{city.description}</h5>
         </div>
       </div>
       <div className="info">
@@ -70,9 +61,9 @@ export const CityPage: FC = () => {
             <div className="info-text">
               <p>Статистика по рынку труда</p>
               <ul>
-                <li>Население: {cityData.population} человек.</li>
-                <li>Средняя зарплата: {cityData.salary} тыс. руб.</li>
-                <li>Уровень безработицы: {cityData.unemployment_rate}%.</li>
+                <li>Население: {city.population} человек.</li>
+                <li>Средняя зарплата: {city.salary} тыс. руб.</li>
+                <li>Уровень безработицы: {city.unemployment_rate}%.</li>
               </ul>
             </div>
           </Col>
