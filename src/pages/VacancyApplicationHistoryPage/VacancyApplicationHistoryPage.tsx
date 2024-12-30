@@ -11,7 +11,7 @@ import { RootState } from '../../store';
 import { useNavigate } from "react-router-dom";
 
 
-const POLLING_INTERVAL = 10000; // Poll every 10 seconds
+const POLLING_INTERVAL = 2000;
 
 const VacancyApplicationHistoryPage = () => {
     const [applications, setApplications] = useState<{ 
@@ -86,7 +86,7 @@ const VacancyApplicationHistoryPage = () => {
     useEffect(() => {
         fetchApplications();
         const intervalId = setInterval(() => {
-            fetchApplications(); // Polling fetch
+            fetchApplications(); 
         }, POLLING_INTERVAL);
 
         return () => clearInterval(intervalId); 
@@ -166,9 +166,11 @@ const VacancyApplicationHistoryPage = () => {
                                         <th>Номер заявки</th>
                                         <th>Статус</th>
                                         <th>Создатель</th>
-                                        <th>Дата создания</th>
                                         <th>Дата формирования</th>
-                                        <th>Дата завершения</th>
+                                        <th>Название вакансии</th>
+                                        <th>Требования</th>
+                                        <th>Обязанности</th>
+                                        <th>Длительность</th>
                                         <th>Действия</th>
                                     </tr>
                                 </thead>
@@ -180,9 +182,11 @@ const VacancyApplicationHistoryPage = () => {
                                                 {application.status === 3 ? 'Сформирован' : application.status === 4 ? 'Завершен' : 'Отклонен'}
                                             </td>
                                             <td>{application.creator}</td>
-                                            <td>{new Date(application.date_created).toLocaleString()}</td>
                                             <td>{application.date_submitted ? new Date(application.date_submitted).toLocaleString() : '—'}</td>
-                                            <td>{application.date_completed ? new Date(application.date_completed).toLocaleString() : '—'}</td>
+                                            <td>{application.vacancy_name}</td>
+                                            <td>{application.vacancy_requirements}</td>
+                                            <td>{application.vacancy_responsibilities}</td>
+                                            <td>{application.duration_days}</td>
                                             <td>
                                                 <Link to={`${ROUTES.VACANCYAPPLICATION}/${application.app_id}`}>Просмотр</Link>
                                                 {/* Change Status buttons */}

@@ -108,6 +108,21 @@ const VacancyApplicationPage: FC = () => {
     }
   };
 
+  const handleDeleteFrom = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    if (app_id) {
+      try {
+        await api.vacancyApplications.vacancyApplicationsDeleteVacancyApplicationDelete(app_id.toString());
+        navigate(`/cities`);
+      } catch (error) {
+        setError('Ошибка при удалении вакансии');
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  };
+
   return (
     <div>
       <Header />
@@ -208,6 +223,11 @@ const VacancyApplicationPage: FC = () => {
             {(isDraft) && (
               <Button className="save-button" onClick={handleSubmit} disabled={!isDraft || !allowedForSubmitted}>
                 Оформить
+              </Button>
+            )}
+            {(isDraft) && (
+              <Button className="save-button" onClick={handleDeleteFrom} disabled={!isDraft || !allowedForSubmitted}>
+                Очистить
               </Button>
             )}
             <div style={{ height: '10vh'}}></div>
