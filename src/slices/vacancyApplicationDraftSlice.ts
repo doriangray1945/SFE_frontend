@@ -65,7 +65,6 @@ export const updateVacancyApplication = createAsyncThunk(
       return response.data;
     }
   );
-  
 
 export const deleteVacancyApplication = createAsyncThunk(
   'vacancyApplication/deleteVacancyApplication',
@@ -75,6 +74,14 @@ export const deleteVacancyApplication = createAsyncThunk(
   }
 );
 
+export const submittedVacancyApplication = createAsyncThunk(
+  'vacancyApplication/submittedVacancyApplication',
+  async (appId: string) => {
+    const response = await api.vacancyApplications.vacancyApplicationsUpdateStatusUserUpdate(appId);
+    return response.data;
+  }
+); 
+
 const vacancyApplicationDraftSlice = createSlice({
   name: 'vacancyApplicationDraft',
   initialState,
@@ -82,6 +89,15 @@ const vacancyApplicationDraftSlice = createSlice({
     setCities: (state, action) => {
       state.cities = action.payload;
     },
+    setVacancyData: (state, action) => {
+      state.vacancyData = {
+          ...state.vacancyData,
+          ...action.payload,
+      };
+    },
+    setError: (state, action) => {
+      state.error = action.payload;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -132,9 +148,29 @@ const vacancyApplicationDraftSlice = createSlice({
       .addCase(deleteVacancyApplication.rejected, (state) => {
         state.error = 'Ошибка при удалении вакансии';
         state.isLoading = false;
+      })
+
+      .addCase(submittedVacancyApplication.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(submittedVacancyApplication.fulfilled, (state) => {
+        state.cities = [];
+        state.vacancyData = {
+          vacancy_name: '',
+          vacancy_responsibilities: '',
+          vacancy_requirements: ''
+        };
+        state.isDraft = false;
+        state.isLoading = false;
+        state.error = '';
+        state.allowedForSubmitted = false;
+      })
+      .addCase(submittedVacancyApplication.rejected, (state) => {
+        state.error = 'Ошибка при оформлении вакансии';
+        state.isLoading = false;
       });
   }
 });
 
-export const { setCities } = vacancyApplicationDraftSlice.actions;
+export const { setCities, setVacancyData, setError } = vacancyApplicationDraftSlice.actions;
 export default vacancyApplicationDraftSlice.reducer;

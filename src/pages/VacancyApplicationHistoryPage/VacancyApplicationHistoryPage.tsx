@@ -9,7 +9,7 @@ import { Alert } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppDispatch, RootState } from '../../store';
 import { useNavigate } from "react-router-dom";
-import { fetchVacancyApplicationList } from '../../slices/vacancyApplicationSlice';
+import { fetchVacancyApplicationList } from '../../slices/VacancyApplicationSlice';
 
 const POLLING_INTERVAL = 2000;
 

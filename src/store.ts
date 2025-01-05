@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import citiesReducer from './slices/citiesSlice';
 import userReducer from './slices/userSlice'; 
-import vacancyApplicationReducer from './slices/vacancyApplicationSlice';
+import vacancyApplicationReducer from './slices/VacancyApplicationSlice';
 import vacancyApplicationDraftReducer from './slices/vacancyApplicationDraftSlice';
 
 const store = configureStore({

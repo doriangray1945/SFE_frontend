@@ -16,8 +16,9 @@ import {
   fetchVacancyApplication,
   updateVacancyApplication,
   deleteVacancyApplication,
+  submittedVacancyApplication,
 } from '../../slices/vacancyApplicationDraftSlice';
-import { setCities } from '../../slices/vacancyApplicationDraftSlice';
+import { setCities, setVacancyData, setError } from '../../slices/vacancyApplicationDraftSlice';
 
 const VacancyApplicationPage: FC = () => {
   const { app_id } = useParams();
@@ -44,20 +45,22 @@ const VacancyApplicationPage: FC = () => {
     if (app_id) {
       dispatch(fetchVacancyApplication(app_id));
     }
-  }, [app_id, isAuthenticated, dispatch, navigate]);
+  }, [dispatch]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
+
     dispatch(
-      updateVacancyApplication({
-        appId: app_id || '',
-        vacancyData: { ...vacancyData, [name]: value },
-      }),
-    );  
+        setVacancyData({
+            ...vacancyData,
+            [name]: value,
+        })
+    );
   };
 
   const handleDelete = (cityId: number) => {
     setCities(cities.filter(city => city.city_id?.city_id !== cityId));
+    if (app_id) dispatch(fetchVacancyApplication(app_id));
   };
 
   const handleSaveVacancy = () => {
@@ -80,10 +83,10 @@ const VacancyApplicationPage: FC = () => {
     e.preventDefault();
     if (app_id) {
       try {
-        await dispatch(updateVacancyApplication({ appId: app_id, vacancyData })).unwrap();
+        await dispatch(submittedVacancyApplication(app_id));
         navigate(ROUTES.CITIES);
       } catch (err) {
-        console.error('Ошибка при обновлении вакансии:', err);
+        dispatch(setError(err));
       }
     }
   };
@@ -95,7 +98,7 @@ const VacancyApplicationPage: FC = () => {
         await dispatch(deleteVacancyApplication(app_id)).unwrap();
         navigate(ROUTES.CITIES);
       } catch (err) {
-        console.error('Ошибка при удалении:', err);
+        dispatch(setError(err));
       }
     }
   };
