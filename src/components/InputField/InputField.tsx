@@ -20,8 +20,8 @@ const InputField: FC<Props> = ({ value, setValue, onSubmit, loading }) => {
     const navigate = useNavigate();
     
     const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
-    const app_id = useSelector((state: RootState) => state.vacancyApplication.app_id);
-    const count = useSelector((state: RootState) => state.vacancyApplication.count);
+    const app_id = useSelector((state: RootState) => state.vacancyApplicationDraft.app_id);
+    const count = useSelector((state: RootState) => state.vacancyApplicationDraft.count);
 
     const handleClick = (app_id: number | null) => {
         navigate(`${ROUTES.VACANCYAPPLICATION}/${app_id}`);

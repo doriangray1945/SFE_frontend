@@ -2,8 +2,6 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { api } from '../api';
 
 interface VacancyApplicationState {
-  app_id: number,
-  count: number | undefined,
   applications: {
     app_id?: number;
     status?: number;
@@ -22,8 +20,6 @@ interface VacancyApplicationState {
 }
 
 const initialState: VacancyApplicationState = {
-  app_id: NaN,
-  count: NaN,
   applications: [],
   loading: false,
   error: null,
@@ -49,14 +45,7 @@ export const fetchVacancyApplicationList = createAsyncThunk(
 const VacancyApplicationSlice = createSlice({
   name: 'vacancyApplication',
   initialState,
-  reducers: {
-    setAppId: (state, action) => {
-      state.app_id = action.payload;
-    },
-    setCount: (state, action) => {
-      state.count = action.payload;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchVacancyApplicationList.pending, (state) => {
@@ -74,5 +63,5 @@ const VacancyApplicationSlice = createSlice({
   },
 });
 
-export const { setAppId, setCount } = VacancyApplicationSlice.actions;
+export const { } = VacancyApplicationSlice.actions;
 export default VacancyApplicationSlice.reducer;

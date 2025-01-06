@@ -1,4 +1,3 @@
-// vacancyApplicationsSlice.ts
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { api } from '../api';
 
@@ -22,6 +21,8 @@ interface VacancyData {
 }
 
 interface VacancyApplicationState {
+  app_id: number;
+  count: number | undefined;
   cities: City[];
   vacancyData: VacancyData;
   isDraft: boolean;
@@ -31,6 +32,8 @@ interface VacancyApplicationState {
 }
 
 const initialState: VacancyApplicationState = {
+  app_id: NaN,
+  count: NaN,
   cities: [],
   vacancyData: {
     vacancy_name: '',
@@ -60,7 +63,6 @@ export const updateVacancyApplication = createAsyncThunk(
         vacancy_responsibilities: vacancyData.vacancy_responsibilities ?? '',
         vacancy_requirements: vacancyData.vacancy_requirements ?? ''
       };
-  
       const response = await api.vacancyApplications.vacancyApplicationsUpdateVacancyUpdate(appId, vacancyDataToSend);
       return response.data;
     }
@@ -82,10 +84,46 @@ export const submittedVacancyApplication = createAsyncThunk(
   }
 ); 
 
+export const addCityToVacancyApplication = createAsyncThunk(
+  'cities/addToVacancyApplication',
+  async (cityId: number) => {
+    const response = await api.cities.citiesAddToVacancyApplicationCreate(cityId.toString());
+    return response.data;
+  }
+);
+
+export const deleteCityFromVacancyApplication = createAsyncThunk(
+  'cities/deleteFromVacancyApplication',
+  async ({ appId, cityId }: { appId: number; cityId: number }) => {
+    await api.citiesVacancyApplications.citiesVacancyApplicationsDeleteCityFromVacancyApplicationDelete(
+      appId.toString(),
+      cityId.toString()
+    ); 
+  }
+);
+
+export const updateCityVacancyCount = createAsyncThunk(
+  'cities/updateVacancyCount',
+  async ({ appId, cityId, count }: { appId: number; cityId: number; count: number }) => {
+    await api.citiesVacancyApplications.citiesVacancyApplicationsUpdateVacancyApplicationUpdate(
+      appId.toString(),
+      cityId.toString(),
+      { count }
+    );
+    return { cityId, count }; // Вернуть обновлённые данные
+  }
+);
+
 const vacancyApplicationDraftSlice = createSlice({
   name: 'vacancyApplicationDraft',
   initialState,
   reducers: {
+    setAppId: (state, action) => {
+      state.app_id = action.payload;
+    },
+    setCount: (state, action) => {
+      state.count = action.payload;
+    },
     setCities: (state, action) => {
       state.cities = action.payload;
     },
@@ -122,6 +160,8 @@ const vacancyApplicationDraftSlice = createSlice({
         state.error = 'Ошибка при загрузке данных';
         state.isLoading = false;
       })
+
+
       .addCase(updateVacancyApplication.pending, (state) => {
         state.isLoading = true;
       })
@@ -133,6 +173,8 @@ const vacancyApplicationDraftSlice = createSlice({
         state.error = 'Ошибка при обновлении данных';
         state.isLoading = false;
       })
+
+
       .addCase(deleteVacancyApplication.pending, (state) => {
         state.isLoading = true;
       })
@@ -150,10 +192,13 @@ const vacancyApplicationDraftSlice = createSlice({
         state.isLoading = false;
       })
 
+
       .addCase(submittedVacancyApplication.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(submittedVacancyApplication.fulfilled, (state) => {
+        state.app_id = NaN;
+        state.count = NaN;
         state.cities = [];
         state.vacancyData = {
           vacancy_name: '',
@@ -168,9 +213,24 @@ const vacancyApplicationDraftSlice = createSlice({
       .addCase(submittedVacancyApplication.rejected, (state) => {
         state.error = 'Ошибка при оформлении вакансии';
         state.isLoading = false;
+      })
+
+
+      /*.addCase(addCityToVacancyApplication.fulfilled, (state, action) => {
+        state.cities = action.payload.cities || [];
+      })
+
+      /*.addCase(deleteCityFromVacancyApplication.fulfilled, (state, action) => {
+        
+      })*/
+
+      .addCase(updateCityVacancyCount.fulfilled, (state, action) => {
+        const { cityId, count } = action.payload;
+        const city = state.cities.find((c) => c.city_id?.city_id === cityId);
+        if (city) city.count = count;
       });
   }
 });
 
-export const { setCities, setVacancyData, setError } = vacancyApplicationDraftSlice.actions;
+export const { setCities, setVacancyData, setError, setAppId, setCount } = vacancyApplicationDraftSlice.actions;
 export default vacancyApplicationDraftSlice.reducer;

@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../store';
 import { useDispatch } from 'react-redux';
 import { logoutUserAsync } from '../../slices/userSlice'; 
-import { setAppId, setCount } from '../../slices/vacancyApplicationSlice';
+import { setAppId, setCount } from '../../slices/vacancyApplicationDraftSlice';
 import { setSearchValue } from '../../slices/citiesSlice'; 
 import { api } from '../../api';
 import { useNavigate } from "react-router-dom";

@@ -49,7 +49,6 @@ const VacancyApplicationPage: FC = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-
     dispatch(
         setVacancyData({
             ...vacancyData,
@@ -58,9 +57,8 @@ const VacancyApplicationPage: FC = () => {
     );
   };
 
-  const handleDelete = (cityId: number) => {
-    setCities(cities.filter(city => city.city_id?.city_id !== cityId));
-    if (app_id) dispatch(fetchVacancyApplication(app_id));
+  const handleDeleteCity = (cityId: number) => {
+    dispatch(setCities(cities.filter(city => city.city_id?.city_id !== cityId)));
   };
 
   const handleSaveVacancy = () => {
@@ -70,7 +68,6 @@ const VacancyApplicationPage: FC = () => {
         vacancy_responsibilities: vacancyData.vacancy_responsibilities ?? '',
         vacancy_requirements: vacancyData.vacancy_requirements ?? ''
       };
-
       dispatch(updateVacancyApplication({ appId: app_id, vacancyData: vacancyDataToSend }));
     }
   }
@@ -91,7 +88,7 @@ const VacancyApplicationPage: FC = () => {
     }
   };
 
-  const handleDeleteFrom = async (e: React.FormEvent) => {
+  const handleDelete = async (e: React.FormEvent) => {
     e.preventDefault();
     if (app_id) {
       try {
@@ -188,7 +185,7 @@ const VacancyApplicationPage: FC = () => {
                       unemployment_rate={item.city_id?.unemployment_rate}
                       imageClickHandler={() => handleCardClick(item.city_id?.city_id)}
                       count={item.count}
-                      onDelete={handleDelete}
+                      onDelete={handleDeleteCity}
                       isDraft={isDraft}
                     />
                   </Col>
@@ -206,7 +203,7 @@ const VacancyApplicationPage: FC = () => {
               </Button>
             )}
             {(isDraft) && (
-              <Button className="save-button" onClick={handleDeleteFrom} disabled={!isDraft || !allowedForSubmitted}>
+              <Button className="save-button" onClick={handleDelete} disabled={!isDraft || !allowedForSubmitted}>
                 Очистить
               </Button>
             )}

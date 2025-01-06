@@ -143,7 +143,11 @@ export interface VacancyApplications {
   vacancy_responsibilities?: string | null;
   /** Vacancy requirements */
   vacancy_requirements?: string | null;
-  /** Duration days */
+  /**
+   * Duration days
+   * @min -2147483648
+   * @max 2147483647
+   */
   duration_days?: number | null;
 }
 
@@ -380,10 +384,62 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     citiesAddToVacancyApplicationCreate: (cityId: string, params: RequestParams = {}) =>
-      this.request<void, any>({
+      this.request<
+        {
+          vacancy_application?: {
+            /** Уникальный идентификатор заявки. */
+            app_id?: number;
+            /** Статус заявки. */
+            status?: number;
+            /**
+             * Дата и время создания заявки.
+             * @format date-time
+             */
+            date_created?: string;
+            /** Имя пользователя, создавшего заявку. */
+            creator?: string;
+            /** Имя модератора заявки (если есть). */
+            moderator?: string | null;
+            /**
+             * Дата отправки заявки.
+             * @format date-time
+             */
+            date_submitted?: string | null;
+            /**
+             * Дата завершения заявки.
+             * @format date-time
+             */
+            date_completed?: string | null;
+            /** Название вакансии. */
+            vacancy_name?: string | null;
+            /** Обязанности вакансии. */
+            vacancy_responsibilities?: string | null;
+            /** Требования вакансии. */
+            vacancy_requirements?: string | null;
+            /** Продолжительность обработки заявки в днях. */
+            duration_days?: number | null;
+          };
+          /** Список городов, привязанных к заявке. */
+          cities?: {
+            city_id?: {
+              city_id?: number;
+              name: string;
+              population: string;
+              salary: string;
+              unemployment_rate: string;
+              description: string;
+              url?: string;
+            };
+            /** Количество записей для данного города. */
+            count?: number;
+          }[];
+        },
+        any
+      >({
         path: `/cities/${cityId}/add_to_vacancy_application/`,
         method: "POST",
         secure: true,
+        format: "json",
         ...params,
       }),
 

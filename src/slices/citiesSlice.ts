@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { Cities } from '../api/Api';
 import { api } from '../api';
 import { CITIES_MOCK } from "../modules/mock";
-import { setAppId, setCount } from './VacancyApplicationSlice';
+import { setAppId, setCount } from './vacancyApplicationDraftSlice';
 
 const initialState: CitiesState = {
   searchValue: '',

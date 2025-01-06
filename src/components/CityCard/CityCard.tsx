@@ -3,9 +3,10 @@ import { Button, Card, Row, Col } from 'react-bootstrap';
 import "./CityCard.css";
 import defaultImage from "../../static/images/DefaultImage.jpg";
 import { useSelector } from 'react-redux'; 
-import { RootState } from '../../store';
-import { api } from '../../api';
+import { AppDispatch, RootState } from '../../store';
 import { useLocation } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { addCityToVacancyApplication, deleteCityFromVacancyApplication, updateCityVacancyCount } from '../../slices/vacancyApplicationDraftSlice';
 
 interface Props {
     city_id: number | undefined;
@@ -37,32 +38,30 @@ export const CityCard: FC<Props> = ({
 }) => {
 
     const { pathname } = useLocation();
-    const app_id = useSelector((state: RootState) => state.vacancyApplication.app_id);
+    const dispatch = useDispatch<AppDispatch>();
+
+    const app_id = useSelector((state: RootState) => state.vacancyApplicationDraft.app_id);
     const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
     
     const [localCount, setLocalCount] = useState(count); 
 
-    const handlerAdd = async () => {
+    const handleAdd = async () => {
         if (city_id) {
-            const response = await api.cities.citiesAddToVacancyApplicationCreate(city_id.toString());
+            await dispatch(addCityToVacancyApplication(city_id));
             if (isAdd) isAdd();
-            return response
         }
-        return
     }
 
-    const handlerDelete = async () => {
+    const handleDelete = async () => {
         if (city_id && app_id) {
-            await api.citiesVacancyApplications.citiesVacancyApplicationsDeleteCityFromVacancyApplicationDelete(app_id.toString(), city_id.toString());
-            if (onDelete) {
-                onDelete(city_id);
-            }
+            await dispatch(deleteCityFromVacancyApplication({ appId: app_id, cityId: city_id }));
+            if (onDelete) onDelete(city_id);
         }
     }
 
-    const handlerChange = async (newCount: number) => {
+    const handleChange = async (newCount: number) => {
         setLocalCount(newCount);
-        if (newCount && app_id && city_id) return await api.citiesVacancyApplications.citiesVacancyApplicationsUpdateVacancyApplicationUpdate(app_id.toString(), city_id.toString(), { count: newCount })
+        if (newCount && app_id && city_id) await dispatch(updateCityVacancyCount({ appId: app_id, cityId: city_id, count: newCount }));
     }
 
     if (pathname === "/cities") {
@@ -91,7 +90,7 @@ export const CityCard: FC<Props> = ({
                             Подробнее
                         </Button>
                         {(isAuthenticated == true ) && (
-                            <Button className="city-btn" onClick={() => handlerAdd() }>
+                            <Button className="city-btn" onClick={() => handleAdd() }>
                                 Добавить
                             </Button>
                         )}
@@ -123,7 +122,7 @@ export const CityCard: FC<Props> = ({
                                             type="number"
                                             className="localcount"
                                             value={localCount}
-                                            onChange={(event => handlerChange(Number(event.target.value)))}
+                                            onChange={(event => handleChange(Number(event.target.value)))}
                                             disabled={!isDraft}
                                         />
                                     </Col>
@@ -137,7 +136,7 @@ export const CityCard: FC<Props> = ({
                                 </Col>
                                 <Col md={3} xs={3}>
                                     {(isAuthenticated == true ) && (isDraft) && (
-                                        <Button className="fav-btn-open" onClick={() => handlerDelete()}>
+                                        <Button className="fav-btn-open" onClick={() => handleDelete()}>
                                             Удалить
                                         </Button>
                                     )}
