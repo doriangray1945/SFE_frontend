@@ -1,7 +1,6 @@
-// CitiesPage.tsx
 import "./CitiesSearchPage.css";
 import { FC, useEffect } from "react";
-import { Col, /*Row,*/ Spinner } from "react-bootstrap";
+import { Col, Spinner } from "react-bootstrap";
 import { BreadCrumbs } from "../../components/BreadCrumbs/BreadCrumbs";
 import { ROUTES, ROUTE_LABELS } from '../../../Routes';
 import { CityCard } from '../../components/CityCard/CityCard';
@@ -9,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import Header from "../../components/Header/Header";
 import InputField from "../../components/InputField/InputField";
 import { useSelector, useDispatch } from 'react-redux';
-import { setSearchValue, fetchCitiesList } from '../../slices/citiesSlice';
+import { getCitiesList } from '../../slices/citiesSlice';
 import { AppDispatch, RootState } from '../../store';
 import { Cities } from '../../api/Api';
 
@@ -20,8 +19,8 @@ const CitiesPage: FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(fetchCitiesList());
-  }, [searchValue, dispatch]);
+    dispatch(getCitiesList());
+  }, [dispatch]);
 
   const handleCardClick = (city_id: number | undefined) => {
     navigate(`${ROUTES.CITIES}/${city_id}`);
@@ -29,9 +28,7 @@ const CitiesPage: FC = () => {
 
   return (
     <div>
-      <Header
-        onChange={() => dispatch(fetchCitiesList())}
-      />
+      <Header/>
       <div className="container-2">
         <BreadCrumbs crumbs={[{ label: ROUTE_LABELS.CITIES, path: ROUTES.CITIES }]} />
         <div className="cities-title">
@@ -41,9 +38,7 @@ const CitiesPage: FC = () => {
         <div className="cities-and-search">
           <InputField
             value={searchValue}
-            setValue={(value) => dispatch(setSearchValue(value))}
             loading={loading}
-            onSubmit={() => dispatch(fetchCitiesList())}
           />
 
           {loading ? (
@@ -63,7 +58,6 @@ const CitiesPage: FC = () => {
                       salary={item.salary}
                       unemployment_rate={item.unemployment_rate}
                       imageClickHandler={() => handleCardClick(item.city_id)}
-                      isAdd={() => dispatch(fetchCitiesList())}
                     />
                   </Col>
                 ))

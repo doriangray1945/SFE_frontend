@@ -9,7 +9,7 @@ import { AppDispatch, RootState } from '../../store';
 import Header from "../../components/Header/Header";
 import { BreadCrumbs } from "../../components/BreadCrumbs/BreadCrumbs";
 import { Alert } from 'react-bootstrap';
-import {fetchCitiesList } from '../../slices/citiesSlice';
+import { getCitiesList } from '../../slices/citiesSlice';
 import { Image } from "react-bootstrap";
 import defaultImage from "../../static/images/DefaultImage.jpg";
 
@@ -28,7 +28,7 @@ const CitiesEditPage: React.FC = () => {
             navigate(`${ROUTES.FORBIDDEN}`);
             return
         }
-        dispatch(fetchCitiesList());
+        dispatch(getCitiesList());
       };
     
     useEffect(() => {

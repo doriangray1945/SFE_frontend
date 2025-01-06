@@ -12,29 +12,26 @@ import { setAppId, setCount } from '../../slices/vacancyApplicationDraftSlice';
 import { setSearchValue } from '../../slices/citiesSlice'; 
 import { api } from '../../api';
 import { useNavigate } from "react-router-dom";
+import {getCitiesList } from '../../slices/citiesSlice';
 
-interface Props {
-    onChange?: () => void
-}
 
-const Header: React.FC <Props> = ({ onChange }) => {
+const Header: React.FC = () => {
     const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
 
     const navigate = useNavigate();
     const dispatch = useDispatch<AppDispatch>();
 
     const handleExit = async ()  => {
-        dispatch(logoutUserAsync());
+        await dispatch(logoutUserAsync());
 
         dispatch(setAppId(null));
         dispatch(setCount(0));
         dispatch(setSearchValue(''));
         
         navigate('/cities');
-        
-        if (onChange) {
-            onChange();  
-        }
+
+        await dispatch(getCitiesList());
+
         return await api.logout.logoutCreate();
     }
 
@@ -66,12 +63,3 @@ const Header: React.FC <Props> = ({ onChange }) => {
 };
 
 export default Header;
-
-
-/*{(location.pathname.includes('/applications') || location.pathname.includes('/cities')) && (
-                    <Link to={ROUTES.HOME}>
-                        <Button className="home-btn">
-                            <Image src={ homeBtn } alt="Домой" />
-                        </Button>
-                    </Link>
-                )} */

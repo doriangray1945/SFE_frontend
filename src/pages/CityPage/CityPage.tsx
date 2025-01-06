@@ -9,7 +9,7 @@ import Header from "../../components/Header/Header";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../store";
 import { RootState } from "../../store";
-import { fetchCity } from "../../slices/citiesSlice";
+import { getCity } from "../../slices/citiesSlice";
 
 export const CityPage: FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -21,7 +21,7 @@ export const CityPage: FC = () => {
   useEffect(() => {
     if (!id) return;
 
-    dispatch(fetchCity(id));
+    dispatch(getCity(id));
   }, [id]);
 
   if (!city) {

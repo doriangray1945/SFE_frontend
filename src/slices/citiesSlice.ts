@@ -20,8 +20,8 @@ interface CitiesState {
   city: Cities | null;
 }
 
-export const fetchCitiesList = createAsyncThunk(
-  'cities/fetchCitiesList',
+export const getCitiesList = createAsyncThunk(
+  'cities/getCitiesList',
   async (_, { getState, dispatch, rejectWithValue }) => {
     const { cities }: any = getState();
     try {
@@ -43,7 +43,7 @@ export const fetchCitiesList = createAsyncThunk(
   }
 );
 
-export const fetchCity = createAsyncThunk(
+export const getCity = createAsyncThunk(
   'city/fetchCity',
   async (id: string) => {
     try {
@@ -65,15 +65,15 @@ const citiesSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchCitiesList.pending, (state) => {
+      .addCase(getCitiesList.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchCitiesList.fulfilled, (state, action) => {
+      .addCase(getCitiesList.fulfilled, (state, action) => {
         state.loading = false;
         state.cities = action.payload;
       })
-      .addCase(fetchCitiesList.rejected, (state, action) => {
+      .addCase(getCitiesList.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
         state.cities = CITIES_MOCK.cities.filter((item) =>
@@ -81,16 +81,16 @@ const citiesSlice = createSlice({
         );
       })
 
-      .addCase(fetchCity.pending, (state) => {
+      .addCase(getCity.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchCity.fulfilled, (state, action) => {
+      .addCase(getCity.fulfilled, (state, action) => {
         state.city = action.payload;
         state.loading = false;
         state.error = null;
       })
-      .addCase(fetchCity.rejected, (state, action) => {
+      .addCase(getCity.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || 'Произошла ошибка';
       });

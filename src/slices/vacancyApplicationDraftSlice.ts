@@ -21,7 +21,7 @@ interface VacancyData {
 }
 
 interface VacancyApplicationState {
-  app_id: number;
+  app_id?: number;
   count: number | undefined;
   cities: City[];
   vacancyData: VacancyData;
@@ -47,8 +47,8 @@ const initialState: VacancyApplicationState = {
 };
 
 
-export const fetchVacancyApplication = createAsyncThunk(
-  'vacancyApplication/fetchVacancyApplication',
+export const getVacancyApplication = createAsyncThunk(
+  'vacancyApplication/getVacancyApplication',
   async (appId: string) => {
     const response = await api.vacancyApplications.vacancyApplicationsRead(appId);
     return response.data;
@@ -85,7 +85,7 @@ export const submittedVacancyApplication = createAsyncThunk(
 ); 
 
 export const addCityToVacancyApplication = createAsyncThunk(
-  'cities/addToVacancyApplication',
+  'cities/addCityToVacancyApplication',
   async (cityId: number) => {
     const response = await api.cities.citiesAddToVacancyApplicationCreate(cityId.toString());
     return response.data;
@@ -93,7 +93,7 @@ export const addCityToVacancyApplication = createAsyncThunk(
 );
 
 export const deleteCityFromVacancyApplication = createAsyncThunk(
-  'cities/deleteFromVacancyApplication',
+  'cities/deleteCityFromVacancyApplication',
   async ({ appId, cityId }: { appId: number; cityId: number }) => {
     await api.citiesVacancyApplications.citiesVacancyApplicationsDeleteCityFromVacancyApplicationDelete(
       appId.toString(),
@@ -139,12 +139,13 @@ const vacancyApplicationDraftSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchVacancyApplication.pending, (state) => {
+      .addCase(getVacancyApplication.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(fetchVacancyApplication.fulfilled, (state, action) => {
+      .addCase(getVacancyApplication.fulfilled, (state, action) => {
         const { vacancy_application, cities } = action.payload;
         if (vacancy_application && cities) {
+            state.app_id = vacancy_application.app_id;
             state.vacancyData = {
                 vacancy_name: vacancy_application.vacancy_name,
                 vacancy_responsibilities: vacancy_application.vacancy_responsibilities,
@@ -156,7 +157,7 @@ const vacancyApplicationDraftSlice = createSlice({
             state.isLoading = false;
         }
       })
-      .addCase(fetchVacancyApplication.rejected, (state) => {
+      .addCase(getVacancyApplication.rejected, (state) => {
         state.error = 'Ошибка при загрузке данных';
         state.isLoading = false;
       })
@@ -179,6 +180,8 @@ const vacancyApplicationDraftSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(deleteVacancyApplication.fulfilled, (state) => {
+        state.app_id = NaN;
+        state.count = NaN;
         state.cities = [];
         state.vacancyData = {
           vacancy_name: '',
@@ -215,14 +218,25 @@ const vacancyApplicationDraftSlice = createSlice({
         state.isLoading = false;
       })
 
-
-      /*.addCase(addCityToVacancyApplication.fulfilled, (state, action) => {
-        state.cities = action.payload.cities || [];
+      .addCase(addCityToVacancyApplication.pending, (state) => {
+        state.isLoading = true;
       })
-
-      /*.addCase(deleteCityFromVacancyApplication.fulfilled, (state, action) => {
-        
-      })*/
+      .addCase(addCityToVacancyApplication.fulfilled, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(addCityToVacancyApplication.rejected, (state) => {
+        state.isLoading = false;
+      })
+      
+      .addCase(deleteCityFromVacancyApplication.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteCityFromVacancyApplication.fulfilled, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(deleteCityFromVacancyApplication.rejected, (state) => {
+        state.isLoading = false;
+      })
 
       .addCase(updateCityVacancyCount.fulfilled, (state, action) => {
         const { cityId, count } = action.payload;

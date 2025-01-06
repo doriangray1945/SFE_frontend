@@ -6,7 +6,9 @@ import { useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../store';
 import { useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { addCityToVacancyApplication, deleteCityFromVacancyApplication, updateCityVacancyCount } from '../../slices/vacancyApplicationDraftSlice';
+import { addCityToVacancyApplication, deleteCityFromVacancyApplication, updateCityVacancyCount, setCities } from '../../slices/vacancyApplicationDraftSlice';
+import { getCitiesList } from '../../slices/citiesSlice';
+
 
 interface Props {
     city_id: number | undefined;
@@ -17,9 +19,7 @@ interface Props {
     url: string | null | undefined;
     imageClickHandler: () => void;
     count?: number;
-    onDelete?: (cityId: number) => void;
     isDraft?: boolean;
-    isAdd?: () => void;
 }
 
 
@@ -32,9 +32,7 @@ export const CityCard: FC<Props> = ({
     url,
     imageClickHandler,
     count,
-    onDelete,
-    isDraft,
-    isAdd
+    isDraft
 }) => {
 
     const { pathname } = useLocation();
@@ -42,20 +40,21 @@ export const CityCard: FC<Props> = ({
 
     const app_id = useSelector((state: RootState) => state.vacancyApplicationDraft.app_id);
     const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
+    const cities = useSelector((state: RootState) => state.vacancyApplicationDraft.cities);
     
     const [localCount, setLocalCount] = useState(count); 
 
     const handleAdd = async () => {
         if (city_id) {
             await dispatch(addCityToVacancyApplication(city_id));
-            if (isAdd) isAdd();
+            await dispatch(getCitiesList());
         }
     }
 
-    const handleDelete = async () => {
+    const handleDeleteCity = async () => {
         if (city_id && app_id) {
             await dispatch(deleteCityFromVacancyApplication({ appId: app_id, cityId: city_id }));
-            if (onDelete) onDelete(city_id);
+            dispatch(setCities(cities.filter(city => city.city_id?.city_id !== city_id)));
         }
     }
 
@@ -136,7 +135,7 @@ export const CityCard: FC<Props> = ({
                                 </Col>
                                 <Col md={3} xs={3}>
                                     {(isAuthenticated == true ) && (isDraft) && (
-                                        <Button className="fav-btn-open" onClick={() => handleDelete()}>
+                                        <Button className="fav-btn-open" onClick={() => handleDeleteCity()}>
                                             Удалить
                                         </Button>
                                     )}

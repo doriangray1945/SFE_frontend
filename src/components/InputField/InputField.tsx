@@ -5,19 +5,20 @@ import './InputField.css'
 import favoriteImg from "../../static/images/favorites-btn.png"
 import { ROUTES } from '../../../Routes';
 import { useNavigate } from "react-router-dom";
-import { useSelector } from 'react-redux'; 
-import { RootState } from '../../store';
+import { useSelector, useDispatch } from 'react-redux'; 
+import { RootState, AppDispatch } from '../../store';
+import { getCitiesList, setSearchValue } from '../../slices/citiesSlice';
+
 
 interface Props {
     value: string
-    setValue: (value: string) => void
-    onSubmit: () => void
     loading?: boolean
 }
 
-const InputField: FC<Props> = ({ value, setValue, onSubmit, loading }) => {
+const InputField: FC<Props> = ({ value, loading }) => {
 
     const navigate = useNavigate();
+    const dispatch = useDispatch<AppDispatch>();
     
     const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
     const app_id = useSelector((state: RootState) => state.vacancyApplicationDraft.app_id);
@@ -37,13 +38,13 @@ const InputField: FC<Props> = ({ value, setValue, onSubmit, loading }) => {
                             type="text"
                             placeholder="Поиск"
                             value={value}
-                            onChange={(event => setValue(event.target.value))}
+                            onChange={(event => dispatch(setSearchValue(event.target.value)))}
                             className="inp-text"
                         />
                     </div>
                 </Col>
                 <Col xs={3} sm={3} md={3}>
-                    <Button disabled={loading} className="search-button" onClick={onSubmit}>
+                    <Button disabled={loading} className="search-button" onClick={() => dispatch(getCitiesList())}>
                         Найти
                     </Button>
                 </Col>

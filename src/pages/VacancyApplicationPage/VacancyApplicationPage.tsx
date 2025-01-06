@@ -13,12 +13,12 @@ import FavImage from "../../static/images/favorites.png"
 import { useSelector, useDispatch } from 'react-redux';
 import { AppDispatch, RootState } from '../../store';
 import {
-  fetchVacancyApplication,
+  getVacancyApplication,
   updateVacancyApplication,
   deleteVacancyApplication,
   submittedVacancyApplication,
 } from '../../slices/vacancyApplicationDraftSlice';
-import { setCities, setVacancyData, setError } from '../../slices/vacancyApplicationDraftSlice';
+import { setVacancyData, setError } from '../../slices/vacancyApplicationDraftSlice';
 
 const VacancyApplicationPage: FC = () => {
   const { app_id } = useParams();
@@ -43,7 +43,7 @@ const VacancyApplicationPage: FC = () => {
       return;
     }
     if (app_id) {
-      dispatch(fetchVacancyApplication(app_id));
+      dispatch(getVacancyApplication(app_id));
     }
   }, [dispatch]);
 
@@ -57,10 +57,6 @@ const VacancyApplicationPage: FC = () => {
     );
   };
 
-  const handleDeleteCity = (cityId: number) => {
-    dispatch(setCities(cities.filter(city => city.city_id?.city_id !== cityId)));
-  };
-
   const handleSaveVacancy = () => {
     if (app_id) {
       const vacancyDataToSend = {
@@ -68,7 +64,11 @@ const VacancyApplicationPage: FC = () => {
         vacancy_responsibilities: vacancyData.vacancy_responsibilities ?? '',
         vacancy_requirements: vacancyData.vacancy_requirements ?? ''
       };
-      dispatch(updateVacancyApplication({ appId: app_id, vacancyData: vacancyDataToSend }));
+      try {
+        dispatch(updateVacancyApplication({ appId: app_id, vacancyData: vacancyDataToSend }));
+      } catch (error) {
+        dispatch(setError(error));
+      }
     }
   }
 
@@ -82,8 +82,8 @@ const VacancyApplicationPage: FC = () => {
       try {
         await dispatch(submittedVacancyApplication(app_id));
         navigate(ROUTES.CITIES);
-      } catch (err) {
-        dispatch(setError(err));
+      } catch (error) {
+        dispatch(setError(error));
       }
     }
   };
@@ -94,8 +94,8 @@ const VacancyApplicationPage: FC = () => {
       try {
         await dispatch(deleteVacancyApplication(app_id)).unwrap();
         navigate(ROUTES.CITIES);
-      } catch (err) {
-        dispatch(setError(err));
+      } catch (error) {
+        dispatch(setError(error));
       }
     }
   };
@@ -185,7 +185,6 @@ const VacancyApplicationPage: FC = () => {
                       unemployment_rate={item.city_id?.unemployment_rate}
                       imageClickHandler={() => handleCardClick(item.city_id?.city_id)}
                       count={item.count}
-                      onDelete={handleDeleteCity}
                       isDraft={isDraft}
                     />
                   </Col>
