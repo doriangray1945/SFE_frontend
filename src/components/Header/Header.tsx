@@ -10,7 +10,6 @@ import { useDispatch } from 'react-redux';
 import { logoutUserAsync } from '../../slices/userSlice'; 
 import { setAppId, setCount } from '../../slices/vacancyApplicationDraftSlice';
 import { setSearchValue } from '../../slices/citiesSlice'; 
-import { api } from '../../api';
 import { useNavigate } from "react-router-dom";
 import {getCitiesList } from '../../slices/citiesSlice';
 
@@ -31,8 +30,6 @@ const Header: React.FC = () => {
         navigate('/cities');
 
         await dispatch(getCitiesList());
-
-        return await api.logout.logoutCreate();
     }
 
     return (
@@ -46,20 +43,16 @@ const Header: React.FC = () => {
                     </Link>
                 )}
 
-                {(isAuthenticated == false ) && (
-                    <Link to={ROUTES.REGISTER}>
-                        <Button className="login-btn">Регистрация</Button>
-                    </Link>
-                )}
-
                 {(isAuthenticated == true) && (
                     <Button variant="primary" type="submit" className="login-btn" onClick={ handleExit }>
                         Выйти
                     </Button>
                 )}
+
             </div>
         </nav>
     );
 };
 
 export default Header;
+

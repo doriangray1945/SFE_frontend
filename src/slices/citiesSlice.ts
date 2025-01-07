@@ -4,21 +4,17 @@ import { api } from '../api';
 import { CITIES_MOCK } from "../modules/mock";
 import { setAppId, setCount } from './vacancyApplicationDraftSlice';
 
-const initialState: CitiesState = {
-  searchValue: '',
-  cities: [],
-  loading: false,
-  error: null,
-  city: null,
-};
-
 interface CitiesState {
   searchValue: string;
   cities: Cities[];
   loading: boolean;
-  error: string | null;
-  city: Cities | null;
 }
+
+const initialState: CitiesState = {
+  searchValue: '',
+  cities: [],
+  loading: false,
+};
 
 export const getCitiesList = createAsyncThunk(
   'cities/getCitiesList',
@@ -43,18 +39,6 @@ export const getCitiesList = createAsyncThunk(
   }
 );
 
-export const getCity = createAsyncThunk(
-  'city/fetchCity',
-  async (id: string) => {
-    try {
-      const response = await api.cities.citiesRead(id);
-      return response.data;
-    } catch (error) {
-      throw new Error('Не удалось загрузить данные о городе');
-    }
-  }
-);
-
 const citiesSlice = createSlice({
   name: 'cities',
   initialState,
@@ -67,32 +51,16 @@ const citiesSlice = createSlice({
     builder
       .addCase(getCitiesList.pending, (state) => {
         state.loading = true;
-        state.error = null;
       })
       .addCase(getCitiesList.fulfilled, (state, action) => {
         state.loading = false;
         state.cities = action.payload;
       })
-      .addCase(getCitiesList.rejected, (state, action) => {
+      .addCase(getCitiesList.rejected, (state) => {
         state.loading = false;
-        state.error = action.payload as string;
         state.cities = CITIES_MOCK.cities.filter((item) =>
           item.name.toLocaleLowerCase().startsWith(state.searchValue.toLocaleLowerCase())
         );
-      })
-
-      .addCase(getCity.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(getCity.fulfilled, (state, action) => {
-        state.city = action.payload;
-        state.loading = false;
-        state.error = null;
-      })
-      .addCase(getCity.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message || 'Произошла ошибка';
       });
   },
 });

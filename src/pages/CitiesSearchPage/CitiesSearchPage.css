@@ -15,9 +15,9 @@
 }*/
 
 .containerLoading {
+  padding-left: 25vw;
   display: flex;
   align-items: center; /* Центрирует по вертикали */
-  justify-content: center; /* Центрирует по горизонтали */
 }
 
 .container-2 {
@@ -47,6 +47,7 @@
 .cities-and-search {
   background-color: #ECF4FF;
   padding-left: 20vw;
+  padding-bottom: 50vh;
 }
 
 /*.cards-wrapper {

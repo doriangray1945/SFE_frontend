@@ -22,9 +22,10 @@ export const NavigationBar = () => {
             <NavLink to={ROUTES.PROFILE} className='nav__link'>{ username }</NavLink>
             <NavLink to={ROUTES.HOME} className='nav__link'>Главная</NavLink>
             <NavLink to={ROUTES.CITIES} className='nav__link'>Доступные города</NavLink>
-            {(isAuthenticated == true ) && (
-              <NavLink to={ROUTES.VACANCYAPPLICATION} className='nav__link'>Заявки на создание вакансий</NavLink>
-            )}
+            
+
+
+
             {((isSuperUser == true)) && (
               <NavLink to={ROUTES.CITIESEDIT} className='nav__link'>Управление городами</NavLink>
             )}
@@ -44,3 +45,9 @@ export const NavigationBar = () => {
       </nav>
   )
 }
+
+/*
+{(isAuthenticated == true ) && (
+              <NavLink to={ROUTES.VACANCYAPPLICATION} className='nav__link'>Заявки на создание вакансий</NavLink>
+            )}
+*/

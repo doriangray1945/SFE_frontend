@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../store';
 import { useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { addCityToVacancyApplication, deleteCityFromVacancyApplication, updateCityVacancyCount, setCities } from '../../slices/vacancyApplicationDraftSlice';
+import { addCityToVacancyApplication, deleteCityFromVacancyApplication, /*updateCityVacancyCount,*/ setCities } from '../../slices/vacancyApplicationDraftSlice';
 import { getCitiesList } from '../../slices/citiesSlice';
 
 
@@ -42,8 +42,8 @@ export const CityCard: FC<Props> = ({
     const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
     const cities = useSelector((state: RootState) => state.vacancyApplicationDraft.cities);
     
-    const [localCount, setLocalCount] = useState(count); 
-
+    /*const [localCount, setLocalCount] = useState(count); 
+*/
     const handleAdd = async () => {
         if (city_id) {
             await dispatch(addCityToVacancyApplication(city_id));
@@ -58,10 +58,10 @@ export const CityCard: FC<Props> = ({
         }
     }
 
-    const handleChange = async (newCount: number) => {
+    /*const handleChange = async (newCount: number) => {
         setLocalCount(newCount);
         if (newCount && app_id && city_id) await dispatch(updateCityVacancyCount({ appId: app_id, cityId: city_id, count: newCount }));
-    }
+    }*/
 
     if (pathname === "/cities") {
         return (
@@ -120,9 +120,9 @@ export const CityCard: FC<Props> = ({
                                         <input
                                             type="number"
                                             className="localcount"
-                                            value={localCount}
-                                            onChange={(event => handleChange(Number(event.target.value)))}
-                                            disabled={!isDraft}
+                                            value={count}
+                                            //onChange={(event => handleChange(Number(event.target.value)))}
+                                            disabled
                                         />
                                     </Col>
                                 </Row>
@@ -134,11 +134,13 @@ export const CityCard: FC<Props> = ({
                                     </a>
                                 </Col>
                                 <Col md={3} xs={3}>
-                                    {(isAuthenticated == true ) && (isDraft) && (
-                                        <Button className="fav-btn-open" onClick={() => handleDeleteCity()}>
-                                            Удалить
-                                        </Button>
-                                    )}
+                                    
+                                {(isDraft) && (isAuthenticated) && (
+                                    <Button className="fav-btn-open" onClick={() => handleDeleteCity()}>
+                                        Удалить
+                                    </Button>
+                                )}
+
                                 </Col>
                             </Row>
                         </div>
@@ -150,3 +152,10 @@ export const CityCard: FC<Props> = ({
 
     return null;
 };
+
+/*
+
+
+
+
+*/
