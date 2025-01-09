@@ -48,14 +48,14 @@ const InputField: FC<Props> = ({ value, loading }) => {
                         Найти
                     </Button>
                 </Col>
-                {(isAuthenticated == true) && (app_id) && (
-                    <Col xs={2} sm={2} md={2}>
-                        <a className="btn-favorites" onClick={() => handleClick(app_id) }>
-                            <img src={favoriteImg} alt="Избранное" />
-                            <span className="badge rounded-pill position-absolute">{ count }</span>
-                        </a>
-                    </Col>
-                )}
+                <Col xs={2} sm={2} md={2}>
+                    <Button className="btn-favorites" onClick={() => handleClick(app_id? app_id : NaN)} disabled={(!isAuthenticated) || (!app_id)}>
+                        <img src={favoriteImg} alt="Избранное" />
+                        {(!isAuthenticated || !app_id) ? null : (
+                            <span className="badge rounded-pill position-absolute">{count}</span>
+                        )}
+                    </Button>
+                </Col>
             </Row>
         </div>
     );

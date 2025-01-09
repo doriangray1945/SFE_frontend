@@ -21,18 +21,15 @@ export const getCitiesList = createAsyncThunk(
   async (_, { getState, dispatch, rejectWithValue }) => {
     const { cities }: any = getState();
     try {
-      const response = await api.cities.citiesList();
-      const filteredCities = response.data.cities.filter((item: Cities) =>
-        item.name.toLocaleLowerCase().startsWith(cities.searchValue.toLocaleLowerCase())
-      );
+      const response = await api.cities.citiesList({city_name: cities.searchValue});
 
-      const app_id = response.data.draft_vacancy_application;
-      const count = response.data.count;
+      const app_id = response.data.draft_vacancy_application; // ID черновой заявки
+      const count = response.data.count; // количество услуг в черновой заявке
 
       dispatch(setAppId(app_id));
       dispatch(setCount(count));
 
-      return filteredCities;
+      return response.data;
     } catch (error) {
       return rejectWithValue('Ошибка при загрузке данных');
     }
@@ -54,7 +51,7 @@ const citiesSlice = createSlice({
       })
       .addCase(getCitiesList.fulfilled, (state, action) => {
         state.loading = false;
-        state.cities = action.payload;
+        state.cities = action.payload.cities;
       })
       .addCase(getCitiesList.rejected, (state) => {
         state.loading = false;

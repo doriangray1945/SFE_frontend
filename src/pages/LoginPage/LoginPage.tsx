@@ -3,10 +3,13 @@ import { Form, Button, Alert, Container } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../store';
 import { loginUserAsync } from '../../slices/userSlice';
+import { useNavigate } from "react-router-dom";
 import Header from "../../components/Header/Header";
+import { ROUTES } from '../../../Routes';
 
 const LoginPage: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
+    const navigate = useNavigate();
 
     const [formData, setFormData] = useState({ username: '', password: '' });
     const error = useSelector((state: RootState) => state.user.error);
@@ -15,10 +18,11 @@ const LoginPage: React.FC = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e: FormEvent) => {
+    const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         if (formData.username && formData.password) {
-            dispatch(loginUserAsync(formData)); // Отправляем 'thunk'
+            await dispatch(loginUserAsync(formData)); // Отправляем 'thunk'
+            navigate(`${ROUTES.CITIES}`);
         }
     };
 

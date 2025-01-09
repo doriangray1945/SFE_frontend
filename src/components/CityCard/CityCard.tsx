@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { Button, Card, Row, Col } from 'react-bootstrap';
 import "./CityCard.css";
 import defaultImage from "../../static/images/DefaultImage.jpg";

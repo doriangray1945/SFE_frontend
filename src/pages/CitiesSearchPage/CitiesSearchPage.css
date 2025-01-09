@@ -86,6 +86,28 @@ body {
   display: flex;
   margin-top: 4vh;
   position: relative;
+  background: transparent; /* Убираем фон кнопки */
+  border: none; /* Убираем границы */
+  padding: 0;
+  cursor: pointer;
+}
+
+.btn-favorites:disabled{
+  background: transparent; /* Убираем фон кнопки */
+  border: none; /* Убираем границы */
+  padding: 0;
+}
+
+.btn-favorites:hover{
+  background: transparent;
+  border: none; /* Убираем границы */
+  padding: 0;
+}
+
+.btn-favorites:active {
+  background: transparent; /* Убираем фон при нажатии и фокусе */
+  border: none; /* Убираем границы */
+  padding: 0;
 }
 
 .btn-favorites img{
