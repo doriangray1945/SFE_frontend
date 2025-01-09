@@ -109,7 +109,7 @@ const VacancyApplicationPage: FC = () => {
                   <Image src={FavImage}></Image>
                 </Col>
             </Row>
-            {(!isDraft) || (!isAuthenticated) ? (
+            {(!isDraft) ? (
               <div>
                 <h4>Название вакансии: {vacancyData.vacancy_name}</h4>
                 <h4>Обязанности: {vacancyData.vacancy_responsibilities}</h4>
@@ -186,7 +186,7 @@ const VacancyApplicationPage: FC = () => {
                 </section>
               )}
             </div>
-            {(isDraft) && (isAuthenticated) && (
+            {(isDraft) && (
               <Button className="save-button" onClick={handleDelete}>
                 Очистить
               </Button>

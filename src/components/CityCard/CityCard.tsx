@@ -135,7 +135,7 @@ export const CityCard: FC<Props> = ({
                                 </Col>
                                 <Col md={3} xs={3}>
                                     
-                                {(isDraft) && (isAuthenticated) && (
+                                {(isDraft) && (
                                     <Button className="fav-btn-open" onClick={() => handleDeleteCity()}>
                                         Удалить
                                     </Button>
