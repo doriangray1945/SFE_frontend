@@ -37,6 +37,7 @@ const VacancyApplicationPage: FC = () => {
     
 
   useEffect(() => {
+    //if (!isAuthenticated) return
     if (app_id) {
       dispatch(getVacancyApplication(app_id));
     }
