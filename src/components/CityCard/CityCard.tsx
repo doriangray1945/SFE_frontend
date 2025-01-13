@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useState, useEffect } from 'react';
 import { Button, Card, Row, Col } from 'react-bootstrap';
 import "./CityCard.css";
 import defaultImage from "../../static/images/DefaultImage.jpg";
@@ -43,6 +43,10 @@ export const CityCard: FC<Props> = ({
     const cities = useSelector((state: RootState) => state.vacancyApplicationDraft.cities);
     
     const [localCount, setLocalCount] = useState(count); 
+
+    useEffect(() => {
+        setLocalCount(count);
+    }, [count]);
 
     const handleAdd = async () => {
         if (city_id) {

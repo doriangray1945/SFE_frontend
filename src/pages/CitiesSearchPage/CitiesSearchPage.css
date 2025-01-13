@@ -67,7 +67,7 @@ body {
   align-items: center;
   flex-wrap: wrap;
   gap: 20px;
-  padding-right: 30vw;
+  padding-right: 20vw;
 }
 
 .cities-not-found h1 {

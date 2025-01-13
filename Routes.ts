@@ -6,6 +6,7 @@ export const ROUTES = {
     VACANCYAPPLICATION: "/vacancy_application",
     PROFILE: "/user",
     CITIESEDIT: "/cities/edit",
+    CITIESCREATE: "/cities/create",
     FORBIDDEN: "/forbidden",
     NOTFOUND: "/notfound",
   }
@@ -18,6 +19,7 @@ export const ROUTES = {
     VACANCYAPPLICATION: "Заявки на создание вакансии",
     PROFILE: "Личный кабинет",
     CITIESEDIT: "Управление городами",
+    CITIESCREATE: "Создание города",
     FORBIDDEN: "Доступ запрещен",
     NOTFOUND: "Не найдено",
   };

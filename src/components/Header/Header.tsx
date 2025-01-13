@@ -8,9 +8,7 @@ import { useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../store';
 import { useDispatch } from 'react-redux';
 import { logoutUserAsync } from '../../slices/userSlice'; 
-import { setAppId, setCount } from '../../slices/vacancyApplicationDraftSlice';
 import { setSearchValue } from '../../slices/citiesSlice'; 
-import { api } from '../../api';
 import { useNavigate } from "react-router-dom";
 import {getCitiesList } from '../../slices/citiesSlice';
 
@@ -24,15 +22,11 @@ const Header: React.FC = () => {
     const handleExit = async ()  => {
         await dispatch(logoutUserAsync());
 
-        dispatch(setAppId(null));
-        dispatch(setCount(0));
-        dispatch(setSearchValue(''));
-        
-        navigate('/cities');
+        dispatch(setSearchValue('')); // можно реализовать в `extrareducers` у функции logoutUserAsynс
+    
+        navigate('/cities'); // переход на страницу списка услуг
 
-        await dispatch(getCitiesList());
-
-        return await api.logout.logoutCreate();
+        await dispatch(getCitiesList()); // для показа очищения поля поиска
     }
 
     return (

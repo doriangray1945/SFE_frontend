@@ -1,15 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import './CitiesEditPages.css';
 import { ROUTES, ROUTE_LABELS } from '../../../Routes';
-import { Cities } from '../../api/Api';
-import { api } from '../../api';
 import { AppDispatch, RootState } from '../../store';
 import Header from "../../components/Header/Header";
 import { BreadCrumbs } from "../../components/BreadCrumbs/BreadCrumbs";
 import { Alert } from 'react-bootstrap';
-import { getCitiesList } from '../../slices/citiesSlice';
+import { getCitiesList, deleteCity, setCities } from '../../slices/citiesSlice';
 import { Image } from "react-bootstrap";
 import defaultImage from "../../static/images/DefaultImage.jpg";
 
@@ -18,8 +16,6 @@ const CitiesEditPage: React.FC = () => {
     const navigate = useNavigate();
 
     const { cities, error } = useSelector((state: RootState) => state.cities);
-
-    const [newCity, setNewCity] = useState<Partial<Cities>>({});
     
     const isSuperUser = useSelector((state: RootState) => state.user.is_superuser);
 
@@ -36,38 +32,13 @@ const CitiesEditPage: React.FC = () => {
     }, [dispatch]);
 
     const handleAddCity = async () => {
-        if (!newCity.name || !newCity.population || !newCity.salary || !newCity.unemployment_rate || !newCity.description) {
-            alert('Введите все данные!');
-            return;
-        }
-
-        const cityData: Cities = {
-            name: newCity.name,
-            population: newCity.population,
-            salary: newCity.salary,
-            unemployment_rate: newCity.unemployment_rate,
-            description: newCity.description,
-            url: newCity.url || null, // Если URL не указан, передаем null
-        };
-
-        try {
-            await api.cities.citiesCreateCityCreate(cityData);
-            setNewCity({
-                name: '',
-                population: '',
-                salary: '',
-                unemployment_rate: '',
-                description: '',
-                url: null,
-            });
-        } catch (error) {
-            alert('Не удалось добавить город.');
-        }
+        navigate(`${ROUTES.CITIESCREATE}`);
     };
 
     const handleDeleteCity = async (cityId: number) => {
         try {
-            await api.cities.citiesDeleteCityDelete(cityId.toString());
+            await dispatch(deleteCity(cityId.toString()));
+            dispatch(setCities(cities.filter(city => city.city_id !== cityId)));
         } catch (error) {
             alert('Не удалось удалить город.');
             console.log(error);
@@ -77,7 +48,6 @@ const CitiesEditPage: React.FC = () => {
     const handleNavigateToEdit = (id: number) => {
         navigate(`${ROUTES.CITIESEDIT}/${id}`);
     };
-    
 
     return (
         <div>
@@ -124,43 +94,7 @@ const CitiesEditPage: React.FC = () => {
                                 ))}
                             </tbody>
                         </table>
-                        <div className="add-city-form">
-                            <h2>Добавить новый город</h2>
-                            <div className='container-4'>
-                                <input
-                                    type="text"
-                                    placeholder="Название"
-                                    value={newCity.name || ''}
-                                    onChange={(e) => setNewCity({ ...newCity, name: e.target.value })}
-                                />
-                                <input
-                                    type="text"
-                                    placeholder="Население"
-                                    value={newCity.population || ''}
-                                    onChange={(e) => setNewCity({ ...newCity, population: e.target.value })}
-                                />
-                                <input
-                                    type="text"
-                                    placeholder="Средняя зарплата"
-                                    value={newCity.salary || ''}
-                                    onChange={(e) => setNewCity({ ...newCity, salary: e.target.value })}
-                                />
-                                <input
-                                    type="text"
-                                    placeholder="Уровень безработицы"
-                                    value={newCity.unemployment_rate || ''}
-                                    onChange={(e) => setNewCity({ ...newCity, unemployment_rate: e.target.value })}
-                                />
-                                <textarea
-                                    placeholder="Описание"
-                                    value={newCity.description || ''}
-                                    onChange={(e) => setNewCity({ ...newCity, description: e.target.value })}
-                                />
-                                <div style={{ height: '3vh'}}></div>
-                                <button onClick={handleAddCity} className='login-btn'>Добавить город</button>
-                                </div>
-                                <div style={{ height: '3vh'}}></div>
-                            </div>
+                        <button onClick={handleAddCity} className='login-btn'>Добавить город</button>
                         <div style={{ height: '15vh'}}></div>
                     </div>
                 </div>

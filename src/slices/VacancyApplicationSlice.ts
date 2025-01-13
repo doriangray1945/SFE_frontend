@@ -42,6 +42,17 @@ export const fetchVacancyApplicationList = createAsyncThunk(
   }
 );
 
+export const fetchVacancyApplication = createAsyncThunk(
+  'vacancyApplications/fetchApplication',
+  async (credintials: { appId: string, status: number }) => {
+    try {
+      await api.vacancyApplications.vacancyApplicationsUpdateStatusAdminUpdate(credintials.appId, {status: credintials.status});
+    } catch (error) {
+      throw new Error('Ошибка при загрузке заявок');
+    }
+  }
+);
+
 const VacancyApplicationSlice = createSlice({
   name: 'vacancyApplication',
   initialState,

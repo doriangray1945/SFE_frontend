@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '../../../Routes';
-import { api } from '../../api';
 import Header from "../../components/Header/Header";
 import { BreadCrumbs } from "../../components/BreadCrumbs/BreadCrumbs";
 import { ROUTE_LABELS } from '../../../Routes';
@@ -9,12 +8,11 @@ import { Alert } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppDispatch, RootState } from '../../store';
 import { useNavigate } from "react-router-dom";
-import { fetchVacancyApplicationList } from '../../slices/VacancyApplicationSlice';
+import { fetchVacancyApplication, fetchVacancyApplicationList } from '../../slices/VacancyApplicationSlice';
 
 const POLLING_INTERVAL = 2000;
 
 const VacancyApplicationHistoryPage = () => {
-    // Для фильтра
     const [statusFilter, setStatusFilter] = useState<number>(NaN); // Status filter
     const [startDate, setStartDate] = useState<string>(''); // Start date filter
     const [endDate, setEndDate] = useState<string>(''); // End date filter
@@ -43,7 +41,7 @@ const VacancyApplicationHistoryPage = () => {
     // Смена статуса
     const handleStatusChange = async (appId: number, newStatus: number) => {
         try {
-            await api.vacancyApplications.vacancyApplicationsUpdateStatusAdminUpdate(appId.toString(), { status: newStatus });
+            await dispatch(fetchVacancyApplication({ appId: appId.toString(), status: newStatus }));
             fetchApplications(); 
         } catch (error) {
             alert('Ошибка при обновлении статуса заявки');

@@ -8,10 +8,12 @@ import { AppDispatch, RootState } from '../../store';
 import { BreadCrumbs } from "../../components/BreadCrumbs/BreadCrumbs";
 import { ROUTES, ROUTE_LABELS } from '../../../Routes';
 import "./LoginPage.css";
+import { useNavigate } from "react-router-dom";
 
 
 const LoginPage: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
+    const navigate = useNavigate();
 
     const [formData, setFormData] = useState<User>({ username: '', password: ''});
     const error = useSelector((state: RootState) => state.user.error); // Получаем ошибку из Redux
@@ -24,7 +26,8 @@ const LoginPage: React.FC = () => {
       e.preventDefault();
     
       if (formData.username && formData.password) {
-        dispatch(loginUserAsync({ username: formData.username, password: formData.password }));
+        await dispatch(loginUserAsync({ username: formData.username, password: formData.password }));
+        navigate(`${ROUTES.CITIES}`); 
       } else {
         console.error('Заполните все поля');
       }

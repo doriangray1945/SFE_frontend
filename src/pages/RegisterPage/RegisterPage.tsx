@@ -1,13 +1,16 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 import Header from "../../components/Header/Header";
-import { api } from '../../api';
 import { User } from '../../api/Api';
 import { BreadCrumbs } from "../../components/BreadCrumbs/BreadCrumbs";
 import { ROUTES, ROUTE_LABELS } from '../../../Routes';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../store';
+import { createUser } from '../../slices/userSlice';
 
 
 const RegisterPage: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
 
   const [formData, setFormData] = useState<User>({
     username: '',
@@ -25,17 +28,10 @@ const RegisterPage: React.FC = () => {
     e.preventDefault();
     
     if (formData.username && formData.password) {
+      const registerData = { 'username': formData.username, 'password': formData.password }
       try {
-        const response = await api.user.userCreate({ 
-          username: formData.username, 
-          password: formData.password 
-        });
-        
-        // Обработка успешной регистрации
-        if (response) {
-          setSuccessMessage('Регистрация успешна! Пожалуйста, войдите.');
-          setError(null); 
-        }
+        await dispatch(createUser(registerData));
+        setSuccessMessage('Регистрация успешна! Пожалуйста, войдите.');
       } catch (error) {
         setError('Ошибка регистрации. Попробуйте снова.');
       }

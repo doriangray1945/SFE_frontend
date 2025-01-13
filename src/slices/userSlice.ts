@@ -68,6 +68,18 @@ export const updateUserDataAsync = createAsyncThunk(
   }
 );
 
+export const createUser = createAsyncThunk (
+  'user/createUser',
+  async (credentials: { username: string, password: string }, { rejectWithValue }) => {
+    try {
+      const response = await api.user.userCreate(credentials);
+      return response;
+    } catch (error) {
+      return rejectWithValue('Ошибка при регистрации'); 
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: 'user',
   initialState,

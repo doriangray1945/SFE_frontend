@@ -31,6 +31,7 @@ function App() {
           <Route path={`${ROUTES.PROFILE}`} element={< UserProfilePage/>} />
           <Route path={`${ROUTES.CITIESEDIT}`} element={<CitiesEditPage/>} />
           <Route path={`${ROUTES.CITIESEDIT}/:id`} element={<CityEditPage/>} />
+          <Route path={`${ROUTES.CITIESCREATE}`} element={<CityEditPage/>} />
           <Route path={`${ROUTES.FORBIDDEN}`} element={<ForbiddenPage/>} />
           <Route path={`${ROUTES.NOTFOUND}`} element={<NotFoundPage/>} />
         </Routes>
