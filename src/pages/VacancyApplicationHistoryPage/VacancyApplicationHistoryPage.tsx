@@ -8,15 +8,15 @@ import { Alert } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppDispatch, RootState } from '../../store';
 import { useNavigate } from "react-router-dom";
-import { fetchVacancyApplication, fetchVacancyApplicationList } from '../../slices/VacancyApplicationSlice';
+import { fetchVacancyApplication, fetchVacancyApplicationList, setFilteredApplications } from '../../slices/VacancyApplicationSlice';
 
 const POLLING_INTERVAL = 2000;
 
 const VacancyApplicationHistoryPage = () => {
-    const [statusFilter, setStatusFilter] = useState<number>(NaN); // Status filter
-    const [startDate, setStartDate] = useState<string>(''); // Start date filter
-    const [endDate, setEndDate] = useState<string>(''); // End date filter
-    const [creatorFilter, setCreatorFilter] = useState<string>(''); // Creator filter
+    const [statusFilter, setStatusFilter] = useState<number>(NaN); 
+    const [startDate, setStartDate] = useState<string>(''); 
+    const [endDate, setEndDate] = useState<string>(''); 
+    const [creatorFilter, setCreatorFilter] = useState<string>(''); 
 
     const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
     const isSuperUser = useSelector((state: RootState) => state.user.is_superuser);
@@ -24,7 +24,7 @@ const VacancyApplicationHistoryPage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch<AppDispatch>();
 
-    const { applications, loading, error } = useSelector((state: RootState) => state.vacancyApplication);
+    const { applications, error } = useSelector((state: RootState) => state.vacancyApplication);
 
     const fetchApplications = async () => {
         if (!isAuthenticated) {
@@ -52,11 +52,11 @@ const VacancyApplicationHistoryPage = () => {
     const filterApplications = () => {
         let filtered = applications;
         if (creatorFilter) {
-            filtered = filtered.filter((application) =>
-                application.creator.toLowerCase().includes(creatorFilter.toLowerCase())
+            filtered = filtered.filter((item) =>
+                item.creator.toLowerCase().includes(creatorFilter.toLowerCase())
             );
         }
-        return filtered;
+        dispatch(setFilteredApplications(filtered));
     };
 
     useEffect(() => {
@@ -90,8 +90,6 @@ const VacancyApplicationHistoryPage = () => {
                                 onChange={(e) => setStatusFilter(Number(e.target.value) || NaN)}
                             >
                                 <option value="">Все</option>
-                                <option value="1">Черновик</option>
-                                <option value="2">Удалена</option>
                                 <option value="3">Сформирована</option>
                                 <option value="4">Завершена</option>
                                 <option value="5">Отклонена</option>
@@ -126,69 +124,63 @@ const VacancyApplicationHistoryPage = () => {
                         </label>
                     </div>
 
-                    {loading ? (
-                        <div className="loader-container">
-                            <div className="loader"></div>
-                        </div>
-                    ) : error ? (
-                        <div>
-                            {error && <Alert variant="danger" style={{ width: '15vw'}}>{error}</Alert>}
-                        </div>
-                    ) : (
-                        <div className="table-container">
-                            <table className="table">
-                                <thead>
-                                    <tr>
-                                        <th>Номер заявки</th>
-                                        <th>Статус</th>
-                                        <th>Создатель</th>
-                                        <th>Дата формирования</th>
-                                        <th>Название вакансии</th>
-                                        <th>Требования</th>
-                                        <th>Обязанности</th>
-                                        <th>Длительность</th>
-                                        <th>Действия</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {applications.map((application) => (
-                                        <tr key={application.app_id}>
-                                            <td>{application.app_id}</td>
-                                            <td className={(application.status === 3 || application.status === 4) ? "status-completed" : "status-pending"}>
-                                                {application.status === 3 ? 'Сформирован' : application.status === 4 ? 'Завершен' : 'Отклонен'}
+                    <div>
+                        {error && <Alert variant="danger" style={{ width: '15vw'}}>{error}</Alert>}
+                    </div>
+                    
+                    <div className="table-container">
+                        <table className="table">
+                            <thead>
+                                <tr>
+                                    <th>Номер заявки</th>
+                                    <th>Статус</th>
+                                    <th>Создатель</th>
+                                    <th>Дата формирования</th>
+                                    <th>Название вакансии</th>
+                                    <th>Требования</th>
+                                    <th>Обязанности</th>
+                                    <th>Длительность</th>
+                                    <th>Действия</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {applications.map((application) => (
+                                    <tr key={application.app_id}>
+                                        <td>{application.app_id}</td>
+                                        <td className={(application.status === 3 || application.status === 4) ? "status-completed" : "status-pending"}>
+                                            {application.status === 3 ? 'Сформирован' : application.status === 4 ? 'Завершен' : 'Отклонен'}
+                                        </td>
+                                        <td>{application.creator}</td>
+                                        <td>{application.date_submitted ? new Date(application.date_submitted).toLocaleString() : '—'}</td>
+                                        <td>{application.vacancy_name}</td>
+                                        <td>{application.vacancy_requirements}</td>
+                                        <td>{application.vacancy_responsibilities}</td>
+                                        <td>{application.duration_days}</td>
+                                        <td>
+                                            <Link to={`${ROUTES.VACANCYAPPLICATION}/${application.app_id}`}>Просмотр</Link>
+                                            {/* Change Status buttons */}
+                                            {application.status !== 4 && application.status !== 5 && (isSuperUser) && (
+                                                <div className="mt-2">
+                                                    <button
+                                                        onClick={() => handleStatusChange(application.app_id!, 4)} 
+                                                        className="edit-button"
+                                                    >
+                                                        Завершить
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleStatusChange(application.app_id!, 5)}
+                                                        className="edit-button"
+                                                    >
+                                                        Отклонить
+                                                    </button>
+                                                </div>
+                                            )}
                                             </td>
-                                            <td>{application.creator}</td>
-                                            <td>{application.date_submitted ? new Date(application.date_submitted).toLocaleString() : '—'}</td>
-                                            <td>{application.vacancy_name}</td>
-                                            <td>{application.vacancy_requirements}</td>
-                                            <td>{application.vacancy_responsibilities}</td>
-                                            <td>{application.duration_days}</td>
-                                            <td>
-                                                <Link to={`${ROUTES.VACANCYAPPLICATION}/${application.app_id}`}>Просмотр</Link>
-                                                {/* Change Status buttons */}
-                                                {application.status !== 4 && application.status !== 5 && (isSuperUser) && (
-                                                    <div className="mt-2">
-                                                        <button
-                                                            onClick={() => handleStatusChange(application.app_id!, 4)} 
-                                                            className="edit-button"
-                                                        >
-                                                            Завершить
-                                                        </button>
-                                                        <button
-                                                            onClick={() => handleStatusChange(application.app_id!, 5)}
-                                                            className="edit-button"
-                                                        >
-                                                            Отклонить
-                                                        </button>
-                                                    </div>
-                                                )}
-                                             </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    )}
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

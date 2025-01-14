@@ -4,20 +4,20 @@
     font-weight: 600;
     color: black;
     margin-bottom: 20px;
-  }
+}
 
-  .page-container {
-    display: flex;
-    justify-content: center; /* Центрирование по горизонтали */
-    align-items: center;
-  }
+.page-container {
+  display: flex;
+  justify-content: center; /* Центрирование по горизонтали */
+  align-items: center;
+}
   
 .loader-container {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 300px;
-  }
+}
   
 .loader {
     border-top: 4px solid #fff;
@@ -28,17 +28,17 @@
     width: 50px;
     height: 50px;
     animation: spin 1.5s linear infinite;
-  }
+}
   
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
-  }
+}
   
   /* Таблица */
 .table-container {
     overflow-x: auto;
-  }
+}
   
 .table {
     width: 100%;
@@ -46,48 +46,48 @@
     border-spacing: 0;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
+}
   
 .table thead {
     background: linear-gradient(90deg, #1F2A48, #2C3A5B);
-  }
+}
   
 .table th, .table td {
     padding: 16px;
     text-align: center;
-  }
+}
 
 .table th {
     color: black;
     text-transform: uppercase;
     font-weight: bold;
-  }
+}
   
 .table td {
     color: black;
-  }
+}
   
 .table tr:hover {
     background-color: #333A4E;
     transition: background-color 0.2s;
-  }
+}
   
   /* Ссылки в таблице */
 .table a {
     color: #63B3ED;
     text-decoration: none;
-  }
+}
   
 .table a:hover {
     text-decoration: underline;
-  }
+}
   
   /* Статус заявки */
 .status-completed {
     color: #48BB78;
-  }
+}
   
 .status-pending {
     color: #F6E05E;
-  }
+}
   

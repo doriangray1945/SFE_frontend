@@ -56,7 +56,11 @@ export const fetchVacancyApplication = createAsyncThunk(
 const VacancyApplicationSlice = createSlice({
   name: 'vacancyApplication',
   initialState,
-  reducers: {},
+  reducers: {
+    setFilteredApplications(state, action) {
+      state.applications = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchVacancyApplicationList.pending, (state) => {
@@ -74,5 +78,5 @@ const VacancyApplicationSlice = createSlice({
   },
 });
 
-export const { } = VacancyApplicationSlice.actions;
+export const { setFilteredApplications } = VacancyApplicationSlice.actions;
 export default VacancyApplicationSlice.reducer;
