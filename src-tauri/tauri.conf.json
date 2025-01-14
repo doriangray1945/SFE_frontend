@@ -2,9 +2,9 @@
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
   "productName": "SFE_tauri",
   "version": "0.1.0",
-  "identifier": "com.tauri.dev",
+  "identifier": "com.example.myapp",
   "build": {
-    "frontendDist": "../build",
+    "frontendDist": "../dist",
     "devUrl": "http://172.20.10.2:5173",
     "beforeDevCommand": "npm run dev",
     "beforeBuildCommand": "npm run build"
