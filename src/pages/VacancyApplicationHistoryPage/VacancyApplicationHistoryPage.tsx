@@ -20,6 +20,8 @@ const VacancyApplicationHistoryPage = () => {
 
     const [page, setPage] = useState<number>(1); // Добавляем состояние для текущей страницы
     const [isDataLoaded, setIsDataLoaded] = useState(false);
+    const [isLoading, setIsLoading] = useState(false); // Флаг загрузки
+    const [hasMoreData, setHasMoreData] = useState(true); // Флаг наличия данных
 
     const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
     const isSuperUser = useSelector((state: RootState) => state.user.is_superuser);
@@ -29,19 +31,41 @@ const VacancyApplicationHistoryPage = () => {
 
     const { applications, error } = useSelector((state: RootState) => state.vacancyApplication);
 
+
     const fetchApplications = async (page: number) => {
         if (!isAuthenticated) {
             navigate(`${ROUTES.FORBIDDEN}`);
             return;
         }
-        dispatch(fetchVacancyApplicationList({
-            status: statusFilter || undefined,
-            date_submitted_start: startDate || undefined,
-            date_submitted_end: endDate || undefined,
-            page,
-            limit: ITEMS_PER_PAGE
-        })).then(() => setIsDataLoaded(true));
+
+        if (isLoading || !hasMoreData) {
+            return; // Не загружаем, если уже идет загрузка или все данные загружены
+        }
+
+        setIsLoading(true); // Устанавливаем флаг загрузки
+
+        try {
+            const response = await dispatch(fetchVacancyApplicationList({
+                status: statusFilter || undefined,
+                date_submitted_start: startDate || undefined,
+                date_submitted_end: endDate || undefined,
+                page,
+                limit: ITEMS_PER_PAGE
+            })).unwrap();  
+    
+            if (response && response.length < ITEMS_PER_PAGE) {
+                setHasMoreData(false); // Если данных меньше, чем ITEMS_PER_PAGE, значит, больше нет данных
+            }
+
+            setIsDataLoaded(true);
+
+        } catch (error) {
+            console.error('Ошибка загрузки данных:', error);
+        } finally {
+            setIsLoading(false); // Сбрасываем флаг загрузки
+        }
     };
+
 
     // Смена статуса
     const handleStatusChange = async (appId: number, newStatus: number) => {
@@ -52,6 +76,7 @@ const VacancyApplicationHistoryPage = () => {
             alert('Ошибка при обновлении статуса заявки');
         }
     };
+
 
     // Фильтрация по создателю на фронтенде
     const filterApplications = () => {
@@ -64,17 +89,17 @@ const VacancyApplicationHistoryPage = () => {
         dispatch(setFilteredApplications(filtered));
     };
 
+
     // Обработчик прокрутки
     const handleScroll = () => {
         // Проверяем, что прокрутили до конца страницы (вниз)
         if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 1) {
-            if (applications.length % ITEMS_PER_PAGE === 0) { // Предотвращаем дублирование запросов
-                setPage((prevPage) => {
-                    const nextPage = prevPage + 1;
-                    fetchApplications(nextPage); // Загружаем следующую страницу
-                    return nextPage;
-                });
-            }
+            // Прокрутили до низа и данные не загружены
+            setPage((prevPage) => {
+                const nextPage = prevPage + 1;
+                fetchApplications(nextPage); // Загружаем следующую страницу
+                return nextPage;
+            });
         }
 
         // Проверяем, что прокрутили до верха страницы (вверх)
@@ -87,14 +112,22 @@ const VacancyApplicationHistoryPage = () => {
         }
     };
 
+
     useEffect(() => {
         setPage(1);
+
+        if (applications.length === 0) {
+            setHasMoreData(true); // Сброс флага наличия данных при изменении фильтров
+        }
+
     }, [statusFilter, startDate, endDate, creatorFilter]);
+
 
     const scrollToMiddle = () => {
         const middle = (document.documentElement.scrollHeight - window.innerHeight) / 2;
         window.scrollTo(0, middle); // Устанавливаем прокрутку в середину
     };
+
 
     useEffect(() => {
         fetchApplications(page);
@@ -103,16 +136,19 @@ const VacancyApplicationHistoryPage = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, [page, statusFilter, startDate, endDate, creatorFilter]);
 
+
     useEffect(() => {
         if (isDataLoaded) { 
             scrollToMiddle();
         }
     }, [page]);
 
+
     useEffect(() => {
         filterApplications();
     }, [creatorFilter]);
 
+    
     return (
         <div>
             <Header />
