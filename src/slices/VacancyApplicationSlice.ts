@@ -27,15 +27,31 @@ const initialState: VacancyApplicationState = {
 
 export const fetchVacancyApplicationList = createAsyncThunk(
   'vacancyApplications/fetchApplications',
-  async (filters: { status: number | undefined; date_submitted_start: string | undefined; date_submitted_end: string | undefined }) => {
-    const { status, date_submitted_start, date_submitted_end } = filters;
+  async ({
+    status,
+    date_submitted_start,
+    date_submitted_end,
+    page,
+    limit
+  }: { 
+    status: number | undefined; 
+    date_submitted_start: string | undefined; 
+    date_submitted_end: string | undefined; 
+    page: number | undefined; 
+    limit: number | undefined 
+  }) => {
     try {
       const response = await api.vacancyApplications.vacancyApplicationsList({
         status,
         date_submitted_start,
         date_submitted_end,
+        page,
+        limit,
       });
-      return response.data; // Возвращаем данные заявок
+
+      console.log(response.data);
+
+      return response.data.results;
     } catch (error) {
       throw new Error('Ошибка при загрузке заявок');
     }

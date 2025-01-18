@@ -305,7 +305,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/cities/
      * @secure
      */
-    citiesList: (params: RequestParams = {}) =>
+    citiesList: (
+      query?: {
+        city_name?: string;
+      },
+      params: RequestParams = {},
+    ) =>
       this.request<
         {
           cities: {
@@ -324,6 +329,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       >({
         path: `/cities/`,
         method: "GET",
+        query: query,
         secure: true,
         format: "json",
         ...params,
@@ -762,6 +768,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
          * @format date-time
          */
         date_submitted_end?: string;
+        /** Номер страницы для пагинации. */
+        page?: number;
+        /** Количество записей на странице. */
+        limit?: number;
       },
       params: RequestParams = {},
     ) =>

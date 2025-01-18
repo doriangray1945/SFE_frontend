@@ -10,13 +10,16 @@ import { AppDispatch, RootState } from '../../store';
 import { useNavigate } from "react-router-dom";
 import { fetchVacancyApplication, fetchVacancyApplicationList, setFilteredApplications } from '../../slices/VacancyApplicationSlice';
 
-const POLLING_INTERVAL = 2000;
+const ITEMS_PER_PAGE = 50; // Количество записей на одну страницу
 
 const VacancyApplicationHistoryPage = () => {
-    const [statusFilter, setStatusFilter] = useState<number>(NaN); 
-    const [startDate, setStartDate] = useState<string>(''); 
-    const [endDate, setEndDate] = useState<string>(''); 
-    const [creatorFilter, setCreatorFilter] = useState<string>(''); 
+    const [statusFilter, setStatusFilter] = useState<number>(NaN);
+    const [startDate, setStartDate] = useState<string>('');
+    const [endDate, setEndDate] = useState<string>('');
+    const [creatorFilter, setCreatorFilter] = useState<string>('');
+
+    const [page, setPage] = useState<number>(1); // Добавляем состояние для текущей страницы
+    const [isDataLoaded, setIsDataLoaded] = useState(false);
 
     const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
     const isSuperUser = useSelector((state: RootState) => state.user.is_superuser);
@@ -26,23 +29,25 @@ const VacancyApplicationHistoryPage = () => {
 
     const { applications, error } = useSelector((state: RootState) => state.vacancyApplication);
 
-    const fetchApplications = async () => {
+    const fetchApplications = async (page: number) => {
         if (!isAuthenticated) {
             navigate(`${ROUTES.FORBIDDEN}`);
-            return
+            return;
         }
         dispatch(fetchVacancyApplicationList({
             status: statusFilter || undefined,
             date_submitted_start: startDate || undefined,
-            date_submitted_end: endDate || undefined
-        }));
+            date_submitted_end: endDate || undefined,
+            page,
+            limit: ITEMS_PER_PAGE
+        })).then(() => setIsDataLoaded(true));
     };
 
     // Смена статуса
     const handleStatusChange = async (appId: number, newStatus: number) => {
         try {
             await dispatch(fetchVacancyApplication({ appId: appId.toString(), status: newStatus }));
-            fetchApplications(); 
+            fetchApplications(page);
         } catch (error) {
             alert('Ошибка при обновлении статуса заявки');
         }
@@ -59,14 +64,50 @@ const VacancyApplicationHistoryPage = () => {
         dispatch(setFilteredApplications(filtered));
     };
 
-    useEffect(() => {
-        fetchApplications();
-        const intervalId = setInterval(() => {
-            fetchApplications(); 
-        }, POLLING_INTERVAL);
+    // Обработчик прокрутки
+    const handleScroll = () => {
+        // Проверяем, что прокрутили до конца страницы (вниз)
+        if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 1) {
+            if (applications.length % ITEMS_PER_PAGE === 0) { // Предотвращаем дублирование запросов
+                setPage((prevPage) => {
+                    const nextPage = prevPage + 1;
+                    fetchApplications(nextPage); // Загружаем следующую страницу
+                    return nextPage;
+                });
+            }
+        }
 
-        return () => clearInterval(intervalId); 
-    }, [statusFilter, startDate, endDate]);
+        // Проверяем, что прокрутили до верха страницы (вверх)
+        if (window.scrollY === 0 && page > 1) {
+            setPage((prevPage) => {
+                const prevPageNum = prevPage - 1;
+                fetchApplications(prevPageNum); // Загружаем предыдущую страницу
+                return prevPageNum;
+            });
+        }
+    };
+
+    useEffect(() => {
+        setPage(1);
+    }, [statusFilter, startDate, endDate, creatorFilter]);
+
+    const scrollToMiddle = () => {
+        const middle = (document.documentElement.scrollHeight - window.innerHeight) / 2;
+        window.scrollTo(0, middle); // Устанавливаем прокрутку в середину
+    };
+
+    useEffect(() => {
+        fetchApplications(page);
+        window.addEventListener('scroll', handleScroll);
+        
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [page, statusFilter, startDate, endDate, creatorFilter]);
+
+    useEffect(() => {
+        if (isDataLoaded) { 
+            scrollToMiddle();
+        }
+    }, [page]);
 
     useEffect(() => {
         filterApplications();
@@ -85,7 +126,7 @@ const VacancyApplicationHistoryPage = () => {
                     <div className="filters mb-4">
                         <label>
                             Статус:
-                            <select 
+                            <select
                                 value={statusFilter}
                                 onChange={(e) => setStatusFilter(Number(e.target.value) || NaN)}
                             >
@@ -98,36 +139,36 @@ const VacancyApplicationHistoryPage = () => {
 
                         <label>
                             Дата начала:
-                            <input 
-                                type="date" 
-                                value={startDate} 
-                                onChange={(e) => setStartDate(e.target.value)} 
+                            <input
+                                type="date"
+                                value={startDate}
+                                onChange={(e) => setStartDate(e.target.value)}
                             />
                         </label>
 
                         <label>
                             Дата окончания:
-                            <input 
-                                type="date" 
-                                value={endDate} 
-                                onChange={(e) => setEndDate(e.target.value)} 
+                            <input
+                                type="date"
+                                value={endDate}
+                                onChange={(e) => setEndDate(e.target.value)}
                             />
                         </label>
 
                         <label>
                             Создатель:
-                            <input 
-                                type="text" 
-                                value={creatorFilter} 
-                                onChange={(e) => setCreatorFilter(e.target.value)} 
+                            <input
+                                type="text"
+                                value={creatorFilter}
+                                onChange={(e) => setCreatorFilter(e.target.value)}
                             />
                         </label>
                     </div>
 
                     <div>
-                        {error && <Alert variant="danger" style={{ width: '15vw'}}>{error}</Alert>}
+                        {error && <Alert variant="danger" style={{ width: '15vw' }}>{error}</Alert>}
                     </div>
-                    
+
                     <div className="table-container">
                         <table className="table">
                             <thead>
@@ -162,7 +203,7 @@ const VacancyApplicationHistoryPage = () => {
                                             {application.status !== 4 && application.status !== 5 && (isSuperUser) && (
                                                 <div className="mt-2">
                                                     <button
-                                                        onClick={() => handleStatusChange(application.app_id!, 4)} 
+                                                        onClick={() => handleStatusChange(application.app_id!, 4)}
                                                         className="edit-button"
                                                     >
                                                         Завершить
@@ -175,7 +216,7 @@ const VacancyApplicationHistoryPage = () => {
                                                     </button>
                                                 </div>
                                             )}
-                                            </td>
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>
