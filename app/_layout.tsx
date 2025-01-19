@@ -8,8 +8,6 @@ import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
 
-
-import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import CitiesPage from '../screens/CitiesPage';
 import CityPage from '../screens/CityPage'
@@ -43,9 +41,8 @@ export default function RootLayout() {
     <Provider store={store}>
         <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
             <Stack.Navigator>
-                {/* Экран для отображения списка городов */}
-                <Stack.Screen name="cities" component={CitiesPage} />
-                <Stack.Screen name="city" component={CityPage} />
+                <Stack.Screen name="Города" component={CitiesPage} />
+                <Stack.Screen name="Город" component={CityPage} />
             </Stack.Navigator>
         </ThemeProvider>
     </Provider>

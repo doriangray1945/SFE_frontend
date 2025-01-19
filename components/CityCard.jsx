@@ -4,7 +4,7 @@ import React from 'react';
 
 export default function CityCard({ navigation, ...props }) {
     const clickHandler = () => {
-        navigation.navigate('city', { id: props.city_id });
+        navigation.navigate('Город', { id: props.city_id, name: props.name });
     };
 
     return (
@@ -35,11 +35,15 @@ export default function CityCard({ navigation, ...props }) {
 
 const styles = StyleSheet.create({
     card: {
-        borderWidth: 1,
-        borderColor: '#ddd',
-        borderRadius: 8,
-        overflow: 'hidden',
+        backgroundColor: '#fff',
+        borderRadius: 10,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.1,
+        shadowRadius: 8,
         margin: 10,
+        flex: 1,
+        flexDirection: 'column',
     },
     cityCardBody: {
         padding: 10,
@@ -49,27 +53,37 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 200,
         resizeMode: 'cover',
+        borderRadius: 8,
+        marginTop: 5,
     },
     cityName: {
-        fontSize: 18,
+        fontSize: 22,
+        textOverflow: 'ellipsis',
+        textTransform: 'uppercase',
         fontWeight: 'bold',
         marginVertical: 5,
+        marginTop: 15,
     },
     cityInfo: {
-        fontSize: 14,
+        fontSize: 16,
         textAlign: 'center',
+        color: '#555555',
     },
     statistics: {
         fontWeight: 'bold',
+        color: '#3166B6',
     },
     cityBtn: {
-        backgroundColor: '#007bff', // Цвет кнопки
+        backgroundColor: '#1890FF',
         padding: 10,
-        borderRadius: 5,
-        marginTop: 10,
+        borderRadius: 8,
+        marginTop: 15,
+        marginBottom: 10,
+        height: 40,
     },
     btnText: {
         color: 'white',
         textAlign: 'center',
+        fontSize: 16,
     }
 });
