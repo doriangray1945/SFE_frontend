@@ -1,6 +1,6 @@
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
+
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
@@ -8,8 +8,19 @@ import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
 
+
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import CitiesPage from '../screens/CitiesPage';
+import CityPage from '../screens/CityPage'
+
+import { store } from './store';
+import { Provider } from 'react-redux';
+
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
+
+const Stack = createNativeStackNavigator();
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -26,14 +37,17 @@ export default function RootLayout() {
   if (!loaded) {
     return null;
   }
+  
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <Provider store={store}>
+        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+            <Stack.Navigator>
+                {/* Экран для отображения списка городов */}
+                <Stack.Screen name="cities" component={CitiesPage} />
+                <Stack.Screen name="city" component={CityPage} />
+            </Stack.Navigator>
+        </ThemeProvider>
+    </Provider>
   );
 }
