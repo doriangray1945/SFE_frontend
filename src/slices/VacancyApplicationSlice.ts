@@ -61,13 +61,16 @@ export const fetchVacancyApplicationList = createAsyncThunk(
 export const fetchVacancyApplication = createAsyncThunk(
   'vacancyApplications/fetchApplication',
   async (credintials: { appId: string, status: number }) => {
-    try {
-      await api.vacancyApplications.vacancyApplicationsUpdateStatusAdminUpdate(credintials.appId, {status: credintials.status});
-    } catch (error) {
-      throw new Error('Ошибка при загрузке заявок');
-    }
+      try {
+          const response = await api.vacancyApplications.vacancyApplicationsUpdateStatusAdminUpdate(credintials.appId, { status: credintials.status });
+          console.log(response.data.duration_days);
+          return response.data.duration_days; // Вернуть полный объект, чтобы его можно было использовать в компоненте
+      } catch (error) {
+          throw new Error('Ошибка при обновлении статуса заявки');
+      }
   }
 );
+
 
 const VacancyApplicationSlice = createSlice({
   name: 'vacancyApplication',

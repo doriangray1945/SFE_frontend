@@ -19,10 +19,9 @@ const VacancyApplicationHistoryPage = () => {
     const [creatorFilter, setCreatorFilter] = useState<string>('');
 
     const [page, setPage] = useState<number>(1); // Добавляем состояние для текущей страницы
-    const [isDataLoaded, setIsDataLoaded] = useState(false);
     const [isLoading, setIsLoading] = useState(false); // Флаг загрузки
     const [hasMoreData, setHasMoreData] = useState(true); // Флаг наличия данных
-
+    
     const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
     const isSuperUser = useSelector((state: RootState) => state.user.is_superuser);
 
@@ -54,10 +53,10 @@ const VacancyApplicationHistoryPage = () => {
             })).unwrap();  
     
             if (response && response.length < ITEMS_PER_PAGE) {
-                setHasMoreData(false); // Если данных меньше, чем ITEMS_PER_PAGE, значит, больше нет данных
+                setHasMoreData(false); // Нет больше данных
+            } else {
+                setHasMoreData(true); // Если данные есть, продолжаем пагинацию
             }
-
-            setIsDataLoaded(true);
 
         } catch (error) {
             console.error('Ошибка загрузки данных:', error);
@@ -66,16 +65,37 @@ const VacancyApplicationHistoryPage = () => {
         }
     };
 
+    const handlePageChange = (newPage: number) => {
+        setPage(newPage);
+    };
 
     // Смена статуса
     const handleStatusChange = async (appId: number, newStatus: number) => {
         try {
-            await dispatch(fetchVacancyApplication({ appId: appId.toString(), status: newStatus }));
-            fetchApplications(page);
+            // Делаем запрос на обновление статуса и получаем новый duration_days
+            const response = await dispatch(fetchVacancyApplication({ appId: appId.toString(), status: newStatus }));
+            
+            // Используем значение duration_days из ответа
+            const durationDays = response.payload;
+    
+            const updatedApplications = applications.map((application) => {
+                if (application.app_id === appId) {
+                    return { 
+                        ...application, 
+                        status: newStatus, 
+                        duration_days: durationDays // обновляем duration_days
+                    };
+                }
+                return application;
+            });
+    
+            // Обновляем состояние с новым списком заявок
+            dispatch(setFilteredApplications(updatedApplications));
+    
         } catch (error) {
             alert('Ошибка при обновлении статуса заявки');
         }
-    };
+    };    
 
 
     // Фильтрация по создателю на фронтенде
@@ -89,60 +109,15 @@ const VacancyApplicationHistoryPage = () => {
         dispatch(setFilteredApplications(filtered));
     };
 
-
-    // Обработчик прокрутки
-    const handleScroll = () => {
-        // Проверяем, что прокрутили до конца страницы (вниз)
-        if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 1) {
-            // Прокрутили до низа и данные не загружены
-            setPage((prevPage) => {
-                const nextPage = prevPage + 1;
-                fetchApplications(nextPage); // Загружаем следующую страницу
-                return nextPage;
-            });
-        }
-
-        // Проверяем, что прокрутили до верха страницы (вверх)
-        if (window.scrollY === 0 && page > 1) {
-            setPage((prevPage) => {
-                const prevPageNum = prevPage - 1;
-                fetchApplications(prevPageNum); // Загружаем предыдущую страницу
-                return prevPageNum;
-            });
-        }
-    };
-
-
     useEffect(() => {
         setPage(1);
-
-        if (applications.length === 0) {
-            setHasMoreData(true); // Сброс флага наличия данных при изменении фильтров
-        }
-
+        setHasMoreData(true);
+        fetchApplications(1);
     }, [statusFilter, startDate, endDate, creatorFilter]);
-
-
-    const scrollToMiddle = () => {
-        const middle = (document.documentElement.scrollHeight - window.innerHeight) / 2;
-        window.scrollTo(0, middle); // Устанавливаем прокрутку в середину
-    };
-
 
     useEffect(() => {
         fetchApplications(page);
-        window.addEventListener('scroll', handleScroll);
-        
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, [page, statusFilter, startDate, endDate, creatorFilter]);
-
-
-    useEffect(() => {
-        if (isDataLoaded) { 
-            scrollToMiddle();
-        }
     }, [page]);
-
 
     useEffect(() => {
         filterApplications();
@@ -214,8 +189,6 @@ const VacancyApplicationHistoryPage = () => {
                                     <th>Создатель</th>
                                     <th>Дата формирования</th>
                                     <th>Название вакансии</th>
-                                    <th>Требования</th>
-                                    <th>Обязанности</th>
                                     <th>Длительность</th>
                                     <th>Действия</th>
                                 </tr>
@@ -230,8 +203,6 @@ const VacancyApplicationHistoryPage = () => {
                                         <td>{application.creator}</td>
                                         <td>{application.date_submitted ? new Date(application.date_submitted).toLocaleString() : '—'}</td>
                                         <td>{application.vacancy_name}</td>
-                                        <td>{application.vacancy_requirements}</td>
-                                        <td>{application.vacancy_responsibilities}</td>
                                         <td>{application.duration_days}</td>
                                         <td>
                                             <Link to={`${ROUTES.VACANCYAPPLICATION}/${application.app_id}`}>Просмотр</Link>
@@ -258,6 +229,24 @@ const VacancyApplicationHistoryPage = () => {
                             </tbody>
                         </table>
                     </div>
+
+                    {/* Пагинация */}
+                    <div className="pagination">
+                        <button
+                            onClick={() => handlePageChange(page - 1)}
+                            disabled={page <= 1}
+                        >
+                            Назад
+                        </button>
+                        <span>Страница {page} </span>
+                        <button
+                            onClick={() => handlePageChange(page + 1)}
+                            disabled={!hasMoreData}
+                        >
+                            Вперед
+                        </button>
+                    </div>
+
                 </div>
             </div>
         </div>

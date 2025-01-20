@@ -53,8 +53,9 @@
 }
   
 .table th, .table td {
-    padding: 16px;
     text-align: center;
+    height: 50px;
+    vertical-align: middle;
 }
 
 .table th {
